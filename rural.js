@@ -1,6 +1,6 @@
 sql(state => {
   return `insert into rural_consumption(
-    "start"",
+    "start",
     "end",
     "today",
     "deviceid",
