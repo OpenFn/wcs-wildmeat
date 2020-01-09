@@ -45,7 +45,7 @@ sql(state => {
     _validation_status,
     _index,
   ) values('` +
-    state.data.start + `', '`
+    state.data.start + `', '` +
     state.data.end
   + `');`;
 });
