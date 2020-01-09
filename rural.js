@@ -1,4 +1,3 @@
-//placeholder for rural.js script
-sql(state => (
-  `INSERT INTO rural_consumption (surveyor) VALUES ('taylor');`
-));
+sql(state => {
+  return "insert into rural_consumption(surveyor) values('taylor')";
+});
