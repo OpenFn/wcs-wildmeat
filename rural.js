@@ -1,3 +1,3 @@
 sql(state => {
-  return "insert into rural_consumption(surveyor) values('taylor')";
+  return "insert into rural_consumption(surveyor) values('taylor');";
 });
