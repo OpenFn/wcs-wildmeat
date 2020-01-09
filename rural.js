@@ -43,7 +43,7 @@ sql(state => {
     "_uuid",
     "_submission_time",
     "_validation_status",
-    "_index",
+    "_index"
   ) values('` +
     state.data.start + `', '` +
     state.data.end + `', '` +
