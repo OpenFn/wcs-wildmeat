@@ -44,9 +44,8 @@ sql(state => {
     _submission_time,
     _validation_status,
     _index,
-  ) values(` +
-    Array.concat([
-      a, b, c
-    ])
-  + `);`;
+  ) values('` +
+    state.data.start + `', '`
+    state.data.end
+  + `');`;
 });
