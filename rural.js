@@ -44,8 +44,7 @@ sql(state => {
     "_id",
     "_uuid",
     "_submission_time",
-    "_validation_status",
-    "_index"
+    "_validation_status"
   ) values('` +
     [
       data.start,
@@ -91,8 +90,10 @@ sql(state => {
       data._uuid,
       data._submission_time,
       JSON.stringify(data._validation_status),
-      data._index,
-    ].join("', '") +
+      // data._index, // Is this meant to be the primary key (a serial) in the DB?
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
     `');`
   );
 });
