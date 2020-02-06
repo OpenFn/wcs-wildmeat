@@ -2,9 +2,9 @@ sql(state => {
   const { data } = state;
   return (
     `insert into tbl_household_ch(
-      "household_number"
-      "number_occupants"
-      "number_children"
+      "household_number",
+      "number_occupants",
+      "number_children",
       "number_adult_men",
       "number_adult_women"
   ) values ('` +
