@@ -7,7 +7,7 @@ sql(state => {
       "number_children"
       "number_adult_men",
       "number_adult_women"
-  ) values('` +
+  ) values ('` +
     [
       data['survey_info/household_id'],
       data['group_begin/group_people/nb_people'],
@@ -59,6 +59,35 @@ sql(state => {
         ].join("', '")
       )
       .join("'), ('")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
+
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into tbl_site (
+      "country",
+      "admin_level1",
+      "admin_level3",
+      "site_name",
+      "site_type",
+      "decimal_latitude",
+      "decimal_longitude",
+      "verbatim_elevation"
+  ) values ('` +
+    [
+      'COD',
+      'Kinshasha',
+      data['survey_info/district'],
+      data['survey_info/village'],
+      'capital',
+      '-4.32758',
+      '15.31357',
+      '240',
+    ]
+      .join("', '")
       .replace(/''/g, null) +
     `');`
   );
