@@ -1,101 +1,65 @@
-// Test the connection first.
-sql(state => "select now();");
-// sql(state => {
-//   const { data } = state;
-//   return (
-//     `insert into rural_consumption(
-//     "start",
-//     "end",
-//     "today",
-//     "deviceid",
-//     "surveyor",
-//     "intro_consent",
-//     "consent_checklist",
-//     "reason_declined",
-//     "reason_declined/refused_hurry",
-//     "reason_declined/refused_confidentiality",
-//     "reason_declined/refused_smartphone",
-//     "reason_declined/refused_no_benefit",
-//     "reason_declined/refused_harassed",
-//     "reason_declined/refused_trust",
-//     "reason_declined/resfused_talk",
-//     "reason_declined/safety_issue",
-//     "reason_declined/other_reason_decline",
-//     "other_reason_declined",
-//     "district",
-//     "village",
-//     "household_id",
-//     "identity",
-//     "date_constraint_calc",
-//     "info_recall_date",
-//     "people_number_explanation",
-//     "nb_people",
-//     "nb_babies",
-//     "nb_children",
-//     "nb_youngmen",
-//     "nb_men",
-//     "nb_oldmen",
-//     "nb_women",
-//     "nb_oldwomen",
-//     "nb_pregnant",
-//     "nb_brestfeeding",
-//     "eat_protein_yes_no",
-//     "additem",
-//     "notes_final",
-//     "__version__",
-//     "_id",
-//     "_uuid",
-//     "_submission_time",
-//     "_validation_status"
-//   ) values('` +
-//     [
-//       data.start,
-//       data.end,
-//       data.today,
-//       data.deviceid,
-//       data.surveyor,
-//       data.intro_consent, // where is this?
-//       data.consent_checklist,
-//       data.reason_declined,
-//       data['reason_declined/refused_hurry'],
-//       data['reason_declined/refused_confidentiality'],
-//       data['reason_declined/refused_smartphone'],
-//       data['reason_declined/refused_no_benefit'],
-//       data['reason_declined/refused_harassed'],
-//       data['reason_declined/refused_trust'],
-//       data['reason_declined/resfused_talk'],
-//       data['reason_declined/safety_issue'],
-//       data['reason_declined/other_reason_decline'],
-//       data.other_reason_declined,
-//       data['survey_info/district'],
-//       data['survey_info/village'],
-//       data['survey_info/household_id'],
-//       data['survey_info/identity'],
-//       data['survey_info/date_constraint_calc'],
-//       data['survey_info/info_recall_date'],
-//       data.people_number_explanation,
-//       data['group_begin/group_people/nb_people'],
-//       data['group_begin/group_people/nb_babies'],
-//       data['group_begin/group_people/nb_children'],
-//       data['group_begin/group_people/nb_youngmen'],
-//       data['group_begin/group_people/nb_men'],
-//       data['group_begin/group_people/nb_oldmen'],
-//       data['group_begin/group_people/nb_women'],
-//       data['group_begin/group_people/nb_oldwomen'],
-//       data['group_begin/group_people/nb_pregnant'],
-//       data['group_begin/group_people/nb_brestfeeding'],
-//       data['group_begin/eat_protein_yes_no'],
-//       data.additem, // Where? Could this house the array of food details?
-//       data.notes_final,
-//       data.__version__,
-//       data._id,
-//       data._uuid,
-//       data._submission_time,
-//       JSON.stringify(data._validation_status),
-//       // data._index, // Is this meant to be the primary key (a serial) in the DB?
-//     ]
-//       .join("', '")
-//       .replace(/''/g, null) +
-//     `');`
-//   );
-// });
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into tbl_household_ch(
+      "household_number"
+      "number_occupants"
+      "number_children"
+      "number_adult_men",
+      "number_adult_women"
+  ) values('` +
+    [
+      data['survey_info/household_id'],
+      data['group_begin/group_people/nb_people'],
+      parseInt(data['group_begin/group_people/nb_babies']) +
+        parseInt(data['group_begin/group_people/nb_children']),
+      parseInt(data['group_begin/group_people/nb_youngmen']) +
+        parseInt(data['group_begin/group_people/nb_men']) +
+        parseInt(data['group_begin/group_people/nb_oldmen']),
+      parseInt(data['group_begin/group_people/nb_women']) +
+        parseInt(data['group_begin/group_people/nb_oldwomen']) +
+        parseInt(data['group_begin/group_people/nb_pregnant']) +
+        parseInt(data['group_begin/group_people/nb_brestfeeding']),
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
+
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into tbl_wildmeat (
+      "unit",
+      "amount",
+      "massin_grams",
+      "price",
+      "acquisition",
+      "condition",
+      "currency"
+  ) values ('` +
+    data['group_begin/group_food']
+      .map(i =>
+        [
+          i['group_begin/group_food/quantity_technique'] === 'known_quantity'
+            ? 'kilogram'
+            : 'other',
+          i['group_begin/group_food/quantity_technique'] === 'known_quantity'
+            ? i['group_begin/group_food/quantity']
+            : '-8',
+          // TODO: Determine how we handle the '-8's
+          parseInt(i['group_begin/group_food/quantity']) * 1000,
+          i['group_begin/group_food/Cost'],
+          i['group_begin/group_food/obtention'],
+          i['group_begin/group_food/state'] === 'other_state'
+            ? '-8'
+            : i['group_begin/group_food/state'],
+          'CDF',
+        ].join("', '")
+      )
+      .join("'), ('")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
