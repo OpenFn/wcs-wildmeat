@@ -92,3 +92,30 @@ sql(state => {
     `');`
   );
 });
+
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into tbl_sample (
+      "sample_date_start",
+      "sample_date_end",
+      "household_id",
+      "household_char_id",
+      "sample_unit",
+      "number_sample_units",
+      "sampling_effort_in_days"
+  ) values ('` +
+    [
+      data['survey_info/info_recall_date'],
+      data['survey_info/info_recall_date'],
+      '', // household_id
+      '', // household_char_id
+      data['group_begin/group_sample/sample_unit'],
+      data['group_begin/group_sample/number_sample_units'],
+      data['group_begin/group_sample/sampling_effort_in_days'],
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
