@@ -1,7 +1,7 @@
 sql(state => {
   const { data } = state;
   return (
-    `insert into tbl_household_ch(
+    `insert into tbl_household_char (
       "household_number",
       "number_occupants",
       "number_children",
