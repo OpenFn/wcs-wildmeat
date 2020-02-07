@@ -1,7 +1,6 @@
 alterState(state => {
   // This is bad. It's a workaround until we get proper UUIDs in the DB.
-  // state.fake_uuid = Date.parse(state.data._submission_time);
-  state.fake_uuid = 1;
+  state.fake_uuid = Date.parse(state.data._submission_time) / 1000;
   // We create some ID based on when the submission took place, and use it for
   // the various INT4 ids we need to populate in Postgres.
   return state;
