@@ -1,52 +1,80 @@
-// sql(state => {
-//   const { data } = state;
-//   return (
-//     `insert into "tbl_site" ("` +
-//     [
-//       'siteID',
-//       'studyID',
-//       'countryCode',
-//       'adminLevel1',
-//       'adminLevel3',
-//       'siteName',
-//       'siteType',
-//       'decimalLatitude',
-//       'decimalLongitude',
-//       'verbatimElevation',
-//     ].join('", "') +
-//     `") values ('` +
-//     [
-//       data.__query_params.siteId,
-//       data.__query_params.studyId,
-//       data.__query_params.country,
-//       data.__query_params.state,
-//       data['survey_info/district'],
-//       data['survey_info/village'],
-//       data.__query_params.siteType,
-//       data.__query_params.lat,
-//       data.__query_params.long,
-//       data.__query_params.alt,
-//     ]
-//       .join("', '")
-//       .replace(/''/g, null) +
-//     `');`
-//   );
-// });
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into "tbl_site" ("` +
+    [
+      'siteID',
+      'studyID',
+      'countryCode',
+      'adminLevel1',
+      'adminLevel3',
+      'siteName',
+      'siteType',
+      'decimalLatitude',
+      'decimalLongitude',
+      'verbatimElevation',
+    ].join('", "') +
+    `") values ('` +
+    [
+      data.__query_params.siteId,
+      data.__query_params.studyId,
+      data.__query_params.country,
+      data.__query_params.state,
+      data['survey_info/district'],
+      data['survey_info/village'],
+      data.__query_params.siteType,
+      data.__query_params.lat,
+      data.__query_params.long,
+      data.__query_params.alt,
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
+
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into "tbl_household" ("` +
+    [
+      'siteID',
+      'studyID',
+      'householdID',
+      'description',
+      // more columns?
+    ].join('", "') +
+    `") values ('` +
+    [
+      data.__query_params.siteId,
+      data.__query_params.studyId,
+      data._uuid,
+      data['survey_info/household_id'],
+      // more values?
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
 
 sql(state => {
   const { data } = state;
   return (
     `insert into "tbl_householdChar" ("` +
     [
+      // 'householdCharID',
       // 'householdID',
       'numberOccupants',
       'numberChildren',
       'numberAdultMen',
       'numberAdultWomen',
+      'studyID',
     ].join('", "') +
     `") values ('` +
     [
-      // data['survey_info/household_id'],
+      // data._uuid,
+      // data._uuid,
       data['group_begin/group_people/nb_people'],
       parseInt(data['group_begin/group_people/nb_babies']) +
         parseInt(data['group_begin/group_people/nb_children']),
@@ -57,6 +85,7 @@ sql(state => {
         parseInt(data['group_begin/group_people/nb_oldwomen']) +
         parseInt(data['group_begin/group_people/nb_pregnant']) +
         parseInt(data['group_begin/group_people/nb_brestfeeding']),
+      data.__query_params.studyId,
     ]
       .join("', '")
       .replace(/''/g, null) +
