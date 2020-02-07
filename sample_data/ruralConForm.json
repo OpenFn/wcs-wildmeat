@@ -1,4 +1,5 @@
 {
+  "configuration": {},
   "data": {
     "group_begin/group_people/nb_babies": "0",
     "survey_info/info_recall_date": "2020-02-05",
@@ -13,10 +14,7 @@
     "group_begin/group_people/nb_oldwomen": "0",
     "group_begin/group_people/nb_pregnant": "0",
     "consent_checklist": "yes",
-    "_geolocation": [
-      null,
-      null
-    ],
+    "_geolocation": [null, null],
     "survey_info/date_constraint_calc": "18295.916666666668",
     "_version__002": "vWwvx8Hdx99AheYegJgnsi",
     "group_begin/group_people/nb_men": "1",
@@ -42,7 +40,8 @@
     "group_begin/group_sample/sample_unit": "24hours",
     "survey_info/household_id": "EPU01",
     "survey_info/village": "epulu",
-    "group_begin/group_food": [{
+    "group_begin/group_food": [
+      {
         "group_begin/group_food/Cost": "200",
         "group_begin/group_food/category1": "wildmeat",
         "group_begin/group_food/category2": "mammal",
