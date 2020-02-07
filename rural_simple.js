@@ -143,9 +143,9 @@ sql(state => {
       .map((item, index) =>
         [
           // TODO: Replace this with real uuid
-          state.fake_uuid + 100000000 + index,
+          `${data._uuid}-wm${index}`,
           data.__query_params.siteId,
-          state.fake_uuid,
+          data._uuid,
           item['group_begin/group_food/quantity_technique'] === 'known_quantity'
             ? 'kilogram'
             : 'other',
