@@ -186,7 +186,8 @@ sql(state => {
     data['group_begin/group_food']
       .map((item, index) =>
         [
-          state.fake_uuid + 10000 + index,
+          // TODO: Replace this with real uuid
+          state.fake_uuid + 100000000 + index,
           data.__query_params.siteId,
           state.fake_uuid,
           item['group_begin/group_food/quantity_technique'] === 'known_quantity'
@@ -236,6 +237,6 @@ sql(state => {
 //     ]
 //       .join("', '")
 //       .replace(/''/g, null) +
-//     `');`
+//     `') ON CONFLICT DO NOTHING;`
 //   );
 // });
