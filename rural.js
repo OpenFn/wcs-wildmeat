@@ -1,3 +1,11 @@
+alterState(state => {
+  // This is bad. It's a workaround until we get proper UUIDs in the DB.
+  state.recordId = Date.parse(state.data._submission_time);
+  // We create some ID based on when the submission took place, and use it for
+  // the various INT4 ids we need to populate in Postgres.
+  return state;
+});
+
 sql(state => {
   const { data } = state;
   return (
@@ -36,6 +44,29 @@ sql(state => {
 sql(state => {
   const { data } = state;
   return (
+    `insert into "tbl_siteChar" ("` +
+    [
+      'siteID',
+      'studyID',
+      'siteCharID',
+      // more columns?
+    ].join('", "') +
+    `") values ('` +
+    [
+      data.__query_params.siteId,
+      data.__query_params.studyId,
+      data.__query_params.siteId,
+      // more values?
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
+
+sql(state => {
+  const { data } = state;
+  return (
     `insert into "tbl_household" ("` +
     [
       'siteID',
@@ -63,6 +94,7 @@ sql(state => {
   return (
     `insert into "tbl_householdChar" ("` +
     [
+      'siteID',
       // 'householdCharID',
       // 'householdID',
       'numberOccupants',
@@ -73,6 +105,7 @@ sql(state => {
     ].join('", "') +
     `") values ('` +
     [
+      data.__query_params.siteId,
       // data._uuid,
       // data._uuid,
       data['group_begin/group_people/nb_people'],
@@ -98,6 +131,7 @@ sql(state => {
   return (
     `insert into "tbl_sample" ("` +
     [
+      'siteCharID',
       // 'sampleID',
       'sampleDateStart',
       'sampleDateEnd',
@@ -111,6 +145,7 @@ sql(state => {
     ].join('", "') +
     `") values ('` +
     [
+      // data._uuid,
       // data._uuid,
       data['survey_info/info_recall_date'],
       data['survey_info/info_recall_date'],
@@ -137,7 +172,7 @@ sql(state => {
       'sampleID',
       'unit',
       'amount',
-      'massinGrams',
+      'massInGrams',
       'price',
       'acquisition',
       'condition',
