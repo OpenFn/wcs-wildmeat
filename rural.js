@@ -1,15 +1,46 @@
 sql(state => {
   const { data } = state;
   return (
-    `insert into tbl_householdChar (
-      "household_number",
-      "number_occupants",
-      "number_children",
-      "number_adult_men",
-      "number_adult_women"
+    `insert into "tbl_site" (
+      "country",
+      "admin_level1",
+      "admin_level3",
+      "site_name",
+      "site_type",
+      "decimal_latitude",
+      "decimal_longitude",
+      "verbatim_elevation"
   ) values ('` +
     [
-      data['survey_info/household_id'],
+      'COD',
+      'Kinshasha',
+      data['survey_info/district'],
+      data['survey_info/village'],
+      'capital',
+      '-4.32758',
+      '15.31357',
+      '240',
+    ]
+      .join("', '")
+      .replace(/''/g, null) +
+    `');`
+  );
+});
+
+sql(state => {
+  const { data } = state;
+  return (
+    `insert into "tbl_householdChar" ("` +
+    [
+      // 'householdID',
+      'numberOccupants',
+      'numberChildren',
+      'numberAdultMen',
+      'numberAdultWomen',
+    ].join('", "') +
+    `") values ('` +
+    [
+      // data['survey_info/household_id'],
       data['group_begin/group_people/nb_people'],
       parseInt(data['group_begin/group_people/nb_babies']) +
         parseInt(data['group_begin/group_people/nb_children']),
@@ -30,7 +61,7 @@ sql(state => {
 sql(state => {
   const { data } = state;
   return (
-    `insert into tbl_wildmeat (
+    `insert into "tbl_wildmeat" (
       "unit",
       "amount",
       "massin_grams",
@@ -67,36 +98,7 @@ sql(state => {
 sql(state => {
   const { data } = state;
   return (
-    `insert into tbl_site (
-      "country",
-      "admin_level1",
-      "admin_level3",
-      "site_name",
-      "site_type",
-      "decimal_latitude",
-      "decimal_longitude",
-      "verbatim_elevation"
-  ) values ('` +
-    [
-      'COD',
-      'Kinshasha',
-      data['survey_info/district'],
-      data['survey_info/village'],
-      'capital',
-      '-4.32758',
-      '15.31357',
-      '240',
-    ]
-      .join("', '")
-      .replace(/''/g, null) +
-    `');`
-  );
-});
-
-sql(state => {
-  const { data } = state;
-  return (
-    `insert into tbl_sample (
+    `insert into "tbl_sample" (
       "sample_date_start",
       "sample_date_end",
       "household_id",
