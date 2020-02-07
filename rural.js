@@ -1,31 +1,37 @@
-sql(state => {
-  const { data } = state;
-  return (
-    `insert into "tbl_site" (
-      "country",
-      "admin_level1",
-      "admin_level3",
-      "site_name",
-      "site_type",
-      "decimal_latitude",
-      "decimal_longitude",
-      "verbatim_elevation"
-  ) values ('` +
-    [
-      'COD',
-      'Kinshasha',
-      data['survey_info/district'],
-      data['survey_info/village'],
-      'capital',
-      '-4.32758',
-      '15.31357',
-      '240',
-    ]
-      .join("', '")
-      .replace(/''/g, null) +
-    `');`
-  );
-});
+// sql(state => {
+//   const { data } = state;
+//   return (
+//     `insert into "tbl_site" ("` +
+//     [
+//       'siteID',
+//       'studyID',
+//       'countryCode',
+//       'adminLevel1',
+//       'adminLevel3',
+//       'siteName',
+//       'siteType',
+//       'decimalLatitude',
+//       'decimalLongitude',
+//       'verbatimElevation',
+//     ].join('", "') +
+//     `") values ('` +
+//     [
+//       data.__query_params.siteId,
+//       data.__query_params.studyId,
+//       data.__query_params.country,
+//       data.__query_params.state,
+//       data['survey_info/district'],
+//       data['survey_info/village'],
+//       data.__query_params.siteType,
+//       data.__query_params.lat,
+//       data.__query_params.long,
+//       data.__query_params.alt,
+//     ]
+//       .join("', '")
+//       .replace(/''/g, null) +
+//     `');`
+//   );
+// });
 
 sql(state => {
   const { data } = state;
