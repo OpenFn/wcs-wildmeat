@@ -1,6 +1,7 @@
 alterState(state => {
   // This is bad. It's a workaround until we get proper UUIDs in the DB.
-  state.recordId = Date.parse(state.data._submission_time);
+  // state.fake_uuid = Date.parse(state.data._submission_time);
+  state.fake_uuid = 1;
   // We create some ID based on when the submission took place, and use it for
   // the various INT4 ids we need to populate in Postgres.
   return state;
@@ -37,7 +38,7 @@ sql(state => {
     ]
       .join("', '")
       .replace(/''/g, null) +
-    `');`
+    `') ON CONFLICT DO NOTHING;`
   );
 });
 
@@ -60,7 +61,7 @@ sql(state => {
     ]
       .join("', '")
       .replace(/''/g, null) +
-    `');`
+    `') ON CONFLICT DO NOTHING;`
   );
 });
 
@@ -79,13 +80,13 @@ sql(state => {
     [
       data.__query_params.siteId,
       data.__query_params.studyId,
-      data._uuid,
+      state.fake_uuid,
       data['survey_info/household_id'],
       // more values?
     ]
       .join("', '")
       .replace(/''/g, null) +
-    `');`
+    `') ON CONFLICT DO NOTHING;`
   );
 });
 
@@ -95,8 +96,8 @@ sql(state => {
     `insert into "tbl_householdChar" ("` +
     [
       'siteID',
-      // 'householdCharID',
-      // 'householdID',
+      'householdCharID',
+      'householdID',
       'numberOccupants',
       'numberChildren',
       'numberAdultMen',
@@ -106,8 +107,8 @@ sql(state => {
     `") values ('` +
     [
       data.__query_params.siteId,
-      // data._uuid,
-      // data._uuid,
+      state.fake_uuid,
+      state.fake_uuid,
       data['group_begin/group_people/nb_people'],
       parseInt(data['group_begin/group_people/nb_babies']) +
         parseInt(data['group_begin/group_people/nb_children']),
@@ -122,7 +123,7 @@ sql(state => {
     ]
       .join("', '")
       .replace(/''/g, null) +
-    `');`
+    `') ON CONFLICT DO NOTHING;`
   );
 });
 
@@ -132,11 +133,11 @@ sql(state => {
     `insert into "tbl_sample" ("` +
     [
       'siteCharID',
-      // 'sampleID',
+      'sampleID',
       'sampleDateStart',
       'sampleDateEnd',
-      // 'householdID',
-      // 'householdCharID',
+      'householdID',
+      'householdCharID',
       'sampleUnit',
       'numberSampleUnits',
       'samplingEffortInDays',
@@ -145,12 +146,12 @@ sql(state => {
     ].join('", "') +
     `") values ('` +
     [
-      // data._uuid,
-      // data._uuid,
+      data.__query_params.siteId,
+      state.fake_uuid,
       data['survey_info/info_recall_date'],
       data['survey_info/info_recall_date'],
-      // data._uuid,
-      // data._uuid,
+      state.fake_uuid,
+      state.fake_uuid,
       data['group_begin/group_sample/sample_unit'],
       data['group_begin/group_sample/number_sample_units'],
       data['group_begin/group_sample/sampling_effort_in_days'],
@@ -159,7 +160,7 @@ sql(state => {
     ]
       .join("', '")
       .replace(/''/g, null) +
-    `');`
+    `') ON CONFLICT DO NOTHING;`
   );
 });
 
@@ -168,6 +169,7 @@ sql(state => {
   return (
     `insert into "tbl_wildmeat" ("` +
     [
+      'wildmeatID',
       'siteID',
       'sampleID',
       'unit',
@@ -178,33 +180,38 @@ sql(state => {
       'condition',
       'currency',
       'scientificName',
+      'studyID',
+      'siteCharID_deleted',
     ].join('", "') +
     `") values ('` +
     data['group_begin/group_food']
-      .map(i =>
+      .map((item, index) =>
         [
+          state.fake_uuid + 10000 + index,
           data.__query_params.siteId,
-          data._uuid,
-          i['group_begin/group_food/quantity_technique'] === 'known_quantity'
+          state.fake_uuid,
+          item['group_begin/group_food/quantity_technique'] === 'known_quantity'
             ? 'kilogram'
             : 'other',
-          i['group_begin/group_food/quantity_technique'] === 'known_quantity'
-            ? i['group_begin/group_food/quantity']
+          item['group_begin/group_food/quantity_technique'] === 'known_quantity'
+            ? item['group_begin/group_food/quantity']
             : '-8',
           // TODO: Determine how we handle the '-8's
-          parseInt(i['group_begin/group_food/quantity']) * 1000,
-          i['group_begin/group_food/Cost'],
-          i['group_begin/group_food/obtention'],
-          i['group_begin/group_food/state'] === 'other_state'
+          parseInt(item['group_begin/group_food/quantity']) * 1000,
+          item['group_begin/group_food/Cost'],
+          item['group_begin/group_food/obtention'],
+          item['group_begin/group_food/state'] === 'other_state'
             ? '-8'
-            : i['group_begin/group_food/state'],
+            : item['group_begin/group_food/state'],
           'CDF',
-          i['group_begin/group_food/species'],
+          item['group_begin/group_food/species'],
+          data.__query_params.studyId,
+          0,
         ].join("', '")
       )
       .join("'), ('")
       .replace(/''/g, null) +
-    `');`
+    `') ON CONFLICT DO NOTHING;`
   );
 });
 
