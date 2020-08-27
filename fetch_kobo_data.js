@@ -1,34 +1,27 @@
 //== Job to be used for fetching data from Kobo on repeated, timer basis  ==//
 // This can be run on-demand at any time by clicking "run" //
 
-alterState(state => {
-  // Set a manual cursor if you'd like to only fetch data after this date.
+get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
+  // Set a manual cursor if you'd like to only fetch data 
   manualCursor = '2020-05-25T14:32:43.325+01:00';
-  state.data = {
-    surveys: [
-      { id: 'afCPRfan8JdBt9sy9q48Jp', tag: 'Rural Consumption' }, //Form Id, Tag of test OpenFN BNS Survey form --> For Testing
-      // Add more Form ids and tags to this list to perform more Kobo syncs...
-      //{ id: 'atyo55YdBdfxzXiaBdrbvr', tag: 'bns_2019' }, //BNS Price survey to be synced regularly
-      //{ id: 'aTRKQW2b8TJGxF7DVPfjFv', tag: 'bns_price_2019' }, //BNS Price survey to be synced regularly
-    ].map(survey => ({
-      formId: survey.id,
-      tag: survey.tag,
-      url: `https://kf.kobotoolbox.org/api/v2/assets/${survey.id}/data/?format=json`,
-      //query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
-    })),
-  };
+  state.data.forms = state.data.results
+    .filter(resource => resource.name.includes('Rural Consumption'))
+    .map(form => {
+      const url = form.url.split('?').join('data/?');
+      return {
+        formId: form.uid,
+        tag: 'Rural Consumption',
+        url,
+        query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
+      };
+    });
   return state;
 });
 
-alterState(state => {
-    console.log(state);
-
-    return state;
-})
-
-each(dataPath('surveys[*]'), state =>
-  //get(`${state.data.url}${state.data.query}`, {}, state => {
-  get(`${state.data.url}`, {}, state => {
+each(
+  dataPath('forms[*]'), state =>
+  get(`${state.data.url}${state.data.query}`, {}, state => {
+    console.log(state.data);
     state.data.submissions = state.data.results.map(submission => ({
       //Here we append the tags defined above to the Kobo form submission data
       form: lastReferenceValue('tag')(state),
@@ -52,7 +45,6 @@ each(dataPath('surveys[*]'), state =>
               }, delay);
             });
           }
-
           async function msg() {
             const msg = await timer();
             console.log(msg);
