@@ -2,7 +2,7 @@ upsert('tbl_study', 'study_id', {
   study_id: 1000,
 });
 
-upsert('tbl_site', 'site_id', {
+/*upsert('tbl_site', 'site_id', {
   site_id: 1001,
   admin_level_3: state.data['survey_info/district'],
   site_name: state.data['survey_info/village'],
@@ -13,9 +13,9 @@ upsert('tbl_household', 'external_id', {
   site_id: 1001,
   household_id: state.data['survey_info/household_id'],
   external_id: state.data['survey_info/household_id'],
-});
+}); */
 
-upsert('tbl_household_char', '', {
+/* insert('tbl_household_char', {
   site_id: 1001,
   study_id: 1000,
   household_id: state.data['survey_info/household_id'],
@@ -29,9 +29,9 @@ upsert('tbl_household_char', '', {
   num_pregnant_women: state.data['group_begin/group_people/nb_pregnant'],
   num_breastfeeding_women:
     state.data['group_begin/group_people/nb_brestfeeding'],
-});
+}); */
 
-upsert('tbl_sample', 'sample_id', {
+/* upsert('tbl_sample', 'sample_id', {
   study_id: 1000,
   site_id: 1001,
   household_id: state.data['survey_info/household_id'],
@@ -72,16 +72,16 @@ insertMany('tbl_wildmeat', state =>
       consumption_frequency_unit: foodItem['group_begin/group_food/frequency'],
     };
   })
-);
+); */
 
-upsert('tbl_individual', '', {
+insert('tbl_individual', {
   site_id: 1001,
   study_id: 1000,
   household_id: state.data['survey_info/household_id'],
   external_id: state.data['survey_info/identity'],
 });
 
-upsert('swm_transaction', 'uuid', {
+/* upsert('swm_transaction', 'uuid', {
   uuid:
     state.data._id + state.data._submission_time + state.data._xform_id_string,
   date: Date.now(),
@@ -91,4 +91,4 @@ upsert('swm_transaction', 'uuid', {
   inserted_by: 'open_fn',
   data_type: 'consumption',
   instances: state.data,
-});
+}); */
