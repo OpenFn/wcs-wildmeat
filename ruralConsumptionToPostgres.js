@@ -89,6 +89,7 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   study_id: 1000,
   household_id: state.data['survey_info/household_id'],
   external_id: state.data['survey_info/identity'],
+  // TODO: Autonumber comment in postgres, but NOT getting generated. Intent?
   individual_id: 1001,
 });
 
