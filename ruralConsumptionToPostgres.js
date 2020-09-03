@@ -1,3 +1,8 @@
+alterState(state => {
+  state.data = state.data.body;
+  return state;
+});
+
 upsert('tbl_study', 'study_id', {
   study_id: 1000,
 });
