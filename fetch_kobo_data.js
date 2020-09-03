@@ -2,7 +2,7 @@
 // This can be run on-demand at any time by clicking "run" //
 
 get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
-  // Set a manual cursor if you'd like to only fetch data 
+  // Set a manual cursor if you'd like to only fetch data
   manualCursor = '2020-05-25T14:32:43.325+01:00';
   state.data.forms = state.data.results
     .filter(resource => resource.name.includes('Rural Consumption'))
@@ -18,10 +18,8 @@ get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
   return state;
 });
 
-each(
-  dataPath('forms[*]'), state =>
+each(dataPath('forms[*]'), state =>
   get(`${state.data.url}${state.data.query}`, {}, state => {
-    console.log(state.data);
     state.data.submissions = state.data.results.map(submission => ({
       //Here we append the tags defined above to the Kobo form submission data
       form: lastReferenceValue('tag')(state),
