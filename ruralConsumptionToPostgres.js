@@ -43,7 +43,9 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   // household_char_id: state.data.body['survey_info/household_id'],
   date_start: state.data.body['survey_info/info_recall_date'],
   sample_id:
-    state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
+    state.data.body._id +
+    state.data.body._submission_time +
+    state.data.body._xform_id_string,
   sample_unit: 'kilograms',
   number_sample_units: '24',
   sampling_effortin_days: '2',
@@ -55,36 +57,47 @@ sql(
 );
 
 // TODO: There are lots of issues with this table. Need to sync on data types with WCS.
-insertMany('tbl_wildmeat', state =>
-  state.data.body['group_begin/group_food'].map(foodItem => {
-    return {
-      kobo_submission_id: state.data.body['meta/instanceID'],
-      site_id: 1001,
-      study_id: 1000,
-      sample_id:
-        state.data.body._id +
-        state.data.body._submission_time +
-        state.data.body._xform_id_string,
-      taxon_id: foodItem['group_begin/group_food/species'],
-      wildmeat_category_1: foodItem['group_begin/group_food/category1'],
-      wildmeat_category_2: foodItem['group_begin/group_food/category2'],
-      wildmeat_group: foodItem['group_begin/group_food/group'],
-      unit:
-        foodItem['group_begin/group_food/quantity_technique'] ===
-        'known_technique'
-          ? 'kilogram'
-          : '-8',
-      amount: foodItem['group_begin/group_food/amount'],
-      massin_grams: foodItem['group_begin/group_food/quantity'],
-      price: foodItem['group_begin/group_food/Cost'],
-      aquisition: foodItem['group_begin/group_food/obtention'],
-      acquisition_other: foodItem['group_begin/group_food/other_obtention'],
-      origin_of_wildmeat: foodItem['group_begin/group_food/origin_wildmeat'],
-      condition: foodItem['group_begin/group_food/state'],
-      consumption_frequency_unit: foodItem['group_begin/group_food/frequency'],
-    };
-  })
-);
+alterState(state => {
+  const repeatGroup = state.data.body['group_begin/group_food'];
+  if (repeatGroup) {
+    console.log('There is an array of wildmeat.');
+    return insertMany('tbl_wildmeat', state =>
+      repeatGroup.map(foodItem => {
+        return {
+          kobo_submission_id: state.data.body['meta/instanceID'],
+          site_id: 1001,
+          study_id: 1000,
+          sample_id:
+            state.data.body._id +
+            state.data.body._submission_time +
+            state.data.body._xform_id_string,
+          taxon_id: foodItem['group_begin/group_food/species'],
+          wildmeat_category_1: foodItem['group_begin/group_food/category1'],
+          wildmeat_category_2: foodItem['group_begin/group_food/category2'],
+          wildmeat_group: foodItem['group_begin/group_food/group'],
+          unit:
+            foodItem['group_begin/group_food/quantity_technique'] ===
+            'known_technique'
+              ? 'kilogram'
+              : '-8',
+          amount: foodItem['group_begin/group_food/amount'],
+          massin_grams: foodItem['group_begin/group_food/quantity'],
+          price: foodItem['group_begin/group_food/Cost'],
+          aquisition: foodItem['group_begin/group_food/obtention'],
+          acquisition_other: foodItem['group_begin/group_food/other_obtention'],
+          origin_of_wildmeat:
+            foodItem['group_begin/group_food/origin_wildmeat'],
+          condition: foodItem['group_begin/group_food/state'],
+          consumption_frequency_unit:
+            foodItem['group_begin/group_food/frequency'],
+        };
+      })
+    )(state);
+  }
+
+  console.log('There is no wildmeat array.');
+  return state;
+});
 
 upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   site_id: 1001,
