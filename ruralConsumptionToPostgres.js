@@ -16,6 +16,7 @@ upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
   external_id: state.data['survey_info/household_id'],
 });
 
+// TODO: Looks like a number of mapping issues around fields on this table.
 upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   site_id: 1001,
   study_id: 1000,
