@@ -54,7 +54,7 @@ sql(
     `DELETE FROM tbl_wildmeat where kobo_submission_id = '${state.data['meta/instanceID']}'`
 );
 
-// TODO: There are lots of issues with this table. Need to sync on data types.
+// TODO: There are lots of issues with this table. Need to sync on data types with WCS.
 insertMany('tbl_wildmeat', state =>
   state.data['group_begin/group_food'].map(foodItem => {
     return {
