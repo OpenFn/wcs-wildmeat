@@ -95,7 +95,7 @@ alterState(state => {
     )(state);
   }
 
-  console.log('There is no wildmeat array.');
+  console.log('There is no wildmeat array. Skipping insertMany(...)');
   return state;
 });
 
@@ -120,5 +120,5 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   inserted_by: 'open_fn',
   data_type: 'consumption',
   // TODO: What does WCS want in here? It's a JSONB column.
-  instances: JSON.stringify(state.data.body),
+  instances: '{"a":1}',
 });
