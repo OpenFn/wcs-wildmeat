@@ -65,7 +65,7 @@ insertMany('tbl_wildmeat', state =>
         state.data._id +
         state.data._submission_time +
         state.data._xform_id_string,
-      vernacular_name: foodItem['group_begin/group_food/species'],
+      taxon_id: foodItem['group_begin/group_food/species'],
       wildmeat_category_1: foodItem['group_begin/group_food/category1'],
       wildmeat_category_2: foodItem['group_begin/group_food/category2'],
       wildmeat_group: foodItem['group_begin/group_food/group'],
