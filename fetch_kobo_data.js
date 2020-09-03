@@ -57,14 +57,9 @@ each(dataPath('forms[*]'), state =>
 );
 
 alterState(state => {
-  console.log(state);
-  console.log(state.references);
   const lastEnd = state.references
-    .filter(item => item.body)
-    .map(s => {
-      console.log(s);
-      return s.body.end;
-    })
+    .filter(item => item && item.body)
+    .map(s => s.body.end)
     .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
   return { ...state, lastEnd };
 });
