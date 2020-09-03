@@ -3,31 +3,33 @@
 
 get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
   // Set a manual cursor if you'd like to only fetch data
-  manualCursor = '2020-05-25T14:32:43.325+01:00';
+  const manualCursor = '2020-05-25T14:32:43.325+01:00';
+  const filter = 'Rural Consumption';
   state.data.forms = state.data.results
-    .filter(resource => resource.name.includes('Rural Consumption'))
+    .filter(resource => resource.name.includes(filter))
     .map(form => {
       const url = form.url.split('?').join('data/?');
       return {
         formId: form.uid,
-        tag: 'Rural Consumption',
+        tag: filter,
         url,
         query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
       };
     });
-  return state;
+  return { ...state, filter };
 });
 
 each(dataPath('forms[*]'), state =>
   get(`${state.data.url}${state.data.query}`, {}, state => {
     state.data.submissions = state.data.results.map(submission => ({
       //Here we append the tags defined above to the Kobo form submission data
-      form: lastReferenceValue('tag')(state),
+      form: state.filter,
       body: submission,
     }));
     console.log(`Fetched ${state.data.count} submissions.`);
     //Once we fetch the data, we want to post each individual Kobo survey
     //back to the OpenFn inbox to run through the jobs
+    console.log(state.data.submissions);
     return each(
       dataPath('submissions[*]'),
       post(
