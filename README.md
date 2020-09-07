@@ -11,7 +11,7 @@ EU SWM uses Kobo Toolbox to collect data on Rural Consumption across sites (see 
 
 ### Data Flows & OpenFn Jobs
 The following jobs are configured on OpenFn.org to run automatically. 
-1. [fetch_kobo_data.js](https://github.com/OpenFn/wcs-consocsci/blob/master/fetch_kobo_data.js): On a timer-basis, OpenFn fetches all Kobo survey submissions where form `name` contains "Rural Consumption". 
+1. [fetch_kobo_data.js](https://github.com/OpenFn/wcs-consocsci/blob/master/fetch_kobo_data.js): On a timer-basis, OpenFn fetches all Kobo survey submissions where form `name` contains "Rural Consumption". This job sends the Kobo data to OpenFn.org and automatically triggers the next job. 
 2. [ruralConsumptionToPostgres.js](https://github.com/OpenFn/wcs-consocsci/blob/master/ruralConsumptionToPostgres.js): OpenFn automatically cleans, maps, & loads the Kobo survey data into structured tables in a Postgres Wildmeat database. 
 ### Mappings 
 [See here](https://docs.google.com/spreadsheets/d/15VRibnaglShF3oNNLMbiyGopTJrYbP02aQ04cz4Qt-k/edit#gid=767749359) for the integration mapping specifications. These jobs leverage [language-postgresql](https://github.com/OpenFn/postgresql) to perform `upsert()` operations in the Postgres database. 
