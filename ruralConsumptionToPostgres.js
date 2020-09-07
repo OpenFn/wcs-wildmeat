@@ -62,7 +62,7 @@ alterState(state => {
   if (repeatGroup) {
     console.log('There is an array of wildmeat.');
     return insertMany('tbl_wildmeat', state =>
-      repeatGroup.map(foodItem => {
+      repeatGroup.map((foodItem, i) => {
         return {
           kobo_submission_id: state.data.body['meta/instanceID'],
           site_id: 1001,
@@ -72,6 +72,8 @@ alterState(state => {
             state.data.body._submission_time +
             state.data.body._xform_id_string,
           taxon_id: foodItem['group_begin/group_food/species'],
+          // TODO: determine how to calculate wildmeat_id
+          wildmeat_id: i,
           wildmeat_category_1: foodItem['group_begin/group_food/category1'],
           wildmeat_category_2: foodItem['group_begin/group_food/category2'],
           wildmeat_group: foodItem['group_begin/group_food/group'],
