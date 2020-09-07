@@ -71,7 +71,7 @@ alterState(state => {
               state.data.body._xform_id_string,
             taxon_id: foodItem['group_begin/group_food/species'],
             // TODO: determine how to calculate wildmeat_id
-            wildmeat_id: state.data.body._id + state.data.body._xform_id_string,
+            wildmeat_id: state.data.body._id,
             wildmeat_category_1: foodItem['group_begin/group_food/category1'],
             wildmeat_category_2: foodItem['group_begin/group_food/category2'],
             wildmeat_group: foodItem['group_begin/group_food/group'],
