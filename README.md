@@ -25,4 +25,4 @@ The following jobs are configured on OpenFn.org to run automatically.
 
 ## Open questions
 1. Are all Kobo surveys to be integrated hosted on 1 server? Or will OpenFn need to access multiple Kobo servers to fetch Rural Consumption data? 
-2.How will we determine the `study_id` and `site_id` from the Kobo forms going forward? Or will we always hardcode these values to map to dummy `tbl_study` and `tbl_site` records in the database?
+2. How will we determine the `study_id` and `site_id` from the Kobo forms going forward? Or will we always hardcode these values to map to dummy `tbl_study` and `tbl_site` records in the database?
