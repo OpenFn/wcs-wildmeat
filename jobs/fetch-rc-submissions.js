@@ -61,6 +61,7 @@ each(dataPath('forms[*]'), state =>
 );
 
 alterState(state => {
+  // TODO: Pluck out the end date of the last submission to use as a cursor.
   const lastEnd = state.references
     .filter(item => item && item.body)
     .map(s => s.body.end)
