@@ -122,6 +122,5 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   modified_by: 'open_fn',
   inserted_by: 'open_fn',
   data_type: 'consumption',
-  // TODO: What does WCS want in here? It's a JSONB column.
   instances: JSON.stringify(state.data),
 });
