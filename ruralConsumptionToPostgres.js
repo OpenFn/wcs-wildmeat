@@ -70,9 +70,10 @@ alterState(state => {
               state.data.body._submission_time +
               state.data.body._xform_id_string,
             taxon_id: foodItem['group_begin/group_food/species'],
-            // TODO: determine how to calculate wildmeat_id
-            //wildmeat_id: i, 
-            wildmeat_id: state.data.body._id, //AK NOTE: use _id for wildmeat_id for now
+            // TODO: determine how to calculate wildmeat_id --------------------
+            // AK NOTE: use _id for wildmeat_id plus array index for now
+            wildmeat_id: state.data.body._id + i,
+            // -----------------------------------------------------------------
             wildmeat_category_1: foodItem['group_begin/group_food/category1'],
             wildmeat_category_2: foodItem['group_begin/group_food/category2'],
             wildmeat_group: foodItem['group_begin/group_food/group'],
@@ -113,7 +114,7 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   // TODO: determine how to use this _id (see https://github.com/kobotoolbox/kobocat/issues/572#issuecomment-685923946)
   // uuid: state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
-  uuid: state.data.body._id + state.data.body._xform_id_string, 
+  uuid: state.data.body._id + state.data.body._xform_id_string,
   // TODO: Figure out what they're trying to do with date here. It's part of the UUID?
   date: state.data.body._submission_time,
   status: 'new',
