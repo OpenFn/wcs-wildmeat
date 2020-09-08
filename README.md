@@ -22,6 +22,7 @@ The following jobs are configured on OpenFn.org to run automatically.
 3. Kobo forms only capture species `code`, not `name`. OpenFn has therefore implemented a reference table `swm_species` and uploaded a [list of species](https://docs.google.com/spreadsheets/d/1yfBjpb9cuCOvzKF9Iu_XrXLA_BC8cQFCyYxjVgFIuXU/edit) extracted from the DRC Kobo form. WCS will keep this `swm_species` table up-to-date to ensure successful integration of any species data. 
 4. The jobs currently use hard-coded values for `study_id` ('1000') and `site_id` ('1001') as this information is currently not captured in the Kobo forms. 
 5. See [Wildmeat Map](https://docs.google.com/spreadsheets/d/15VRibnaglShF3oNNLMbiyGopTJrYbP02aQ04cz4Qt-k/edit#gid=767749359) for a list of fields that were intentionally not mapped in these jobs (i.e., `tbl_individual_char`). 
+6. All Kobo surveys to be fetched by OpenFn will contain "Rural Consumption" in the form name. If this criteria should change, job #1 should be updated. 
 
 ### (4) Open questions
 1. Are all Kobo surveys to be integrated hosted on 1 server? Or will OpenFn need to access multiple Kobo servers to fetch Rural Consumption data? 
