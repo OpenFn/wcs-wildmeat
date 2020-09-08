@@ -22,7 +22,7 @@ upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   study_id: 1000,
   household_id: state.data.body['survey_info/household_id'],
   // TODO: decide on how to handle household_char_id
-  household_char_id: 1001,
+  household_char_id: state.data.body['survey_info/household_id'],
   num_occupants: state.data.body['group_begin/group_people/nb_people'],
   num_babies: state.data.body['group_begin/group_people/nb_babies'],
   num_children: state.data.body['group_begin/group_people/nb_children'],
@@ -108,7 +108,7 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   external_id: state.data.body['survey_info/identity'],
   // TODO: Autonumber comment in postgres, but NOT getting generated. Intent?
-  individual_id: 1001,
+  individual_id: state.data.body['survey_info/household_id'],
 });
 
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
