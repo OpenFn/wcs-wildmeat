@@ -38,7 +38,7 @@ upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
 upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   study_id: 1000,
   site_id: 1001,
-  household_id: state.data.body['survey_info/household_id'],
+  household_id: state.data.body._id,
   // TODO: What's this doing here? Need to talk to WCS.
   // household_char_id: state.data.body['survey_info/household_id'],
   date_start: state.data.body['survey_info/info_recall_date'],
@@ -108,7 +108,7 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   external_id: state.data.body['survey_info/identity'],
   // TODO: Autonumber comment in postgres, but NOT getting generated. Intent?
-  individual_id: state.data.body['survey_info/household_id'],
+  individual_id: state.data.body._id,
 });
 
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
