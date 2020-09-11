@@ -65,7 +65,7 @@ alterState(state => {
   const lastEnd = state.references
     .filter(item => item && item.body)
     .map(s => s.body.end)
-    .sort((a, b) => new Date(b.date) - new Date(a.date))[0];
+    .sort((a, b) => (new Date(a.date) > new Date(b.date) ? 1 : -1))[0];
   console.log(`Next cursor: ${lastEnd}`);
   return { ...state, lastEnd };
 });
