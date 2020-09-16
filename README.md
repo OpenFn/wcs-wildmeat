@@ -48,5 +48,6 @@ The following jobs are configured on OpenFn.org to run automatically.
    do we therefore continue to use the hardcoded values?)
 3. How to determine the survey consumption type (i.e., Hunter or Market)?
    (Question flagged by Usman.)
-4. How do you want to test these jobs? What Kobo server should we connect with?
+4. Is there a default `sample_unit` for different surveys? 
+5. How do you want to test these jobs? What Kobo server should we connect with?
    (Currently testing with OpenFn Kobo account.)
