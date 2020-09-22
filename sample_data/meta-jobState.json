@@ -1,0 +1,2167 @@
+{
+    "references": [],
+    "data": [
+      {
+        "name": "new_column2",
+        "type": "varchar",
+        "$kuid": "AMqSyNxGw",
+        "label": [
+          "Wanaume wangapi?",
+          "How many men?",
+          "Combien d'hommes?"
+        ],
+        "default": "0",
+        "required": false,
+        "$autoname": "new",
+        "constraint": ". >= 0 and . <= 100"
+      },
+      {
+        "hint": [
+          "Quel type de nourriture a été mangé?",
+          "What type of food was eaten?",
+          "Quel type de nourriture a été mangé?"
+        ],
+        "name": "category1",
+        "type": "varchar",
+        "$kuid": "g282Zgldg",
+        "label": [
+          "Catégorie d'aliment",
+          "Item Category",
+          "Catégorie d'aliment"
+        ],
+        "required": true,
+        "$autoname": "category1",
+        "appearance": "minimal",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "category1"
+      },
+      {
+        "hint": [
+          "Quel type de nourriture a été mangé?",
+          "What type of food was eaten?",
+          "Quel type de nourriture a été mangé?"
+        ],
+        "name": "category2",
+        "type": "varchar",
+        "$kuid": "TrxgrysRD",
+        "label": [
+          "Sous catégorie d'aliment",
+          "Item sub category",
+          "Sous catégorie d'aliment"
+        ],
+        "required": true,
+        "$autoname": "category2",
+        "appearance": "minimal",
+        "choice_filter": "category1=${category1}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "category2"
+      },
+      {
+        "hint": [
+          "Sélectionner le groupe",
+          "Select the group",
+          "Sélectionner le groupe"
+        ],
+        "name": "kobogroup",
+        "type": "varchar",
+        "$kuid": "SoblDFoW6",
+        "label": [
+          "Groupe",
+          "Group",
+          "Groupe"
+        ],
+        "required": true,
+        "$autoname": "group",
+        "appearance": "minimal",
+        "choice_filter": "category2=${category2}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "group"
+      },
+      {
+        "hint": [
+          "Sélectionner l'espèce",
+          "Select the species",
+          "Sélectionner l'espèce"
+        ],
+        "name": "species",
+        "type": "varchar",
+        "$kuid": "1CWEm381L",
+        "label": [
+          "Espèce",
+          "Species",
+          "Espèce"
+        ],
+        "required": true,
+        "$autoname": "species",
+        "appearance": "minimal",
+        "choice_filter": "group=${group}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "specie"
+      },
+      {
+        "hint": [
+          "Si la personne sait précisément combien elle/il a acheté, choisissez \"quantité connue\", si non, choisissez \"pesée à la balance\"",
+          "If the person knows precisely how much she/he bought, choose \"known quantity\", if not, choose \"measure with scale\"",
+          "Si la personne sait précisément combien elle/il a acheté, choisissez \"quantité connue\", si non, choisissez \"pesée à la balance\""
+        ],
+        "name": "quantity_technique",
+        "type": "varchar",
+        "$kuid": "zu6S5Sb2W",
+        "label": [
+          "Comment voulez-vous mesurer la quantité?",
+          "How do yo want to measure the quantity?",
+          "Comment voulez-vous mesurer la quantité?"
+        ],
+        "required": true,
+        "$autoname": "quantity_technique",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "quantity_technique"
+      },
+      {
+        "hint": [
+          "Les quantités sont indiquées par le poids en kilo de pâte à modeler correspondant au même volume que la quantité de viande consommée.",
+          "Quantities are indicated by the weight in kg of the amount of plasticine clay corresponding to the same volume of meat consumed",
+          "Les quantités sont indiquées par le poids en kilo de pâte à modeler correspondant au même volume que la quantité de viande consommée."
+        ],
+        "name": "quantity",
+        "type": "float4",
+        "$kuid": "gwIBzxXoG",
+        "label": [
+          "Kadiri cha chakula (katika kilo)",
+          "Quantity of food (in kilograms)",
+          "Quantité de nourriture (en kilogrammes)"
+        ],
+        "required": true,
+        "$autoname": "quantity",
+        "constraint": ". > 0 and . <= 20",
+        "constraint_message": [
+          "Le poids de l'aliment consommé doit être compris entre 0 et 20 kilos",
+          "Weight should be between 0 and 20 kg",
+          "Le poids de l'aliment consommé doit être compris entre 0 et 20 kilos"
+        ]
+      },
+      {
+        "hint": [
+          "Combien coûte habituellement cette quantité de l'aliment mangé? (Demandez à la personne interrogée combien elle l'a payé si elle l'a acheté, et combien elle le paierait si elle ne l'achetait pas).",
+          "How much does this quantity of food usually cost? (Ask the interviewee how much she paid for it if she bought it, and how much she would pay for it if she didn't buy it).",
+          "Combien coûte habituellement cette quantité de l'aliment mangé? (Demandez à la personne interrogée combien elle l'a payé si elle l'a acheté, et combien elle le paierait si elle ne l'achetait pas)."
+        ],
+        "name": "Cost",
+        "type": "float4",
+        "$kuid": "knZIRfAm4",
+        "label": [
+          "Bei ya mboka inye ilikuliwa (katika FC)",
+          "Cost of the protein eaten (en FC)",
+          "Coût de la protéine mangée (en FC)"
+        ],
+        "required": true,
+        "$autoname": "Cost",
+        "constraint": ". > 0 and . <= 100000",
+        "constraint_message": [
+          "Le prix de l'aliment consommé doit être compris entre 0 et 500.000 FC",
+          "Price should be between 0 and 500.000 FC",
+          "Le prix de l'aliment consommé doit être compris entre 0 et 500.000 FC"
+        ]
+      },
+      {
+        "hint": [
+          "Comment avez-vous obtenu l'aliment?",
+          "How did you get this food?",
+          "Comment avez-vous obtenu l'aliment?"
+        ],
+        "name": "obtention",
+        "type": "varchar",
+        "$kuid": "62qPBKgxK",
+        "label": [
+          "Njia za kupata chakula",
+          "Obtention of food",
+          "Moyen d'obtention des aliments"
+        ],
+        "required": true,
+        "$autoname": "obtention",
+        "appearance": "horizontal-compact",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "obtention"
+      },
+      {
+        "hint": [
+          "Dites comment vous avez obtenu cet aliment",
+          "Indicate how did you get this food",
+          "Dites comment vous avez obtenu cet aliment"
+        ],
+        "name": "other_obtention",
+        "type": "text",
+        "$kuid": "3p48RCqti",
+        "label": [
+          "Njia zingine za kupata chakula",
+          "Other obtention of food",
+          "Autre moyen d'obtention des aliments"
+        ],
+        "relevant": "${obtention} = 'other_obtention'",
+        "required": true,
+        "$autoname": "other_obtention",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "hint": [
+          "Soyez le plus précis possible (nom la forêt, nom du village/ville, intérieur/extérieur RFO etc.)",
+          "Be as precise as possible",
+          "Soyez le plus précis possible (nom la forêt, nom du village/ville, intérieur/extérieur RFO etc.)"
+        ],
+        "name": "origin_wildmeat",
+        "type": "text",
+        "$kuid": "ELdqTZRKP",
+        "label": [
+          "Nyama ya pori imetoka wapi?",
+          "From where does this game comes from?",
+          "Provenance du gibier"
+        ],
+        "relevant": "${category1} = 'wildmeat'",
+        "$autoname": "origin_wildmeat"
+      },
+      {
+        "hint": [
+          "Quel était l'état de l'aliment quand vous l'avez acheté?",
+          "What is the state of the food when it was bought?",
+          "Quel était l'état de l'aliment quand vous l'avez acheté?"
+        ],
+        "name": "state",
+        "type": "varchar",
+        "$kuid": "4jIxqfzjl",
+        "label": [
+          "Hali ya mboka",
+          "State of food",
+          "L'état de l'aliment"
+        ],
+        "required": true,
+        "$autoname": "state",
+        "appearance": "minimal",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "state"
+      },
+      {
+        "hint": [
+          "Ajoutez l'état de l'aliment ici",
+          "Add here the state of the food",
+          "Ajoutez l'état de l'aliment ici"
+        ],
+        "name": "other_state",
+        "type": "text",
+        "$kuid": "wzcGCc12c",
+        "label": [
+          "Hali ya mboka",
+          "State of food",
+          "L'état de l'aliment"
+        ],
+        "relevant": "${state} = 'other_state'",
+        "required": true,
+        "$autoname": "other_state",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "hint": [
+          "À quelle fréquence mangez-vous habituellement cette nourriture ?",
+          "How frequently do you usually eat this food?",
+          "À quelle fréquence mangez-vous habituellement cette nourriture ?"
+        ],
+        "name": "frequency",
+        "type": "varchar",
+        "$kuid": "2O02gyaje",
+        "label": [
+          "Unakulaka yao mara ngapi?",
+          "Frequency of consumption",
+          "Fréquence de consommation"
+        ],
+        "required": true,
+        "$autoname": "frequency",
+        "appearance": "minimal",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "freq"
+      },
+      {
+        "hint": [
+          "Avez-vous d'autres informations sur cet aliment qu'il serait utile de noter ?",
+          "Do you have any further information on this food that might be useful to note down?",
+          "Avez-vous d'autres informations sur cet aliment qu'il serait utile de noter ?"
+        ],
+        "name": "notes_alim",
+        "type": "text",
+        "$kuid": "cIHAfo47J",
+        "label": [
+          "Vidokezo juu ya chakula",
+          "Notes on the aliment",
+          "Notes sur l'aliment"
+        ],
+        "required": false,
+        "$autoname": "notes_alim"
+      },
+      {
+        "table_name": "tbl_survey_char"
+      }
+    ],
+    "configuration": {
+      "host": "localhost",
+      "port": "5432",
+      "database": "openfn_dev",
+      "user": "openfn",
+      "password": "passer",
+      "ssl": true,
+      "allowSelfSignedCert": true
+    },
+    "kobo_form": [
+      {
+        "name": "start",
+        "type": "start",
+        "$kuid": "cinejNbpI",
+        "$autoname": "start"
+      },
+      {
+        "name": "end",
+        "type": "end",
+        "$kuid": "cn5WtsVX4",
+        "$autoname": "end"
+      },
+      {
+        "name": "today",
+        "type": "today",
+        "$kuid": "hgxBnkOoo",
+        "$autoname": "today"
+      },
+      {
+        "name": "deviceid",
+        "type": "deviceid",
+        "$kuid": "tsTAPFhU3",
+        "$autoname": "deviceid"
+      },
+      {
+        "hint": [
+          "Selectionner le nom de la personne réalisant l'enquête (vous)",
+          "Select the name of the person who is conducting the survey (you)",
+          "Selectionner le nom de la personne réalisant l'enquête (vous)"
+        ],
+        "name": "surveyor",
+        "type": "varchar",
+        "$kuid": "dIKGGdn5d",
+        "label": [
+          "Jina la mpelelezi",
+          "Name of the surveyor",
+          "Nom de l'enqueteur"
+        ],
+        "required": true,
+        "$autoname": "surveyor",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "surveyor"
+      },
+      {
+        "name": "intro_consent",
+        "type": "note",
+        "$kuid": "d2JxvxOr3",
+        "label": [
+          "Unaalikwa kushiriki kwenye utafiti ili kuelewa mifumo ya utumiaji wa chakula ya makao zinazoishi karibu na RFO.\nHabari unayopewa itatumika kwaku saidia miradi ya majaribio ili kukuza uzalishaji wa nyama wa uvoko. Kusudi ni kuboresha malisho ya wakaadji wa eneo hilo, kupunguza shinikizo kwa wanyama za pori na kuunda fursa mpya za usimamizi. Utafiti huu pia unaweza kusababisha mabadiliko katika sera(politique), sheria na kanuni zinazoathiri ufikiaji wako kwa wanyama za pori na rasilimali zingine za asili.\n\nUmechaguliwa kwa bahati nasibu. Utaulizwa mfululizo wa maswali. Unaweza kuamua kutokujibu maswali yoyote. Utafiti utachukua dakika 20 na utaombewa kurudia tena kila mwezi kwa mwaka mmoja.\nUshiriki katika utafiti huu haupaswi kuwa hatari kwako zaidi ya zile ambazo ni sehemu ya shurhuli zako za kawaida za kila siku.\nUshiriki wako katika utafiti huu ni wa hiari(kudji toloa kwa kitu bila ku tumwa) kabisa na unaweza kutuuliza kuimaliza wakati wowote bila kuathiri ufikiaji wako wa faida za siku zijazo.\nUnaweza kuwasiliana na WCS huko Epulu ikiwa una maswali mengine juu ya utafiti.\nTafadhali niambie ikiwa unaelewa kile umeulizwa kufanya na ikiwa unakubali kushiriki katika utafiti huu.",
+          "You are invited to participate in a study designed to understand food consumption patterns of the households who live in and around the OWR.\nThe information you provide will be used to inform the design of pilot projects to promote domestic meat production. This is intended to improve the nutrition of local people, reduce pressure on wildlife and create new opportunities for it to be managed sustainably. This study may also lead to changes in policies, laws and regulations that affect your access to wildlife and other natural resources.\nYou were selected randomly. You will be asked a series of questions. You can decide not to answer any question. The survey will take 20 minutes to complete and you will be asked to repeat this survey every month during one year.\n\nParticipation in this survey should not pose any risks to you beyond those that are part of your normal daily activities. \nYour participation in this study is entirely voluntary and you may ask us to discontinue your participation at any time without affecting your access to the possible future benefits. \nWe will not record your name because we want to protect your identity.\nPlease contact WCS in Epulu if you have any additional questions about the study.\nPlease tell me if you understand what you are being asked to do, and whether you consent to be a participant in this study.",
+          "Vous êtes invités à participer à une étude visant à comprendre les modes de consommation alimentaire des ménages qui vivent dans les alentours de la RFO.\nLes renseignements que vous fournirez serviront à la conception de projets pilotes visant à promouvoir la production nationale de viande. L'objectif est d'améliorer la nutrition de la population locale, de réduire la pression sur la faune sauvage et de créer de nouvelles possibilités de gestion. Cette étude peut également mener à des changements dans les politiques, les lois et les règlements qui affectent votre accès à la faune et aux autres ressources naturelles.\n\nVous avez été choisi au hasard. On vous posera une série de questions. Vous pouvez décider de ne répondre à aucune question. Le sondage prendra 20 minutes et il vous sera demandé de le répéter chaque mois pendant un an.\nLa participation à cette enquête ne devrait pas poser de risques pour vous au-delà de ceux qui font partie de vos activités quotidiennes normales. \nVotre participation à cette étude est entièrement volontaire et vous pouvez nous demander d'y mettre fin à tout moment sans que cela n'affecte votre accès aux prestations futures possibles. \nVous pouvez contacter WCS à Epulu si vous avez d'autres questions au sujet de l'étude.\nVeuillez me dire si vous comprenez ce qu'on vous demande de faire et si vous consentez à participer à cette étude."
+        ],
+        "$autoname": "intro_consent"
+      },
+      {
+        "name": "consent_checklist",
+        "type": "varchar",
+        "$kuid": "1bUAiMjiy",
+        "label": [
+          "- Présentation (nom et agent RFO)\n- Brief sur SWM (gestion durable de la faune + sécurité alimentaire)\n- Explications sur l'enquête (comprendre la consommation de protéines animales pour identifier les besoin, les possibilité de développement de l'élevage et s'assurer que le projet ne fait pas de mal)\n- Confidentialité (les données ne seront jamais partagées avec les autorités, le nom sera gardé secret et les données seront analysées au niveau du village ou de la RFO)\n- 1 enquête / mois * 12 mois\n- Plus d'informations disponibles à Epulu\n- Avez-vous bien compris?\n\n*Cochez la case correspondant à la réponse que le sujet a donnée verbalement concernant son consentement à participer à l'étude.* \n*Si le sujet accepte, donnez lui une version imprimée du consentement.*\n*Si le sujet refuse de participer, cherchez un autre participant.\n\n*Etes-vous d'accord pour répondre aux questions?",
+          "- Present yourself (name, OWR agent)\n- Brief on SWM (sustainable wildlife management + food security)\n- Explanation on the survey (understand animal protein consumption to indentify the needs, develop breeding, and make sure the program is not doing any harm)\n- Confidentiality (info will never be shared with the authorities, your name will be kept secret and data will be analyzed at the village and OWR level)\n- 1 survey / month * 12 months\n- Duration = 20 minutes\n- More information available in Epulu\n- Did you understand everything?\n\n*Tick the box corresponding to the answer the subject provided verbally regarding his consent to participate in the study.*\n*If the subject accept, give him'her a printed copy of the consent*\n*If the subject declines to participate, look for another participant.*\n\nDo you accept to proceed with the survey?",
+          "- Présentation (nom et agent RFO)\n- Brief sur SWM (gestion durable de la faune + sécurité alimentaire)\n- Explications sur l'enquête (comprendre la consommation de protéines animales pour identifier les besoin, les possibilité de développement de l'élevage et s'assurer que le projet ne fait pas de mal)\n- Confidentialité (les données ne seront jamais partagées avec les autorités, le nom sera gardé secret et les données seront analysées au niveau du village ou de la RFO)\n- 1 enquête / mois * 12 mois\n- Plus d'informations disponibles à Epulu\n- Avez-vous bien compris?\n\n*Cochez la case correspondant à la réponse que le sujet a donnée verbalement concernant son consentement à participer à l'étude.* \n*Si le sujet accepte, donnez lui une version imprimée du consentement.*\n*Si le sujet refuse de participer, cherchez un autre participant.\n\n*Etes-vous d'accord pour répondre aux questions?"
+        ],
+        "required": true,
+        "$autoname": "consent_checklist",
+        "select_from_list_name": "yes_no"
+      },
+      {
+        "name": "reason_declined",
+        "type": "select_multiple",
+        "$kuid": "BnXkmjasp",
+        "label": [
+          "Kwanini mtu huyo hakutaka kujibu maswali?",
+          "Why did the subject decline to be interviewed?",
+          "Pourquoi la personne n'a-t-elle pas souhaité répondre aux questions?"
+        ],
+        "relevant": "${consent_checklist} = 'no'",
+        "required": true,
+        "$autoname": "reason_declined",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "decline"
+      },
+      {
+        "name": "other_reason_declined",
+        "type": "text",
+        "$kuid": "5PoIEej8l",
+        "label": [
+          "Sababu gani mtu huyo hakutaka kujibu maswali?",
+          "For what other reason the subject decline to be interviewed?",
+          "Pour quelle autre raison la personne n'a-t-elle pas souhaité répondre aux questions?"
+        ],
+        "relevant": "selected(${reason_declined}, 'other_reason_decline')",
+        "required": true,
+        "$autoname": "other_reason_declined",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "name": "survey_info",
+        "type": "begin_group",
+        "$kuid": "nstlgOCjA",
+        "label": [
+          "Habari ya uchunguzi",
+          "Information on the survey",
+          "Informations sur l'enquête"
+        ],
+        "relevant": "${consent_checklist} = 'yes'",
+        "$autoname": "survey_info",
+        "appearance": "field-list",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "name": "district",
+        "type": "varchar",
+        "$kuid": "hPrBAPgsI",
+        "label": [
+          "Chagua usulutani wa asiri",
+          "Select district",
+          "Sélectionner la chefferie"
+        ],
+        "required": true,
+        "$autoname": "district",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "district"
+      },
+      {
+        "hint": [
+          "Le village ou la ville où l'enquête a lieu",
+          "The village or town where the survey is taking place",
+          "Le village ou la ville où l'enquête a lieu"
+        ],
+        "name": "village",
+        "type": "varchar",
+        "$kuid": "5F1Khjoqb",
+        "label": [
+          "Jina la kijiji",
+          "Name of village",
+          "Nom du village"
+        ],
+        "required": true,
+        "$autoname": "village",
+        "appearance": "minimal",
+        "choice_filter": "district=${district}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "village"
+      },
+      {
+        "hint": [
+          "Le numéro d'identification du ménage où se déroule l'entretien",
+          "The household ID where the interview is taking place",
+          "Le numéro d'identification du ménage où se déroule l'entretien"
+        ],
+        "name": "household_id",
+        "type": "varchar",
+        "$kuid": "qbifSESlB",
+        "label": [
+          "Kitambulisho chamakao",
+          "Household ID",
+          "ID du ménage"
+        ],
+        "required": true,
+        "$autoname": "household_id",
+        "appearance": "minimal",
+        "choice_filter": "village=${village}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "hh_id"
+      },
+      {
+        "name": "identity",
+        "type": "text",
+        "$kuid": "s6thRcUfS",
+        "label": [
+          "Jina kamili la mtu ni nini?",
+          "Full name of the person you interrogate",
+          "Quel est le nom complet de la personne?"
+        ],
+        "required": false,
+        "$autoname": "identity",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "name": "date_constraint_calc",
+        "type": "varchar",
+        "$kuid": "vplp0rjCh",
+        "label": [
+          "Mahesabu \"leo\" kisha siku 2 kuweka kikwazo kwa swali linalofuata",
+          "Calculate \"today\" - 2 days to put a constraint on the next question",
+          "Calcule \"today\" moins 2 jours pour mettre une contrainte sur la question suivante"
+        ],
+        "required": true,
+        "$autoname": "date_constraint_calc",
+        "calculation": "${today} - 2",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "name": "info_recall_date",
+        "type": "date",
+        "$kuid": "Vo5KLKwAv",
+        "label": [
+          "Je! Ni tarehe gani ambayo utakusanya habari?",
+          "What is the date of the day you are going to register the information about?",
+          "Quelle est la date du jour duquel vous allez collecter des informations?"
+        ],
+        "required": true,
+        "$autoname": "info_recall_date",
+        "constraint": ". < ${today} and . >= ${date_constraint_calc}",
+        "constraint_message": [
+          "La date des informations sur lesquelles vous posez des questions doit être hier (24h-recall) ou avant-hier (48h-recall)",
+          "The date of the information you are asking about should be yesterday (24h-recall) or the day before yesterday (48h-recall)",
+          "La date des informations sur lesquelles vous posez des questions doit être hier (24h-recall) ou avant-hier (48h-recall)"
+        ]
+      },
+      {
+        "type": "end_group",
+        "$kuid": "pRYuWZO1g"
+      },
+      {
+        "name": "group_begin",
+        "type": "begin_group",
+        "$kuid": "thmsyhIPq",
+        "label": [
+          "Maelezo juu ya ${info_recall_date}",
+          "Information on day ${info_recall_date}",
+          "Informations sur le ${info_recall_date}"
+        ],
+        "relevant": "${consent_checklist} = 'yes'",
+        "$autoname": "group_begin"
+      },
+      {
+        "name": "group_people",
+        "type": "begin_group",
+        "$kuid": "DN6ytcRbg",
+        "label": [
+          "Idadi ya watu",
+          "Number of people",
+          "Nombre de personnes"
+        ],
+        "$autoname": "group_people",
+        "appearance": "field-list"
+      },
+      {
+        "name": "people_number_explanation",
+        "type": "note",
+        "$kuid": "etOnjokLK",
+        "label": [
+          "Ikiwa idadi ya watu wanaokula katika makao inatofautiana wakati wa mchana, onesha wastani.",
+          "If the number of people eating in the househlod during the day varies, please indicate the average",
+          "Si le nombre de personnes mangeant dans le foyer varie au cours de la journée, indiquez la moyenne."
+        ],
+        "$autoname": "people_number_explanation"
+      },
+      {
+        "hint": [
+          "Inclure tous les adultes et les enfants, y compris la personne interrogée",
+          "Include all adults and children, including the surveyed person",
+          "Inclure tous les adultes et les enfants, y compris la personne interrogée"
+        ],
+        "name": "nb_people",
+        "type": "int4",
+        "$kuid": "L1p2knzz4",
+        "label": [
+          "Ni watu wangapi wamekula ${info_recall_date}?",
+          "How many people ate at your place the ${info_recall_date}?",
+          "Combien de personnes ont mangé chez vous le ${info_recall_date}?"
+        ],
+        "required": true,
+        "$autoname": "nb_people",
+        "constraint": ". = ${nb_babies} + ${nb_children} + ${nb_youngmen} + ${nb_men} + ${nb_oldmen} + ${nb_women} + ${nb_oldwomen} + ${nb_pregnant} + ${nb_brestfeeding}",
+        "constraint_message": [
+          "Le nombre total de personnes présentes hier pour manger doit être égal a la somme des différentes catégories de personnes.",
+          "The total number of people present to eat yesterday should be egal to the sum of all the different catergories of people.",
+          "Le nombre total de personnes présentes hier pour manger doit être égal a la somme des différentes catégories de personnes."
+        ]
+      },
+      {
+        "hint": [
+          "Enfants de moins de 4 ans",
+          "Children under 4",
+          "Enfants de moins de 4 ans"
+        ],
+        "name": "nb_babies",
+        "type": "int4",
+        "$kuid": "ADkrsomZZ",
+        "label": [
+          "Watoto changa wangapi?",
+          "How many babies?",
+          "Combien de bébés?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_babies",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total de bébés de moins de 4 ans, présents hier pour manger doit être compris entre 0 et 100",
+          "The number of babies under 4, present to eat yesterday should be between 0 and 100",
+          "Le nombre total de bébés de moins de 4 ans, présents hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "hint": [
+          "Enfants entre 4 et 10 ans",
+          "Children between 4 and 10",
+          "Enfants entre 4 et 10 ans"
+        ],
+        "name": "nb_children",
+        "type": "int4",
+        "$kuid": "NhidMQOdc",
+        "label": [
+          "Watoto wangapi?",
+          "How many children?",
+          "Combien d'enfants?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_children",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total d'enfants entre 4 et 11 ans, présents hier pour manger doit être compris entre 0 et 100",
+          "The number of children between 4 and 11, present to eat yesterday should be between 0 and 100",
+          "Le nombre total d'enfants entre 4 et 11 ans, présents hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "hint": [
+          "Garçon entre 11 et 15 ans",
+          "Men between 11 and 15",
+          "Garçon entre 11 et 15 ans"
+        ],
+        "name": "nb_youngmen",
+        "type": "int4",
+        "$kuid": "I18pEuICA",
+        "label": [
+          "Vijana wangapi?",
+          "How many young men?",
+          "Combien de jeunes hommes?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_youngmen",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total de garçons entre 11 et 15 ans, présents hier pour manger doit être compris entre 0 et 100",
+          "The number of young men between 11 and 15, present to eat yesterday should be between 0 and 100",
+          "Le nombre total de garçons entre 11 et 15 ans, présents hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "hint": [
+          "Hommes entre 16 et 50 ans",
+          "Men between 16 and 50",
+          "Hommes entre 16 et 50 ans"
+        ],
+        "name": "nb_men",
+        "type": "int4",
+        "$kuid": "AMqSyNxGw",
+        "label": [
+          "Wanaume wangapi?",
+          "How many men?",
+          "Combien d'hommes?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_men",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total d'hommes entre15 et 50 ans, présents hier pour manger doit être compris entre 0 et 100",
+          "The number of men between 15 and 50, present to eat yesterday should be between 0 and 100",
+          "Le nombre total d'hommes entre15 et 50 ans, présents hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "name": "new_column",
+        "type": "int4",
+        "$kuid": "AMqSyNxGw",
+        "label": [
+          "Wanaume wangapi?",
+          "How many men?",
+          "Combien d'hommes?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "new",
+        "constraint": ". >= 0 and . <= 100"
+      },
+      {
+        "hint": [
+          "Hommes de plus de 50 ans",
+          "Men over the age of 50",
+          "Hommes de plus de 50 ans"
+        ],
+        "name": "nb_oldmen",
+        "type": "int4",
+        "$kuid": "XLuBocWpu",
+        "label": [
+          "Wazee wangapi?",
+          "How many old men?",
+          "Combien d'hommes agés?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_oldmen",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total d'hommes agés de plus de 50 ans, présents hier pour manger doit être compris entre 0 et 100",
+          "The number of old men over 50, present to eat yesterday should be between 0 and 100",
+          "Le nombre total d'hommes agés de plus de 50 ans, présents hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "hint": [
+          "Femmes entre 11 et 50 ans",
+          "Women between 11 and 50",
+          "Femmes entre 11 et 50 ans"
+        ],
+        "name": "nb_women",
+        "type": "int4",
+        "$kuid": "iShd2GDtO",
+        "label": [
+          "Ni wanawake wangapi ambao hawana mimba na wangapi awanyonyeshe?",
+          "How many non pregnant and non brestfeeding women ?",
+          "Combien de femmes ni enceintes ni allaitantes?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_women",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total de femmes ni enceinte, ni allaitante, entre 11 et 50 ans, présentes hier pour manger doit être compris entre 0 et 100",
+          "The number of non pregnant and non brestfeeding women between 11 and 50, present to eat yesterday should be between 0 and 100",
+          "Le nombre total de femmes ni enceinte, ni allaitante, entre 11 et 50 ans, présentes hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "hint": [
+          "Femmes de plus de 50 ans",
+          "Women over the age of 50",
+          "Femmes de plus de 50 ans"
+        ],
+        "name": "nb_oldwomen",
+        "type": "int4",
+        "$kuid": "di4sHEAYG",
+        "label": [
+          "Wanawake wazee wangapi?",
+          "How many old women?",
+          "Combien de femmes agées?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_oldwomen",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total de femmes agées de plus de 50 ans, présentes hier pour manger doit être compris entre 0 et 100",
+          "The number of women over 50, present to eat yesterday should be between 0 and 100",
+          "Le nombre total de femmes agées de plus de 50 ans, présentes hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "name": "nb_pregnant",
+        "type": "int4",
+        "$kuid": "OXQZh7psX",
+        "label": [
+          "Wanawake wangapi wana mimba?",
+          "How many pregnant women?",
+          "Combien de femmes enceintes?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_pregnant",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total de femmes enceintes, présentes hier pour manger doit être compris entre 0 et 100",
+          "The number of pregnant women, present to eat yesterday should be between 0 and 100",
+          "Le nombre total de femmes enceintes, présentes hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "hint": [
+          "Femmes donnant le sein",
+          null,
+          "Femmes donnant le sein"
+        ],
+        "name": "nb_brestfeeding",
+        "type": "int4",
+        "$kuid": "Wiac9sIyV",
+        "label": [
+          "Wanawake wangapi wana nyonyesha?",
+          "How many brestfeeding women?",
+          "Combien de femmes allaitantes?"
+        ],
+        "default": "0",
+        "required": true,
+        "$autoname": "nb_brestfeeding",
+        "constraint": ". >= 0 and . <= 100",
+        "constraint_message": [
+          "Le nombre total de femmes allaitantes, présentes hier pour manger doit être compris entre 0 et 100",
+          "The number of brestfeeding women, present to eat yesterday should be between 0 and 100",
+          "Le nombre total de femmes allaitantes, présentes hier pour manger doit être compris entre 0 et 100"
+        ]
+      },
+      {
+        "type": "end_group",
+        "$kuid": "XXugL11z7"
+      },
+      {
+        "hint": [
+          "Si la personne répond \"Non\", demander si elle/il a mangé de la viande, des oeufs ou des poduits laitiers pour être sûr de la réponse.",
+          "If the person says \"No\", please ask if she/he ate either meat, eggs or dairy in order to make sure that the answer is correct",
+          "Si la personne répond \"Non\", demander si elle/il a mangé de la viande, des oeufs ou des poduits laitiers pour être sûr de la réponse."
+        ],
+        "name": "eat_protein_yes_no",
+        "type": "varchar",
+        "$kuid": "pNKRLnXjb",
+        "label": [
+          "Mulikula mboka? $ {info_recall_date}?",
+          "Did you eat any animal protein on the ${info_recall_date}?",
+          "Avez vous mangé des protéines animales le ${info_recall_date}?"
+        ],
+        "required": true,
+        "$autoname": "eat_protein_yes_no",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "yes_no"
+      },
+      {
+        "name": "additem",
+        "type": "note",
+        "$kuid": "rerQnk748",
+        "label": [
+          "Baada ya ukurasa huu, kuongeza chakula, bonyeza kitufe cha \"+\". Ikiwa hakuna chakula kingine, bonyeza \"Next\"",
+          "After this page, to add a food item, click on the \"+\" button. If no other food item, click on \"Next\".",
+          "Après cette page, pour ajouter un aliment, cliquer sur le bouton \"+\". Si pas d'autre aliment, cliquer sur \"Suivant\""
+        ],
+        "relevant": "${eat_protein_yes_no} = 'yes'",
+        "$autoname": "additem"
+      },
+      {
+        "name": "group_food",
+        "type": "begin_repeat",
+        "$kuid": "vhjKLsIk7",
+        "label": [
+          "chakula",
+          "Food",
+          "Nourriture"
+        ],
+        "relevant": "${eat_protein_yes_no} = 'yes'",
+        "$autoname": "group_food",
+        "appearance": "field-list"
+      },
+      {
+        "name": "new_column2",
+        "type": "varchar",
+        "$kuid": "AMqSyNxGw",
+        "label": [
+          "Wanaume wangapi?",
+          "How many men?",
+          "Combien d'hommes?"
+        ],
+        "default": "0",
+        "required": false,
+        "$autoname": "new",
+        "constraint": ". >= 0 and . <= 100"
+      },
+      {
+        "hint": [
+          "Quel type de nourriture a été mangé?",
+          "What type of food was eaten?",
+          "Quel type de nourriture a été mangé?"
+        ],
+        "name": "category1",
+        "type": "varchar",
+        "$kuid": "g282Zgldg",
+        "label": [
+          "Catégorie d'aliment",
+          "Item Category",
+          "Catégorie d'aliment"
+        ],
+        "required": true,
+        "$autoname": "category1",
+        "appearance": "minimal",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "category1"
+      },
+      {
+        "hint": [
+          "Quel type de nourriture a été mangé?",
+          "What type of food was eaten?",
+          "Quel type de nourriture a été mangé?"
+        ],
+        "name": "category2",
+        "type": "varchar",
+        "$kuid": "TrxgrysRD",
+        "label": [
+          "Sous catégorie d'aliment",
+          "Item sub category",
+          "Sous catégorie d'aliment"
+        ],
+        "required": true,
+        "$autoname": "category2",
+        "appearance": "minimal",
+        "choice_filter": "category1=${category1}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "category2"
+      },
+      {
+        "hint": [
+          "Sélectionner le groupe",
+          "Select the group",
+          "Sélectionner le groupe"
+        ],
+        "name": "kobogroup",
+        "type": "varchar",
+        "$kuid": "SoblDFoW6",
+        "label": [
+          "Groupe",
+          "Group",
+          "Groupe"
+        ],
+        "required": true,
+        "$autoname": "group",
+        "appearance": "minimal",
+        "choice_filter": "category2=${category2}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "group"
+      },
+      {
+        "hint": [
+          "Sélectionner l'espèce",
+          "Select the species",
+          "Sélectionner l'espèce"
+        ],
+        "name": "species",
+        "type": "varchar",
+        "$kuid": "1CWEm381L",
+        "label": [
+          "Espèce",
+          "Species",
+          "Espèce"
+        ],
+        "required": true,
+        "$autoname": "species",
+        "appearance": "minimal",
+        "choice_filter": "group=${group}",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "specie"
+      },
+      {
+        "hint": [
+          "Si la personne sait précisément combien elle/il a acheté, choisissez \"quantité connue\", si non, choisissez \"pesée à la balance\"",
+          "If the person knows precisely how much she/he bought, choose \"known quantity\", if not, choose \"measure with scale\"",
+          "Si la personne sait précisément combien elle/il a acheté, choisissez \"quantité connue\", si non, choisissez \"pesée à la balance\""
+        ],
+        "name": "quantity_technique",
+        "type": "varchar",
+        "$kuid": "zu6S5Sb2W",
+        "label": [
+          "Comment voulez-vous mesurer la quantité?",
+          "How do yo want to measure the quantity?",
+          "Comment voulez-vous mesurer la quantité?"
+        ],
+        "required": true,
+        "$autoname": "quantity_technique",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "quantity_technique"
+      },
+      {
+        "hint": [
+          "Les quantités sont indiquées par le poids en kilo de pâte à modeler correspondant au même volume que la quantité de viande consommée.",
+          "Quantities are indicated by the weight in kg of the amount of plasticine clay corresponding to the same volume of meat consumed",
+          "Les quantités sont indiquées par le poids en kilo de pâte à modeler correspondant au même volume que la quantité de viande consommée."
+        ],
+        "name": "quantity",
+        "type": "float4",
+        "$kuid": "gwIBzxXoG",
+        "label": [
+          "Kadiri cha chakula (katika kilo)",
+          "Quantity of food (in kilograms)",
+          "Quantité de nourriture (en kilogrammes)"
+        ],
+        "required": true,
+        "$autoname": "quantity",
+        "constraint": ". > 0 and . <= 20",
+        "constraint_message": [
+          "Le poids de l'aliment consommé doit être compris entre 0 et 20 kilos",
+          "Weight should be between 0 and 20 kg",
+          "Le poids de l'aliment consommé doit être compris entre 0 et 20 kilos"
+        ]
+      },
+      {
+        "hint": [
+          "Combien coûte habituellement cette quantité de l'aliment mangé? (Demandez à la personne interrogée combien elle l'a payé si elle l'a acheté, et combien elle le paierait si elle ne l'achetait pas).",
+          "How much does this quantity of food usually cost? (Ask the interviewee how much she paid for it if she bought it, and how much she would pay for it if she didn't buy it).",
+          "Combien coûte habituellement cette quantité de l'aliment mangé? (Demandez à la personne interrogée combien elle l'a payé si elle l'a acheté, et combien elle le paierait si elle ne l'achetait pas)."
+        ],
+        "name": "Cost",
+        "type": "float4",
+        "$kuid": "knZIRfAm4",
+        "label": [
+          "Bei ya mboka inye ilikuliwa (katika FC)",
+          "Cost of the protein eaten (en FC)",
+          "Coût de la protéine mangée (en FC)"
+        ],
+        "required": true,
+        "$autoname": "Cost",
+        "constraint": ". > 0 and . <= 100000",
+        "constraint_message": [
+          "Le prix de l'aliment consommé doit être compris entre 0 et 500.000 FC",
+          "Price should be between 0 and 500.000 FC",
+          "Le prix de l'aliment consommé doit être compris entre 0 et 500.000 FC"
+        ]
+      },
+      {
+        "hint": [
+          "Comment avez-vous obtenu l'aliment?",
+          "How did you get this food?",
+          "Comment avez-vous obtenu l'aliment?"
+        ],
+        "name": "obtention",
+        "type": "varchar",
+        "$kuid": "62qPBKgxK",
+        "label": [
+          "Njia za kupata chakula",
+          "Obtention of food",
+          "Moyen d'obtention des aliments"
+        ],
+        "required": true,
+        "$autoname": "obtention",
+        "appearance": "horizontal-compact",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "obtention"
+      },
+      {
+        "hint": [
+          "Dites comment vous avez obtenu cet aliment",
+          "Indicate how did you get this food",
+          "Dites comment vous avez obtenu cet aliment"
+        ],
+        "name": "other_obtention",
+        "type": "text",
+        "$kuid": "3p48RCqti",
+        "label": [
+          "Njia zingine za kupata chakula",
+          "Other obtention of food",
+          "Autre moyen d'obtention des aliments"
+        ],
+        "relevant": "${obtention} = 'other_obtention'",
+        "required": true,
+        "$autoname": "other_obtention",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "hint": [
+          "Soyez le plus précis possible (nom la forêt, nom du village/ville, intérieur/extérieur RFO etc.)",
+          "Be as precise as possible",
+          "Soyez le plus précis possible (nom la forêt, nom du village/ville, intérieur/extérieur RFO etc.)"
+        ],
+        "name": "origin_wildmeat",
+        "type": "text",
+        "$kuid": "ELdqTZRKP",
+        "label": [
+          "Nyama ya pori imetoka wapi?",
+          "From where does this game comes from?",
+          "Provenance du gibier"
+        ],
+        "relevant": "${category1} = 'wildmeat'",
+        "$autoname": "origin_wildmeat"
+      },
+      {
+        "hint": [
+          "Quel était l'état de l'aliment quand vous l'avez acheté?",
+          "What is the state of the food when it was bought?",
+          "Quel était l'état de l'aliment quand vous l'avez acheté?"
+        ],
+        "name": "state",
+        "type": "varchar",
+        "$kuid": "4jIxqfzjl",
+        "label": [
+          "Hali ya mboka",
+          "State of food",
+          "L'état de l'aliment"
+        ],
+        "required": true,
+        "$autoname": "state",
+        "appearance": "minimal",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "state"
+      },
+      {
+        "hint": [
+          "Ajoutez l'état de l'aliment ici",
+          "Add here the state of the food",
+          "Ajoutez l'état de l'aliment ici"
+        ],
+        "name": "other_state",
+        "type": "text",
+        "$kuid": "wzcGCc12c",
+        "label": [
+          "Hali ya mboka",
+          "State of food",
+          "L'état de l'aliment"
+        ],
+        "relevant": "${state} = 'other_state'",
+        "required": true,
+        "$autoname": "other_state",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ]
+      },
+      {
+        "hint": [
+          "À quelle fréquence mangez-vous habituellement cette nourriture ?",
+          "How frequently do you usually eat this food?",
+          "À quelle fréquence mangez-vous habituellement cette nourriture ?"
+        ],
+        "name": "frequency",
+        "type": "varchar",
+        "$kuid": "2O02gyaje",
+        "label": [
+          "Unakulaka yao mara ngapi?",
+          "Frequency of consumption",
+          "Fréquence de consommation"
+        ],
+        "required": true,
+        "$autoname": "frequency",
+        "appearance": "minimal",
+        "constraint_message": [
+          "Champ obligatoire",
+          null,
+          "Champ obligatoire"
+        ],
+        "select_from_list_name": "freq"
+      },
+      {
+        "hint": [
+          "Avez-vous d'autres informations sur cet aliment qu'il serait utile de noter ?",
+          "Do you have any further information on this food that might be useful to note down?",
+          "Avez-vous d'autres informations sur cet aliment qu'il serait utile de noter ?"
+        ],
+        "name": "notes_alim",
+        "type": "text",
+        "$kuid": "cIHAfo47J",
+        "label": [
+          "Vidokezo juu ya chakula",
+          "Notes on the aliment",
+          "Notes sur l'aliment"
+        ],
+        "required": false,
+        "$autoname": "notes_alim"
+      },
+      {
+        "name": "additem_001",
+        "type": "note",
+        "$kuid": "ZR5i0tmMK",
+        "label": [
+          "Ili kuongeza chakula (protini), bonyeza kitufe cha \"+\". Ikiwa hakuna chakula kingine, bonyeza \"Next\"",
+          "To add a food item (protein), click on the \"+\" button. If no other food item, click on \"Next\".",
+          "Pour ajouter un aliment (protéines), cliquer sur le bouton \"+\". Si pas d'autre aliment, cliquer sur \"Suivant\""
+        ],
+        "$autoname": "additem_001",
+        "$given_name": "additem"
+      },
+      {
+        "type": "end_repeat",
+        "$kuid": "Dz0gmuf81"
+      },
+      {
+        "name": "group_end",
+        "type": "end_group",
+        "$kuid": "ELGcf9r2b"
+      },
+      {
+        "hint": [
+          "Avez-vous d'autres informations sur l'enquête en general qu'il serait utile de noter ?",
+          "Do you have any further information on the general survey that might be useful to note down?",
+          "Avez-vous d'autres informations sur l'enquête en general qu'il serait utile de noter ?"
+        ],
+        "name": "notes_final",
+        "type": "text",
+        "$kuid": "Tw93n59Th",
+        "label": [
+          "Maelezo ya mwisho",
+          "Final notes",
+          "Notes finales"
+        ],
+        "required": false,
+        "$autoname": "notes_final"
+      },
+      {
+        "name": "__version__",
+        "type": "varchar",
+        "$kuid": "ViK1PeHEP",
+        "$autoname": "__version__",
+        "calculation": "'vAdjocdkfyNoxxwvjLo3n3'"
+      },
+      {
+        "name": "_version_",
+        "type": "varchar",
+        "$kuid": "RqzMLoEYj",
+        "$autoname": "_version_",
+        "$given_name": "__version__",
+        "calculation": "'v5P4wZJT4tacqjZQDYNFyC'"
+      },
+      {
+        "name": "_version__001",
+        "type": "varchar",
+        "$kuid": "daLxTmRe9",
+        "$autoname": "_version__001",
+        "$given_name": "__version__",
+        "calculation": "'vGdmzSQt3cmgqhXydTYLfG'"
+      }
+    ],
+    "tablesToBeCreated": [
+      [
+        {
+          "hint": [
+            "Selectionner le nom de la personne réalisant l'enquête (vous)",
+            "Select the name of the person who is conducting the survey (you)",
+            "Selectionner le nom de la personne réalisant l'enquête (vous)"
+          ],
+          "name": "surveyor",
+          "type": "varchar",
+          "$kuid": "dIKGGdn5d",
+          "label": [
+            "Jina la mpelelezi",
+            "Name of the surveyor",
+            "Nom de l'enqueteur"
+          ],
+          "required": true,
+          "$autoname": "surveyor",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "surveyor"
+        },
+        {
+          "name": "consent_checklist",
+          "type": "varchar",
+          "$kuid": "1bUAiMjiy",
+          "label": [
+            "- Présentation (nom et agent RFO)\n- Brief sur SWM (gestion durable de la faune + sécurité alimentaire)\n- Explications sur l'enquête (comprendre la consommation de protéines animales pour identifier les besoin, les possibilité de développement de l'élevage et s'assurer que le projet ne fait pas de mal)\n- Confidentialité (les données ne seront jamais partagées avec les autorités, le nom sera gardé secret et les données seront analysées au niveau du village ou de la RFO)\n- 1 enquête / mois * 12 mois\n- Plus d'informations disponibles à Epulu\n- Avez-vous bien compris?\n\n*Cochez la case correspondant à la réponse que le sujet a donnée verbalement concernant son consentement à participer à l'étude.* \n*Si le sujet accepte, donnez lui une version imprimée du consentement.*\n*Si le sujet refuse de participer, cherchez un autre participant.\n\n*Etes-vous d'accord pour répondre aux questions?",
+            "- Present yourself (name, OWR agent)\n- Brief on SWM (sustainable wildlife management + food security)\n- Explanation on the survey (understand animal protein consumption to indentify the needs, develop breeding, and make sure the program is not doing any harm)\n- Confidentiality (info will never be shared with the authorities, your name will be kept secret and data will be analyzed at the village and OWR level)\n- 1 survey / month * 12 months\n- Duration = 20 minutes\n- More information available in Epulu\n- Did you understand everything?\n\n*Tick the box corresponding to the answer the subject provided verbally regarding his consent to participate in the study.*\n*If the subject accept, give him'her a printed copy of the consent*\n*If the subject declines to participate, look for another participant.*\n\nDo you accept to proceed with the survey?",
+            "- Présentation (nom et agent RFO)\n- Brief sur SWM (gestion durable de la faune + sécurité alimentaire)\n- Explications sur l'enquête (comprendre la consommation de protéines animales pour identifier les besoin, les possibilité de développement de l'élevage et s'assurer que le projet ne fait pas de mal)\n- Confidentialité (les données ne seront jamais partagées avec les autorités, le nom sera gardé secret et les données seront analysées au niveau du village ou de la RFO)\n- 1 enquête / mois * 12 mois\n- Plus d'informations disponibles à Epulu\n- Avez-vous bien compris?\n\n*Cochez la case correspondant à la réponse que le sujet a donnée verbalement concernant son consentement à participer à l'étude.* \n*Si le sujet accepte, donnez lui une version imprimée du consentement.*\n*Si le sujet refuse de participer, cherchez un autre participant.\n\n*Etes-vous d'accord pour répondre aux questions?"
+          ],
+          "required": true,
+          "$autoname": "consent_checklist",
+          "select_from_list_name": "yes_no"
+        },
+        {
+          "name": "other_reason_declined",
+          "type": "text",
+          "$kuid": "5PoIEej8l",
+          "label": [
+            "Sababu gani mtu huyo hakutaka kujibu maswali?",
+            "For what other reason the subject decline to be interviewed?",
+            "Pour quelle autre raison la personne n'a-t-elle pas souhaité répondre aux questions?"
+          ],
+          "relevant": "selected(${reason_declined}, 'other_reason_decline')",
+          "required": true,
+          "$autoname": "other_reason_declined",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ]
+        },
+        {
+          "name": "district",
+          "type": "varchar",
+          "$kuid": "hPrBAPgsI",
+          "label": [
+            "Chagua usulutani wa asiri",
+            "Select district",
+            "Sélectionner la chefferie"
+          ],
+          "required": true,
+          "$autoname": "district",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "district"
+        },
+        {
+          "hint": [
+            "Le village ou la ville où l'enquête a lieu",
+            "The village or town where the survey is taking place",
+            "Le village ou la ville où l'enquête a lieu"
+          ],
+          "name": "village",
+          "type": "varchar",
+          "$kuid": "5F1Khjoqb",
+          "label": [
+            "Jina la kijiji",
+            "Name of village",
+            "Nom du village"
+          ],
+          "required": true,
+          "$autoname": "village",
+          "appearance": "minimal",
+          "choice_filter": "district=${district}",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "village"
+        },
+        {
+          "hint": [
+            "Le numéro d'identification du ménage où se déroule l'entretien",
+            "The household ID where the interview is taking place",
+            "Le numéro d'identification du ménage où se déroule l'entretien"
+          ],
+          "name": "household_id",
+          "type": "varchar",
+          "$kuid": "qbifSESlB",
+          "label": [
+            "Kitambulisho chamakao",
+            "Household ID",
+            "ID du ménage"
+          ],
+          "required": true,
+          "$autoname": "household_id",
+          "appearance": "minimal",
+          "choice_filter": "village=${village}",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "hh_id"
+        },
+        {
+          "name": "identity",
+          "type": "text",
+          "$kuid": "s6thRcUfS",
+          "label": [
+            "Jina kamili la mtu ni nini?",
+            "Full name of the person you interrogate",
+            "Quel est le nom complet de la personne?"
+          ],
+          "required": false,
+          "$autoname": "identity",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ]
+        },
+        {
+          "name": "date_constraint_calc",
+          "type": "varchar",
+          "$kuid": "vplp0rjCh",
+          "label": [
+            "Mahesabu \"leo\" kisha siku 2 kuweka kikwazo kwa swali linalofuata",
+            "Calculate \"today\" - 2 days to put a constraint on the next question",
+            "Calcule \"today\" moins 2 jours pour mettre une contrainte sur la question suivante"
+          ],
+          "required": true,
+          "$autoname": "date_constraint_calc",
+          "calculation": "${today} - 2",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ]
+        },
+        {
+          "name": "info_recall_date",
+          "type": "date",
+          "$kuid": "Vo5KLKwAv",
+          "label": [
+            "Je! Ni tarehe gani ambayo utakusanya habari?",
+            "What is the date of the day you are going to register the information about?",
+            "Quelle est la date du jour duquel vous allez collecter des informations?"
+          ],
+          "required": true,
+          "$autoname": "info_recall_date",
+          "constraint": ". < ${today} and . >= ${date_constraint_calc}",
+          "constraint_message": [
+            "La date des informations sur lesquelles vous posez des questions doit être hier (24h-recall) ou avant-hier (48h-recall)",
+            "The date of the information you are asking about should be yesterday (24h-recall) or the day before yesterday (48h-recall)",
+            "La date des informations sur lesquelles vous posez des questions doit être hier (24h-recall) ou avant-hier (48h-recall)"
+          ]
+        },
+        {
+          "hint": [
+            "Inclure tous les adultes et les enfants, y compris la personne interrogée",
+            "Include all adults and children, including the surveyed person",
+            "Inclure tous les adultes et les enfants, y compris la personne interrogée"
+          ],
+          "name": "nb_people",
+          "type": "int4",
+          "$kuid": "L1p2knzz4",
+          "label": [
+            "Ni watu wangapi wamekula ${info_recall_date}?",
+            "How many people ate at your place the ${info_recall_date}?",
+            "Combien de personnes ont mangé chez vous le ${info_recall_date}?"
+          ],
+          "required": true,
+          "$autoname": "nb_people",
+          "constraint": ". = ${nb_babies} + ${nb_children} + ${nb_youngmen} + ${nb_men} + ${nb_oldmen} + ${nb_women} + ${nb_oldwomen} + ${nb_pregnant} + ${nb_brestfeeding}",
+          "constraint_message": [
+            "Le nombre total de personnes présentes hier pour manger doit être égal a la somme des différentes catégories de personnes.",
+            "The total number of people present to eat yesterday should be egal to the sum of all the different catergories of people.",
+            "Le nombre total de personnes présentes hier pour manger doit être égal a la somme des différentes catégories de personnes."
+          ]
+        },
+        {
+          "hint": [
+            "Enfants de moins de 4 ans",
+            "Children under 4",
+            "Enfants de moins de 4 ans"
+          ],
+          "name": "nb_babies",
+          "type": "int4",
+          "$kuid": "ADkrsomZZ",
+          "label": [
+            "Watoto changa wangapi?",
+            "How many babies?",
+            "Combien de bébés?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_babies",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total de bébés de moins de 4 ans, présents hier pour manger doit être compris entre 0 et 100",
+            "The number of babies under 4, present to eat yesterday should be between 0 and 100",
+            "Le nombre total de bébés de moins de 4 ans, présents hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Enfants entre 4 et 10 ans",
+            "Children between 4 and 10",
+            "Enfants entre 4 et 10 ans"
+          ],
+          "name": "nb_children",
+          "type": "int4",
+          "$kuid": "NhidMQOdc",
+          "label": [
+            "Watoto wangapi?",
+            "How many children?",
+            "Combien d'enfants?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_children",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total d'enfants entre 4 et 11 ans, présents hier pour manger doit être compris entre 0 et 100",
+            "The number of children between 4 and 11, present to eat yesterday should be between 0 and 100",
+            "Le nombre total d'enfants entre 4 et 11 ans, présents hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Garçon entre 11 et 15 ans",
+            "Men between 11 and 15",
+            "Garçon entre 11 et 15 ans"
+          ],
+          "name": "nb_youngmen",
+          "type": "int4",
+          "$kuid": "I18pEuICA",
+          "label": [
+            "Vijana wangapi?",
+            "How many young men?",
+            "Combien de jeunes hommes?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_youngmen",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total de garçons entre 11 et 15 ans, présents hier pour manger doit être compris entre 0 et 100",
+            "The number of young men between 11 and 15, present to eat yesterday should be between 0 and 100",
+            "Le nombre total de garçons entre 11 et 15 ans, présents hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Hommes entre 16 et 50 ans",
+            "Men between 16 and 50",
+            "Hommes entre 16 et 50 ans"
+          ],
+          "name": "nb_men",
+          "type": "int4",
+          "$kuid": "AMqSyNxGw",
+          "label": [
+            "Wanaume wangapi?",
+            "How many men?",
+            "Combien d'hommes?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_men",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total d'hommes entre15 et 50 ans, présents hier pour manger doit être compris entre 0 et 100",
+            "The number of men between 15 and 50, present to eat yesterday should be between 0 and 100",
+            "Le nombre total d'hommes entre15 et 50 ans, présents hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "name": "new_column",
+          "type": "int4",
+          "$kuid": "AMqSyNxGw",
+          "label": [
+            "Wanaume wangapi?",
+            "How many men?",
+            "Combien d'hommes?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "new",
+          "constraint": ". >= 0 and . <= 100"
+        },
+        {
+          "hint": [
+            "Hommes de plus de 50 ans",
+            "Men over the age of 50",
+            "Hommes de plus de 50 ans"
+          ],
+          "name": "nb_oldmen",
+          "type": "int4",
+          "$kuid": "XLuBocWpu",
+          "label": [
+            "Wazee wangapi?",
+            "How many old men?",
+            "Combien d'hommes agés?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_oldmen",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total d'hommes agés de plus de 50 ans, présents hier pour manger doit être compris entre 0 et 100",
+            "The number of old men over 50, present to eat yesterday should be between 0 and 100",
+            "Le nombre total d'hommes agés de plus de 50 ans, présents hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Femmes entre 11 et 50 ans",
+            "Women between 11 and 50",
+            "Femmes entre 11 et 50 ans"
+          ],
+          "name": "nb_women",
+          "type": "int4",
+          "$kuid": "iShd2GDtO",
+          "label": [
+            "Ni wanawake wangapi ambao hawana mimba na wangapi awanyonyeshe?",
+            "How many non pregnant and non brestfeeding women ?",
+            "Combien de femmes ni enceintes ni allaitantes?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_women",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total de femmes ni enceinte, ni allaitante, entre 11 et 50 ans, présentes hier pour manger doit être compris entre 0 et 100",
+            "The number of non pregnant and non brestfeeding women between 11 and 50, present to eat yesterday should be between 0 and 100",
+            "Le nombre total de femmes ni enceinte, ni allaitante, entre 11 et 50 ans, présentes hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Femmes de plus de 50 ans",
+            "Women over the age of 50",
+            "Femmes de plus de 50 ans"
+          ],
+          "name": "nb_oldwomen",
+          "type": "int4",
+          "$kuid": "di4sHEAYG",
+          "label": [
+            "Wanawake wazee wangapi?",
+            "How many old women?",
+            "Combien de femmes agées?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_oldwomen",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total de femmes agées de plus de 50 ans, présentes hier pour manger doit être compris entre 0 et 100",
+            "The number of women over 50, present to eat yesterday should be between 0 and 100",
+            "Le nombre total de femmes agées de plus de 50 ans, présentes hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "name": "nb_pregnant",
+          "type": "int4",
+          "$kuid": "OXQZh7psX",
+          "label": [
+            "Wanawake wangapi wana mimba?",
+            "How many pregnant women?",
+            "Combien de femmes enceintes?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_pregnant",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total de femmes enceintes, présentes hier pour manger doit être compris entre 0 et 100",
+            "The number of pregnant women, present to eat yesterday should be between 0 and 100",
+            "Le nombre total de femmes enceintes, présentes hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Femmes donnant le sein",
+            null,
+            "Femmes donnant le sein"
+          ],
+          "name": "nb_brestfeeding",
+          "type": "int4",
+          "$kuid": "Wiac9sIyV",
+          "label": [
+            "Wanawake wangapi wana nyonyesha?",
+            "How many brestfeeding women?",
+            "Combien de femmes allaitantes?"
+          ],
+          "default": "0",
+          "required": true,
+          "$autoname": "nb_brestfeeding",
+          "constraint": ". >= 0 and . <= 100",
+          "constraint_message": [
+            "Le nombre total de femmes allaitantes, présentes hier pour manger doit être compris entre 0 et 100",
+            "The number of brestfeeding women, present to eat yesterday should be between 0 and 100",
+            "Le nombre total de femmes allaitantes, présentes hier pour manger doit être compris entre 0 et 100"
+          ]
+        },
+        {
+          "hint": [
+            "Si la personne répond \"Non\", demander si elle/il a mangé de la viande, des oeufs ou des poduits laitiers pour être sûr de la réponse.",
+            "If the person says \"No\", please ask if she/he ate either meat, eggs or dairy in order to make sure that the answer is correct",
+            "Si la personne répond \"Non\", demander si elle/il a mangé de la viande, des oeufs ou des poduits laitiers pour être sûr de la réponse."
+          ],
+          "name": "eat_protein_yes_no",
+          "type": "varchar",
+          "$kuid": "pNKRLnXjb",
+          "label": [
+            "Mulikula mboka? $ {info_recall_date}?",
+            "Did you eat any animal protein on the ${info_recall_date}?",
+            "Avez vous mangé des protéines animales le ${info_recall_date}?"
+          ],
+          "required": true,
+          "$autoname": "eat_protein_yes_no",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "yes_no"
+        },
+        {
+          "hint": [
+            "Avez-vous d'autres informations sur l'enquête en general qu'il serait utile de noter ?",
+            "Do you have any further information on the general survey that might be useful to note down?",
+            "Avez-vous d'autres informations sur l'enquête en general qu'il serait utile de noter ?"
+          ],
+          "name": "notes_final",
+          "type": "text",
+          "$kuid": "Tw93n59Th",
+          "label": [
+            "Maelezo ya mwisho",
+            "Final notes",
+            "Notes finales"
+          ],
+          "required": false,
+          "$autoname": "notes_final"
+        },
+        {
+          "name": "__version__",
+          "type": "varchar",
+          "$kuid": "ViK1PeHEP",
+          "$autoname": "__version__",
+          "calculation": "'vAdjocdkfyNoxxwvjLo3n3'"
+        },
+        {
+          "name": "_version_",
+          "type": "varchar",
+          "$kuid": "RqzMLoEYj",
+          "$autoname": "_version_",
+          "$given_name": "__version__",
+          "calculation": "'v5P4wZJT4tacqjZQDYNFyC'"
+        },
+        {
+          "name": "_version__001",
+          "type": "varchar",
+          "$kuid": "daLxTmRe9",
+          "$autoname": "_version__001",
+          "$given_name": "__version__",
+          "calculation": "'vGdmzSQt3cmgqhXydTYLfG'"
+        },
+        {
+          "table_name": "tbl_survey"
+        }
+      ],
+      [
+        {
+          "name": "new_column2",
+          "type": "varchar",
+          "$kuid": "AMqSyNxGw",
+          "label": [
+            "Wanaume wangapi?",
+            "How many men?",
+            "Combien d'hommes?"
+          ],
+          "default": "0",
+          "required": false,
+          "$autoname": "new",
+          "constraint": ". >= 0 and . <= 100"
+        },
+        {
+          "hint": [
+            "Quel type de nourriture a été mangé?",
+            "What type of food was eaten?",
+            "Quel type de nourriture a été mangé?"
+          ],
+          "name": "category1",
+          "type": "varchar",
+          "$kuid": "g282Zgldg",
+          "label": [
+            "Catégorie d'aliment",
+            "Item Category",
+            "Catégorie d'aliment"
+          ],
+          "required": true,
+          "$autoname": "category1",
+          "appearance": "minimal",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "category1"
+        },
+        {
+          "hint": [
+            "Quel type de nourriture a été mangé?",
+            "What type of food was eaten?",
+            "Quel type de nourriture a été mangé?"
+          ],
+          "name": "category2",
+          "type": "varchar",
+          "$kuid": "TrxgrysRD",
+          "label": [
+            "Sous catégorie d'aliment",
+            "Item sub category",
+            "Sous catégorie d'aliment"
+          ],
+          "required": true,
+          "$autoname": "category2",
+          "appearance": "minimal",
+          "choice_filter": "category1=${category1}",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "category2"
+        },
+        {
+          "hint": [
+            "Sélectionner le groupe",
+            "Select the group",
+            "Sélectionner le groupe"
+          ],
+          "name": "kobogroup",
+          "type": "varchar",
+          "$kuid": "SoblDFoW6",
+          "label": [
+            "Groupe",
+            "Group",
+            "Groupe"
+          ],
+          "required": true,
+          "$autoname": "group",
+          "appearance": "minimal",
+          "choice_filter": "category2=${category2}",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "group"
+        },
+        {
+          "hint": [
+            "Sélectionner l'espèce",
+            "Select the species",
+            "Sélectionner l'espèce"
+          ],
+          "name": "species",
+          "type": "varchar",
+          "$kuid": "1CWEm381L",
+          "label": [
+            "Espèce",
+            "Species",
+            "Espèce"
+          ],
+          "required": true,
+          "$autoname": "species",
+          "appearance": "minimal",
+          "choice_filter": "group=${group}",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "specie"
+        },
+        {
+          "hint": [
+            "Si la personne sait précisément combien elle/il a acheté, choisissez \"quantité connue\", si non, choisissez \"pesée à la balance\"",
+            "If the person knows precisely how much she/he bought, choose \"known quantity\", if not, choose \"measure with scale\"",
+            "Si la personne sait précisément combien elle/il a acheté, choisissez \"quantité connue\", si non, choisissez \"pesée à la balance\""
+          ],
+          "name": "quantity_technique",
+          "type": "varchar",
+          "$kuid": "zu6S5Sb2W",
+          "label": [
+            "Comment voulez-vous mesurer la quantité?",
+            "How do yo want to measure the quantity?",
+            "Comment voulez-vous mesurer la quantité?"
+          ],
+          "required": true,
+          "$autoname": "quantity_technique",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "quantity_technique"
+        },
+        {
+          "hint": [
+            "Les quantités sont indiquées par le poids en kilo de pâte à modeler correspondant au même volume que la quantité de viande consommée.",
+            "Quantities are indicated by the weight in kg of the amount of plasticine clay corresponding to the same volume of meat consumed",
+            "Les quantités sont indiquées par le poids en kilo de pâte à modeler correspondant au même volume que la quantité de viande consommée."
+          ],
+          "name": "quantity",
+          "type": "float4",
+          "$kuid": "gwIBzxXoG",
+          "label": [
+            "Kadiri cha chakula (katika kilo)",
+            "Quantity of food (in kilograms)",
+            "Quantité de nourriture (en kilogrammes)"
+          ],
+          "required": true,
+          "$autoname": "quantity",
+          "constraint": ". > 0 and . <= 20",
+          "constraint_message": [
+            "Le poids de l'aliment consommé doit être compris entre 0 et 20 kilos",
+            "Weight should be between 0 and 20 kg",
+            "Le poids de l'aliment consommé doit être compris entre 0 et 20 kilos"
+          ]
+        },
+        {
+          "hint": [
+            "Combien coûte habituellement cette quantité de l'aliment mangé? (Demandez à la personne interrogée combien elle l'a payé si elle l'a acheté, et combien elle le paierait si elle ne l'achetait pas).",
+            "How much does this quantity of food usually cost? (Ask the interviewee how much she paid for it if she bought it, and how much she would pay for it if she didn't buy it).",
+            "Combien coûte habituellement cette quantité de l'aliment mangé? (Demandez à la personne interrogée combien elle l'a payé si elle l'a acheté, et combien elle le paierait si elle ne l'achetait pas)."
+          ],
+          "name": "Cost",
+          "type": "float4",
+          "$kuid": "knZIRfAm4",
+          "label": [
+            "Bei ya mboka inye ilikuliwa (katika FC)",
+            "Cost of the protein eaten (en FC)",
+            "Coût de la protéine mangée (en FC)"
+          ],
+          "required": true,
+          "$autoname": "Cost",
+          "constraint": ". > 0 and . <= 100000",
+          "constraint_message": [
+            "Le prix de l'aliment consommé doit être compris entre 0 et 500.000 FC",
+            "Price should be between 0 and 500.000 FC",
+            "Le prix de l'aliment consommé doit être compris entre 0 et 500.000 FC"
+          ]
+        },
+        {
+          "hint": [
+            "Comment avez-vous obtenu l'aliment?",
+            "How did you get this food?",
+            "Comment avez-vous obtenu l'aliment?"
+          ],
+          "name": "obtention",
+          "type": "varchar",
+          "$kuid": "62qPBKgxK",
+          "label": [
+            "Njia za kupata chakula",
+            "Obtention of food",
+            "Moyen d'obtention des aliments"
+          ],
+          "required": true,
+          "$autoname": "obtention",
+          "appearance": "horizontal-compact",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "obtention"
+        },
+        {
+          "hint": [
+            "Dites comment vous avez obtenu cet aliment",
+            "Indicate how did you get this food",
+            "Dites comment vous avez obtenu cet aliment"
+          ],
+          "name": "other_obtention",
+          "type": "text",
+          "$kuid": "3p48RCqti",
+          "label": [
+            "Njia zingine za kupata chakula",
+            "Other obtention of food",
+            "Autre moyen d'obtention des aliments"
+          ],
+          "relevant": "${obtention} = 'other_obtention'",
+          "required": true,
+          "$autoname": "other_obtention",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ]
+        },
+        {
+          "hint": [
+            "Soyez le plus précis possible (nom la forêt, nom du village/ville, intérieur/extérieur RFO etc.)",
+            "Be as precise as possible",
+            "Soyez le plus précis possible (nom la forêt, nom du village/ville, intérieur/extérieur RFO etc.)"
+          ],
+          "name": "origin_wildmeat",
+          "type": "text",
+          "$kuid": "ELdqTZRKP",
+          "label": [
+            "Nyama ya pori imetoka wapi?",
+            "From where does this game comes from?",
+            "Provenance du gibier"
+          ],
+          "relevant": "${category1} = 'wildmeat'",
+          "$autoname": "origin_wildmeat"
+        },
+        {
+          "hint": [
+            "Quel était l'état de l'aliment quand vous l'avez acheté?",
+            "What is the state of the food when it was bought?",
+            "Quel était l'état de l'aliment quand vous l'avez acheté?"
+          ],
+          "name": "state",
+          "type": "varchar",
+          "$kuid": "4jIxqfzjl",
+          "label": [
+            "Hali ya mboka",
+            "State of food",
+            "L'état de l'aliment"
+          ],
+          "required": true,
+          "$autoname": "state",
+          "appearance": "minimal",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "state"
+        },
+        {
+          "hint": [
+            "Ajoutez l'état de l'aliment ici",
+            "Add here the state of the food",
+            "Ajoutez l'état de l'aliment ici"
+          ],
+          "name": "other_state",
+          "type": "text",
+          "$kuid": "wzcGCc12c",
+          "label": [
+            "Hali ya mboka",
+            "State of food",
+            "L'état de l'aliment"
+          ],
+          "relevant": "${state} = 'other_state'",
+          "required": true,
+          "$autoname": "other_state",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ]
+        },
+        {
+          "hint": [
+            "À quelle fréquence mangez-vous habituellement cette nourriture ?",
+            "How frequently do you usually eat this food?",
+            "À quelle fréquence mangez-vous habituellement cette nourriture ?"
+          ],
+          "name": "frequency",
+          "type": "varchar",
+          "$kuid": "2O02gyaje",
+          "label": [
+            "Unakulaka yao mara ngapi?",
+            "Frequency of consumption",
+            "Fréquence de consommation"
+          ],
+          "required": true,
+          "$autoname": "frequency",
+          "appearance": "minimal",
+          "constraint_message": [
+            "Champ obligatoire",
+            null,
+            "Champ obligatoire"
+          ],
+          "select_from_list_name": "freq"
+        },
+        {
+          "hint": [
+            "Avez-vous d'autres informations sur cet aliment qu'il serait utile de noter ?",
+            "Do you have any further information on this food that might be useful to note down?",
+            "Avez-vous d'autres informations sur cet aliment qu'il serait utile de noter ?"
+          ],
+          "name": "notes_alim",
+          "type": "text",
+          "$kuid": "cIHAfo47J",
+          "label": [
+            "Vidokezo juu ya chakula",
+            "Notes on the aliment",
+            "Notes sur l'aliment"
+          ],
+          "required": false,
+          "$autoname": "notes_alim"
+        },
+        {
+          "table_name": "tbl_survey_char"
+        }
+      ]
+    ],
+    "index": 1
+  }
