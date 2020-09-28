@@ -93,13 +93,8 @@ alterState(state => {
           }
         })
         .catch(error => {
-          console.log('here');
           console.log(error);
         });
     })
   );
-  
-  //insertTable(state => state.columns);
-  
-  //describeTable('tbl_survey');
   

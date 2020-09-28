@@ -1,15 +1,4 @@
 alterState(state => {
-  const mapType = {
-    decimal: 'float4',
-    integer: 'int4',
-    text: 'text',
-    select_one: 'varchar',
-    calculate: 'varchar',
-    date: 'date',
-  };
-
-  const types = ['float4', 'int4', 'text', 'varchar', 'varchar', 'date'];
-
   const { kobo_form } = state;
 
   var index = -1;
@@ -34,58 +23,55 @@ alterState(state => {
 each(
   '$.tablesToBeCreated[*]',
   alterState(state => {
-    const types = ['float4', 'int4', 'text', 'varchar', 'varchar', 'date'];
+    const validTypes = ['float4', 'int4', 'text', 'varchar', 'varchar', 'date'];
 
     const { table_name } = state.data[state.data.length - 1];
     return describeTable(table_name)(state)
       .then(postgresColumn => {
-        const columnNames = postgresColumn.table_data.body.rows.map(
-          x => x.column_name
-        );
-        console.log(columnNames);
+        const columnNames = postgresColumn.data.map(x => x.name);
 
-        // On the 1st 'alterState' we separated the form in different parts (inside kobo_columns).
-        // One holding repeatgroups, the other anything but repeatgroups.
-        for (var idx = 0; idx < state.kobo_columns.length; idx++) {
-          var path = [];
-          var prefix = ''; // prefix can be something like "/group_begin/group_people/"
-          for (var i = 0; i < state.kobo_columns[idx].length; i++) {
-            // We 1st test if we meet those keyword so we can start assigning our prefix.
+        var path = [];
+        var prefix = '';
+        for (var i = 0; i < state.kobo_columns[state.index].length; i++) {
+          // We 1st test if we meet those keyword so we can start assigning our prefix.
+          if (
+            state.kobo_columns[state.index][i].type == 'begin_group' ||
+            state.kobo_columns[state.index][i].type == 'begin_repeat'
+          ) {
+            prefix += '/' + state.kobo_columns[state.index][i].name;
+          } else if (
+            // if we have a 'end_group' or 'end_repeat',
+            //it means we must close a group = removing last element of prefix
+            state.kobo_columns[state.index][i].type == 'end_group' ||
+            state.kobo_columns[state.index][i].type == 'end_repeat'
+          ) {
+            const prefixes = prefix.split('/');
+            prefixes.splice(prefixes.length - 1);
+            prefix = prefixes.join('/');
+          } else {
+            // if none of those cases are met, it means we have potentially a column then we must add it to the path.
             if (
-              state.kobo_columns[idx][i].type == 'begin_group' ||
-              state.kobo_columns[idx][i].type == 'begin_repeat'
-            ) {
-              prefix += '/' + state.kobo_columns[idx][i].name;
-            } else if (
-              // if we have a 'end_group' or 'end_repeat',
-              //it means we must close a group = removing last element of prefix
-              state.kobo_columns[idx][i].type == 'end_group' ||
-              state.kobo_columns[idx][i].type == 'end_repeat'
-            ) {
-              const prefixes = prefix.split('/');
-              prefixes.splice(prefixes.length - 1);
-              prefix = prefixes.join('/');
-            } else {
-              // if none of those cases are met, it means we have potentially a column then we must add it to the path.
-              if (
-                state.kobo_columns[idx][i].name &&
-                types.includes(state.kobo_columns[idx][i].type)
-              )
-                path.push(prefix + '/' + state.kobo_columns[idx][i].name + '/');
-            }
+              state.kobo_columns[state.index][i].name &&
+              validTypes.includes(state.kobo_columns[state.index][i].type)
+            )
+              path.push(
+                prefix + '/' + state.kobo_columns[state.index][i].name + '/'
+              );
           }
-          console.log(path);
-          const mapPostgresToKobo = {}; // This is the jsonBody that should be given to our upsert
-
-          columnNames.forEach((key, i) => (mapPostgresToKobo[key] = path[i]));
-          console.log(mapPostgresToKobo);
         }
-        //const expression = `UPSERT(${table_name}, uuid, ${mapPostgresToKobo})`;
+        //console.log(path);
+        const mapPostgresToKobo = {}; // This is the jsonBody that should be given to our upsert
 
-        return state;
+        columnNames.forEach((key, i) => (mapPostgresToKobo[key] = path[i]));
+        console.log(mapPostgresToKobo);
+
+        const expression = `UPSERT(${table_name}, uuid, ${mapPostgresToKobo})`;
+
+        console.log(expression);
+
+        return { ...state, expression };
       })
       .catch(error => {
-        console.log('here');
         console.log(error);
       });
   })
