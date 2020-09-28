@@ -1,5 +1,7 @@
 //== Job to be used for fetching data from Kobo on repeated, timer basis  ==//
 // This can be run on-demand at any time by clicking "run" //
+console.log('Inspecting initial state...')
+console.log(JSON.stringify({ ...state, configuration: 'REDACTED' }, null, 2));
 
 get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
   console.log(`Previous cursor: ${state.lastEnd}`);
