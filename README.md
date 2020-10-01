@@ -16,7 +16,10 @@ Toolbox and a Postgresql transitional database.
 
 The following jobs are configured on OpenFn.org to run automatically.
 
-1. [fetch_kobo_data.js](https://github.com/OpenFn/wcs-consocsci/blob/master/fetch_kobo_data.js): On a timer-basis, OpenFn fetches all Kobo survey submissions where form `name` contains "Rural Consumption". This job sends the Kobo data to OpenFn.org and automatically triggers the next job.
+1. [fetch_kobo_data.js](https://github.com/OpenFn/wcs-consocsci/blob/master/fetch_kobo_data.js):
+   On a timer-basis, OpenFn fetches all Kobo survey submissions where form
+   `name` contains "Rural Consumption". This job sends the Kobo data to
+   OpenFn.org and automatically triggers the next job.
 2. [ruralConsumptionToPostgres.js](https://github.com/OpenFn/wcs-consocsci/blob/master/ruralConsumptionToPostgres.js): OpenFn automatically cleans, maps, & loads the Kobo survey data into structured tables in a Postgres Wildmeat database.
 
 ### (2) Mappings
@@ -29,7 +32,11 @@ The following jobs are configured on OpenFn.org to run automatically.
 2. All data cleaning will be done in Kobo Toolbox. Every time Kobo data is
    synced with the DB, it will overwrite the records saved there and use the
    above uuid to upsert existing records.
-3. Kobo forms only capture species `code`, not `name`. OpenFn has therefore implemented a reference table `swm_species` and uploaded a [list of species](https://docs.google.com/spreadsheets/d/1yfBjpb9cuCOvzKF9Iu_XrXLA_BC8cQFCyYxjVgFIuXU/edit) extracted from the DRC Kobo form. WCS will keep this `swm_species` table up-to-date to ensure successful integration of any species data.
+3. Kobo forms only capture species `code`, not `name`. OpenFn has therefore
+   implemented a reference table `swm_species` and uploaded
+   a [list of species](https://docs.google.com/spreadsheets/d/1yfBjpb9cuCOvzKF9Iu_XrXLA_BC8cQFCyYxjVgFIuXU/edit) extracted
+   from the DRC Kobo form. WCS will keep this `swm_species` table up-to-date to
+   ensure successful integration of any species data.
 4. The jobs currently use hard-coded values for `study_id` ('1000') and
    `site_id` ('1001') as this information is currently not captured in the Kobo
    forms.
@@ -48,6 +55,6 @@ The following jobs are configured on OpenFn.org to run automatically.
    do we therefore continue to use the hardcoded values?)
 3. How to determine the survey consumption type (i.e., Hunter or Market)?
    (Question flagged by Usman.)
-4. Is there a default `sample_unit` for different surveys? 
+4. Is there a default `sample_unit` for different surveys?
 5. How do you want to test these jobs? What Kobo server should we connect with?
    (Currently testing with OpenFn Kobo account.)
