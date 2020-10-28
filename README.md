@@ -1,4 +1,4 @@
-# wcs-consocsci
+# wcs-wildmeat
 
 Wildlife Conservation Society Project
 
