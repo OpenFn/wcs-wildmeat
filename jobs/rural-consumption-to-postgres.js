@@ -21,7 +21,7 @@ upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   site_id: 1001,
   study_id: 1000,
   household_id: state.data.body['survey_info/household_id'],
-  // TODO: decide on how to handle household_char_id
+  // TODO: decide how to handle household_char_id
   household_char_id: state.data.body._id,
   num_occupants: state.data.body['group_begin/group_people/nb_people'],
   num_babies: state.data.body['group_begin/group_people/nb_babies'],
