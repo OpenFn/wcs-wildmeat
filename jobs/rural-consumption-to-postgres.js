@@ -1,3 +1,5 @@
+
+
 upsert('tbl_study', 'study_id', {
   study_id: 1000,
 });
@@ -46,7 +48,7 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
     state.data.body._id +
     state.data.body._submission_time +
     state.data.body._xform_id_string,
-  sample_unit: 'kilograms',
+  sample_unit: 'kilograms', //specify on survey
   number_sample_units: '24',
   sampling_effortin_days: '2',
 });
@@ -80,7 +82,7 @@ alterState(state => {
             unit:
               foodItem['group_begin/group_food/quantity_technique'] ===
               'known_technique'
-                ? 'kilogram'
+                ? 'kilogram' //biomass
                 : '-8',
             amount: foodItem['group_begin/group_food/amount'],
             massin_grams: foodItem['group_begin/group_food/quantity'],
@@ -121,6 +123,6 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   submission_time: state.data.body._submission_time,
   modified_by: 'open_fn',
   inserted_by: 'open_fn',
-  data_type: 'consumption',
+  data_type: 'consumption', //other types: hunter, market
   instances: JSON.stringify(state.data),
 });
