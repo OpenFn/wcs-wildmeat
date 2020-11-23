@@ -16,11 +16,11 @@ Toolbox and a Postgresql transitional database.
 
 The following jobs are configured on OpenFn.org to run automatically.
 
-1. [fetch_kobo_data.js](https://github.com/OpenFn/wcs-consocsci/blob/master/fetch_kobo_data.js):
+1. [fetch-rc-submissions.js](https://github.com/OpenFn/wcs-wildmeat/blob/master/jobs/fetch-rc-submissions.js):
    On a timer-basis, OpenFn fetches all Kobo survey submissions where form
    `name` contains "Rural Consumption". This job sends the Kobo data to
    OpenFn.org and automatically triggers the next job.
-2. [ruralConsumptionToPostgres.js](https://github.com/OpenFn/wcs-consocsci/blob/master/ruralConsumptionToPostgres.js): OpenFn automatically cleans, maps, & loads the Kobo survey data into structured tables in a Postgres Wildmeat database.
+2. [rural-consumption-to-postgres.js](https://github.com/OpenFn/wcs-consocsci/blob/master/rural-consumption-to-postgres.js): OpenFn automatically cleans, maps, & loads the Kobo survey data into structured tables in a Postgres Wildmeat database.
 
 ### (2) Mappings
 
