@@ -43,18 +43,10 @@ The following jobs are configured on OpenFn.org to run automatically.
 5. See [Wildmeat Map](https://docs.google.com/spreadsheets/d/15VRibnaglShF3oNNLMbiyGopTJrYbP02aQ04cz4Qt-k/edit#gid=767749359) for a list of fields that were intentionally not mapped in these jobs (i.e., `tbl_individual_char`).
 6. All Kobo surveys to be fetched by OpenFn will contain "Rural Consumption" in
    the form name. If this criteria should change, job #1 should be updated.
+7. All surveys will have a default `sample unit` (e.g., kilograms).
+8. All surveys will be mapped to a default `site` and `study` record. 
+9. All surveys will have the default type `consumption` to start (but downstream other types like `hunter` or `market` may be added). 
 
-### (4) Open questions
+### Questions?
+Contact support@openfn.org. 
 
-1. Are all Kobo surveys to be integrated hosted on 1 server? Or will OpenFn need
-   to access multiple Kobo servers to fetch Rural Consumption data?
-2. How will we determine the `study_id` and `site_id` from the Kobo forms going
-   forward? Or will we always hardcode these values to map to dummy `tbl_study`
-   and `tbl_site` records in the database? (Usman says these ids are determined
-   by an internal protocol and no way to determine at the Kobo survey stage. So
-   do we therefore continue to use the hardcoded values?)
-3. How to determine the survey consumption type (i.e., Hunter or Market)?
-   (Question flagged by Usman.)
-4. Is there a default `sample_unit` for different surveys?
-5. How do you want to test these jobs? What Kobo server should we connect with?
-   (Currently testing with OpenFn Kobo account.)
