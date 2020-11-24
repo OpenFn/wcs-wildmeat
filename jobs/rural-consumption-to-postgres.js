@@ -48,7 +48,7 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
     state.data.body._id +
     state.data.body._submission_time +
     state.data.body._xform_id_string,
-  sample_unit: 'kilograms', //specify on survey
+  sample_unit: state.data.defaultUnit || 'kilograms', //specify on survey
   number_sample_units: '24',
   sampling_effortin_days: '2',
 });
