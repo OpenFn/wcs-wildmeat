@@ -10,8 +10,8 @@ get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
 
   // ===========================================================================
   // Add strings to be case-insensitively searched for across Kobo form names
-  // and tag them all as one type of form for processing in OpenFn.
-  const filters = ['Rural Consumption', 'Préférences consommation'];
+  // and tag them all as one type of form for handling in OpenFn.
+  const filters = ['Rural Consumption'];
   const tag = 'Rural Consumption';
   // ===========================================================================
 
