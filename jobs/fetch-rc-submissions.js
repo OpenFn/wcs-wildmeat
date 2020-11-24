@@ -39,6 +39,7 @@ each(dataPath('forms[*]'), state =>
     state.data.submissions = state.data.results.map(submission => ({
       //Here we append the tags defined above to the Kobo form submission data
       form: state.tag,
+      defaultUnit: 'kilograms',
       body: submission,
     }));
     console.log(`Fetched ${state.data.count} submissions.`);
