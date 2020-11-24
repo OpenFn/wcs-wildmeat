@@ -36,16 +36,24 @@ get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
 
 each(dataPath('forms[*]'), state =>
   get(`${state.data.url}${state.data.query}`, {}, state => {
-    state.data.submissions = state.data.results.map(submission => ({
-      //Here we append the tags defined above to the Kobo form submission data
-      form: state.tag,
-      defaultUnit: 'kilograms',
-      body: submission,
-    }));
+    state.data.submissions = state.data.results.map(submission => {
+      if (!submission['survey_info/household_id']) {
+        submission['survey_info/household_id'] =
+          submission['survey_info/household'];
+      }
+
+      return {
+        //Here we append the tags defined above to the Kobo form submission data
+        form: state.tag,
+        defaultUnit: 'kilograms',
+        body: submission,
+      };
+    });
     console.log(`Fetched ${state.data.count} submissions.`);
     //Once we fetch the data, we want to post each individual Kobo survey
     //back to the OpenFn inbox to run through the jobs
-    console.log(state.data.submissions);
+    // console.log(state.data.submissions);
+
     return each(
       dataPath('submissions[*]'),
       post(
