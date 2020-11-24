@@ -1,36 +1,44 @@
 // Job to be used for fetching data from Kobo on repeated, timer basis
 // This can be run on-demand at any time by clicking "run"
-console.log('Inspecting initial state...')
+console.log('Inspecting initial state...');
 console.log(JSON.stringify({ ...state, configuration: 'REDACTED' }, null, 2));
 
 get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
   console.log(`Previous cursor: ${state.lastEnd}`);
   // Set a manual cursor if you'd like to only fetch data after a certain date
   const manualCursor = '2020-05-25T14:32:43.325+01:00';
-  const filter = 'Rural Consumption';
+
+  // ===========================================================================
+  // Add strings to be case-insensitively searched for across Kobo form names
+  // and tag them all as one type of form for processing in OpenFn.
+  const filters = ['Rural Consumption', 'Préférences consommation'];
+  const tag = 'Rural Consumption';
+  // ===========================================================================
+
   state.data.forms = state.data.results
     .filter(resource =>
-      resource.name.toLowerCase().includes(filter.toLowerCase())
+      filters.some(f => resource.name.toLowerCase().includes(f.toLowerCase()))
     )
     .map(form => {
+      console.log(form.name);
       const url = form.url.split('?').join('data/?');
       return {
         formId: form.uid,
-        tag: filter,
+        tag,
         url,
         query: `&query={"end":{"$gte":"${manualCursor}"}}`,
         //query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
       };
     });
   console.log(`Forms to fetch: ${JSON.stringify(state.data.forms, null, 2)}`);
-  return { ...state, filter };
+  return { ...state, tag };
 });
 
 each(dataPath('forms[*]'), state =>
   get(`${state.data.url}${state.data.query}`, {}, state => {
     state.data.submissions = state.data.results.map(submission => ({
       //Here we append the tags defined above to the Kobo form submission data
-      form: state.filter,
+      form: state.tag,
       body: submission,
     }));
     console.log(`Fetched ${state.data.count} submissions.`);
