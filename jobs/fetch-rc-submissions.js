@@ -9,7 +9,9 @@ get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
   const manualCursor = '2020-05-25T14:32:43.325+01:00';
   const filter = 'Rural Consumption';
   state.data.forms = state.data.results
-    .filter(resource => resource.name.includes(filter))
+    .filter(resource =>
+      resource.name.toLowerCase().includes(filter.toLowerCase())
+    )
     .map(form => {
       const url = form.url.split('?').join('data/?');
       return {
