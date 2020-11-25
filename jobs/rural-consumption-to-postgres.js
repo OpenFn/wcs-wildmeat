@@ -3,7 +3,8 @@ alterState(state => {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
   }
-  return execute(
+  console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
+  execute(
     upsert('tbl_study', 'study_id', {
       study_id: 1000,
     }),
@@ -120,6 +121,7 @@ alterState(state => {
       individual_id: state.data.body._id,
     })
   )(state);
+  return state;
 });
 
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
@@ -134,4 +136,4 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   inserted_by: 'open_fn',
   data_type: 'consumption', //other types: hunter, market
   instances: JSON.stringify(state.data),
-});
+})(state);
