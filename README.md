@@ -32,20 +32,15 @@ The following jobs are configured on OpenFn.org to run automatically.
 2. All data cleaning will be done in Kobo Toolbox. Every time Kobo data is
    synced with the DB, it will overwrite the records saved there and use the
    above uuid to upsert existing records.
-3. Kobo forms only capture species `code`, not `name`. OpenFn has therefore
-   implemented a reference table `swm_species` and uploaded
-   a [list of species](https://docs.google.com/spreadsheets/d/1yfBjpb9cuCOvzKF9Iu_XrXLA_BC8cQFCyYxjVgFIuXU/edit) extracted
-   from the DRC Kobo form. WCS will keep this `swm_species` table up-to-date to
-   ensure successful integration of any species data.
+3. Kobo forms only capture species `code`, not `name`. OpenFn was unable to determine a way to match this species `code` to the relevant species `name` and `taxonId`, so OpenFn is only mapping the `code` until a master list of species codes and corresponding names can be provided.
 4. The jobs currently use hard-coded values for `study_id` ('1000') and
    `site_id` ('1001') as this information is currently not captured in the Kobo
-   forms.
+   forms. All surveys will be mapped to these default `site` and `study` record. 
 5. See [Wildmeat Map](https://docs.google.com/spreadsheets/d/15VRibnaglShF3oNNLMbiyGopTJrYbP02aQ04cz4Qt-k/edit#gid=767749359) for a list of fields that were intentionally not mapped in these jobs (i.e., `tbl_individual_char`).
 6. All Kobo surveys to be fetched by OpenFn will contain "Rural Consumption" in
    the form name. If this criteria should change, job #1 should be updated.
 7. All surveys will have a default `sample unit` (e.g., kilograms).
-8. All surveys will be mapped to a default `site` and `study` record. 
-9. All surveys will have the default type `consumption` to start (but downstream other types like `hunter` or `market` may be added). 
+8. All surveys will have the default type `consumption` to start (but downstream other types like `hunter` or `market` may be added). 
 
 ### Questions?
 Contact support@openfn.org. 
