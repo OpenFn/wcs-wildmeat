@@ -135,4 +135,4 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   inserted_by: 'open_fn',
   data_type: 'consumption', //other types: hunter, market
   instances: JSON.stringify(state.data),
-})(state);
+});
