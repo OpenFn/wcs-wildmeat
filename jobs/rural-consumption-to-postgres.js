@@ -139,7 +139,7 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
       return JSON.stringify(state.data);
     else {
       let inst = { uuid: state.data.body._uuid, consent: 'no' };
-      console.log(`Instances : ${inst}`);
+      console.log(`Instances : ${JSON.stringify(inst)}`);
       return inst;
     }
   },
