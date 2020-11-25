@@ -3,7 +3,6 @@ alterState(state => {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
   }
-  console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
   return execute(
     upsert('tbl_study', 'study_id', {
       study_id: 1000,
