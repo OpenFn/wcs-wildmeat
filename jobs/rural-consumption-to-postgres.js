@@ -123,7 +123,7 @@ alterState(state => {
   return state;
 });
 
-upsert('swm_transaction', 'ON CONSTRAINT ', uuid {
+upsert('swm_transaction', 'ON CONSTRAINT uuid', {
   // swm_data_pkey
   // TODO: determine how to use this _id (see https://github.com/kobotoolbox/kobocat/issues/572#issuecomment-685923946)
   // uuid: state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
