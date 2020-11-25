@@ -138,6 +138,6 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   instances: state => {
     if (state.data.body.consent_checklist == 'yes')
       return JSON.stringify(state.data);
-    else return { uuid: 'f3f6ca03-b14f-4d8a-a0b3-a84d26d73e65', consent: 'no' };
+    else return { uuid: state.data.body._uuid, consent: 'no' };
   },
 })(state);
