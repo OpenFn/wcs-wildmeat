@@ -54,11 +54,12 @@ each(dataPath('forms[*]'), state =>
     //back to the OpenFn inbox to run through the jobs
     // console.log(state.data.submissions);
 
-    state.data.sample = state.data.submissions.slice(0,2);
+    //TO LIMIT # SUBMISSIONS FETCHED
+    //state.data.sample = state.data.submissions.slice(0,2);
 
     return each(
-      // dataPath('submissions[*]'),
-      dataPath('sample[*]'),
+       dataPath('submissions[*]'),
+     // dataPath('sample[*]'),
       post(
         state.configuration.openfnInboxUrl,
         { body: state => state.data },
