@@ -3,7 +3,6 @@ alterState(state => {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
   }
-  console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
   execute(
     upsert('tbl_study', 'study_id', {
       study_id: 1000,
@@ -138,6 +137,10 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   instances: state => {
     if (state.data.body.consent_checklist == 'yes')
       return JSON.stringify(state.data);
-    else return { uuid: state.data.body._uuid, consent: 'no' };
+    else {
+      let inst = { uuid: state.data.body._uuid, consent: 'no' };
+      console.log(`Instances : ${inst}`);
+      return inst;
+    }
   },
 })(state);
