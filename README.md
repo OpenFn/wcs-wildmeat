@@ -1,8 +1,8 @@
 # wcs-wildmeat
 
-Wildlife Conservation Society Project
 
 ## Connection to OpenFn.org
+See the OpenFn `Wildmeat` project for the live integration. 
 
 **N.B. that all commits to the `master` branch will auto-deploy to OpenFn.org and WCS's live integration implementation.**
 
