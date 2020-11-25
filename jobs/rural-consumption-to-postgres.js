@@ -135,5 +135,9 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   modified_by: 'open_fn',
   inserted_by: 'open_fn',
   data_type: 'consumption', //other types: hunter, market
-  instances: JSON.stringify(state.data),
+  instances: state => {
+    if (state.data.body.consent_checklist == 'yes')
+      return JSON.stringify(state.data);
+    else return { uuid: 'f3f6ca03-b14f-4d8a-a0b3-a84d26d73e65', consent: 'no' };
+  },
 })(state);
