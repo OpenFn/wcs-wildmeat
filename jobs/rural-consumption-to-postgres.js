@@ -1,4 +1,4 @@
-alterState(state => {
+/*alterState(state => {
   if (state.data.body.consent_checklist == 'no') {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
@@ -57,7 +57,7 @@ alterState(state => {
       sample_unit: state.data.defaultUnit || 'kilograms', //specify on survey
       number_sample_units: '24',
       sampling_effortin_days: '2',
-    }),
+    }),*/
 
     // TODO: There are lots of issues with this table. Need to sync on data types with WCS.
     alterState(state => {
@@ -110,8 +110,9 @@ alterState(state => {
 
       console.log('There is no wildmeat array. Skipping insertMany(...)');
       return state;
-    }),
-
+      //)
+    });
+/*
     upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
       site_id: 1001,
       study_id: 1000,
@@ -142,4 +143,4 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
       return instance;
     }
   },
-});
+});*/
