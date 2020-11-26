@@ -4,9 +4,14 @@ alterState(state => {
     return state;
   }
   execute(
-    upsert('tbl_study', 'study_id', {
-      study_id: 1000,
-    }),
+    upsert(
+      'tbl_study',
+      'study_id',
+      {
+        study_id: 1000,
+      },
+      { writeSql: true, execute: true }
+    ),
 
     upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
       study_id: 1000,
@@ -123,8 +128,7 @@ alterState(state => {
   return state;
 });
 
-upsert('swm_transaction', 'ON CONSTRAINT uuid', {
-  // swm_data_pkey
+upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   // TODO: determine how to use this _id (see https://github.com/kobotoolbox/kobocat/issues/572#issuecomment-685923946)
   // uuid: state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
   uuid: state.data.body._id + state.data.body._xform_id_string,
