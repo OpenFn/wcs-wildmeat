@@ -3,7 +3,8 @@ alterState(state => {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
   }
-  execute(
+  
+  return execute(
     upsert('tbl_study', 'study_id', {
       study_id: 1000,
     }),
@@ -120,7 +121,6 @@ alterState(state => {
       individual_id: state.data.body._id,
     })
   )(state);
-  return state;
 });
 
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
