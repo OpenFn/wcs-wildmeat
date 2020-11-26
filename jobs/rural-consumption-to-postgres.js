@@ -25,7 +25,7 @@ alterState(state => {
     return state;
   }
 
-  return execute(
+  return combine(
     upsert('tbl_study', 'study_id', {
       study_id: 1000,
     }),
