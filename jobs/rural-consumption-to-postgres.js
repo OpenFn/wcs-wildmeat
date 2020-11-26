@@ -1,4 +1,4 @@
-/*alterState(state => {
+alterState(state => {
   if (state.data.body.consent_checklist == 'no') {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
@@ -57,7 +57,7 @@
       sample_unit: state.data.defaultUnit || 'kilograms', //specify on survey
       number_sample_units: '24',
       sampling_effortin_days: '2',
-    }),*/
+    }),
 
     // TODO: There are lots of issues with this table. Need to sync on data types with WCS.
     alterState(state => {
@@ -77,7 +77,7 @@
                   state.data.body._id +
                   state.data.body._submission_time +
                   state.data.body._xform_id_string,
-                taxon_id: foodItem['group_begin/group_food/species'],
+                //taxon_id: foodItem['group_begin/group_food/species'],
                 // TODO: determine how to calculate wildmeat_id --------------------
                 // AK NOTE: use _id for wildmeat_id plus array index for now
                 wildmeat_id: state.data.body._id + i,
@@ -110,9 +110,9 @@
 
       console.log('There is no wildmeat array. Skipping insertMany(...)');
       return state;
-      //)
+      )
     });
-/*
+
     upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
       site_id: 1001,
       study_id: 1000,
@@ -143,4 +143,4 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
       return instance;
     }
   },
-});*/
+});
