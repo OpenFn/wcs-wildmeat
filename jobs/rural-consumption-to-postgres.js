@@ -4,14 +4,9 @@ alterState(state => {
     return state;
   }
   execute(
-    upsert(
-      'tbl_study',
-      'study_id',
-      {
-        study_id: 1000,
-      },
-      { writeSql: true, execute: true }
-    ),
+    upsert('tbl_study', 'study_id', {
+      study_id: 1000,
+    }),
 
     upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
       study_id: 1000,
