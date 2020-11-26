@@ -1,9 +1,30 @@
+upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+  // TODO: determine how to use this _id (see https://github.com/kobotoolbox/kobocat/issues/572#issuecomment-685923946)
+  // uuid: state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
+  uuid: state.data.body._id + state.data.body._xform_id_string,
+  // TODO: Figure out what they're trying to do with date here. It's part of the UUID?
+  date: state.data.body._submission_time,
+  status: 'new',
+  submission_time: state.data.body._submission_time,
+  modified_by: 'open_fn',
+  inserted_by: 'open_fn',
+  data_type: 'consumption', //other types: hunter, market
+  instances: state => {
+    if (state.data.body.consent_checklist == 'yes')
+      return JSON.stringify(state.data);
+    else {
+      let instance = { uuid: state.data.body._uuid, consent: 'no' };
+      return instance;
+    }
+  },
+});
+
 alterState(state => {
   if (state.data.body.consent_checklist == 'no') {
     console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
     return state;
   }
-  
+
   return execute(
     upsert('tbl_study', 'study_id', {
       study_id: 1000,
@@ -121,25 +142,4 @@ alterState(state => {
       individual_id: state.data.body._id,
     })
   )(state);
-});
-
-upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
-  // TODO: determine how to use this _id (see https://github.com/kobotoolbox/kobocat/issues/572#issuecomment-685923946)
-  // uuid: state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
-  uuid: state.data.body._id + state.data.body._xform_id_string,
-  // TODO: Figure out what they're trying to do with date here. It's part of the UUID?
-  date: state.data.body._submission_time,
-  status: 'new',
-  submission_time: state.data.body._submission_time,
-  modified_by: 'open_fn',
-  inserted_by: 'open_fn',
-  data_type: 'consumption', //other types: hunter, market
-  instances: state => {
-    if (state.data.body.consent_checklist == 'yes')
-      return JSON.stringify(state.data);
-    else {
-      let instance = { uuid: state.data.body._uuid, consent: 'no' };
-      return instance;
-    }
-  },
 });
