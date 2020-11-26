@@ -55,11 +55,11 @@ each(dataPath('forms[*]'), state =>
     // console.log(state.data.submissions);
 
     //TO LIMIT # SUBMISSIONS FETCHED
-    //state.data.sample = state.data.submissions.slice(0,2);
+    state.data.sample = state.data.submissions.slice(0,100);
 
     return each(
-       dataPath('submissions[*]'),
-     // dataPath('sample[*]'),
+       //dataPath('submissions[*]'),
+     dataPath('sample[*]'),
       post(
         state.configuration.openfnInboxUrl,
         { body: state => state.data },
