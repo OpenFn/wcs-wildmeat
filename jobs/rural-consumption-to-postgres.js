@@ -142,4 +142,4 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
       return instance;
     }
   },
-})(state);
+});
