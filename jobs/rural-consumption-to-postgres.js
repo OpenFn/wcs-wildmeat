@@ -110,8 +110,7 @@ alterState(state => {
 
       console.log('There is no wildmeat array. Skipping insertMany(...)');
       return state;
-      )
-    });
+    }),
 
     upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
       site_id: 1001,
