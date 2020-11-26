@@ -23,12 +23,11 @@ alterState(state => {
       external_id: state.data.body['survey_info/household_id'],
     }),
 
-    // TODO: Looks like a number of mapping issues around fields on this table.
     upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
       site_id: 1001,
       study_id: 1000,
       household_id: state.data.body['survey_info/household_id'],
-      // TODO: decide how to handle household_char_id
+      // TODO: decide how to handle household_char_id //Q: remove?
       household_char_id: state.data.body._id,
       num_occupants: state.data.body['group_begin/group_people/nb_people'],
       num_babies: state.data.body['group_begin/group_people/nb_babies'],
@@ -47,19 +46,17 @@ alterState(state => {
       study_id: 1000,
       site_id: 1001,
       household_id: state.data.body['survey_info/household_id'],
-      // TODO: What's this doing here? Need to talk to WCS.
-      // household_char_id: state.data.body['survey_info/household_id'],
+      // household_char_id: state.data.body['survey_info/household_id'], //Q: remove?
       date_start: state.data.body['survey_info/info_recall_date'],
       sample_id:
         state.data.body._id +
         state.data.body._submission_time +
         state.data.body._xform_id_string,
-      sample_unit: state.data.defaultUnit || 'kilograms', //specify on survey
+      sample_unit: state.data.defaultUnit || 'kilograms', //Q: set to default unit? 
       number_sample_units: '24',
       sampling_effortin_days: '2',
     }),
 
-    // TODO: There are lots of issues with this table. Need to sync on data types with WCS.
     alterState(state => {
       const repeatGroup = state.data.body['group_begin/group_food'];
       if (repeatGroup) {
@@ -77,11 +74,8 @@ alterState(state => {
                   state.data.body._id +
                   state.data.body._submission_time +
                   state.data.body._xform_id_string,
-                //taxon_id: foodItem['group_begin/group_food/species'],
-                // TODO: determine how to calculate wildmeat_id --------------------
-                // AK NOTE: use _id for wildmeat_id plus array index for now
+                //taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column? 
                 wildmeat_id: state.data.body._id + i,
-                // -----------------------------------------------------------------
                 wildmeat_category_1:
                   foodItem['group_begin/group_food/category1'],
                 wildmeat_category_2:
@@ -90,7 +84,7 @@ alterState(state => {
                 unit:
                   foodItem['group_begin/group_food/quantity_technique'] ===
                   'known_technique'
-                    ? 'kilogram' //biomass
+                    ? 'kilogram' //Q: set to default unit? Future options: biomass
                     : '-8',
                 amount: foodItem['group_begin/group_food/amount'],
                 massin_grams: foodItem['group_begin/group_food/quantity'],
@@ -124,10 +118,7 @@ alterState(state => {
 });
 
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
-  // TODO: determine how to use this _id (see https://github.com/kobotoolbox/kobocat/issues/572#issuecomment-685923946)
-  // uuid: state.data.body._id + state.data.body._submission_time + state.data.body._xform_id_string,
   uuid: state.data.body._id + state.data.body._xform_id_string,
-  // TODO: Figure out what they're trying to do with date here. It's part of the UUID?
   date: state.data.body._submission_time,
   status: 'new',
   submission_time: state.data.body._submission_time,
