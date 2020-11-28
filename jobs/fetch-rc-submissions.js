@@ -64,7 +64,7 @@ each(dataPath('forms[*]'), state =>
         state.configuration.openfnInboxUrl,
         { body: state => state.data },
         state => {
-          const delay = 1000;
+          const delay = 200;
           console.log(`Waiting ${delay}ms. ⏱️`);
           function timer() {
             return new Promise(resolve => {
