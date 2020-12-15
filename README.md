@@ -9,12 +9,12 @@ See the OpenFn `Wildmeat` project for the live integration.
 ## Wildmeat Kobo Integration
 
 EU SWM uses Kobo Toolbox to collect data on Rural Consumption across sites (see
-the Kobo form template here). OpenFn automates data integration between Kobo
+the [Kobo form template here](https://docs.google.com/spreadsheets/d/1AN2Qyjx-ua3fE5-Nj7Bg2WSdZdIE6zy4FmVVrMqGZl0/edit?usp=drive_web&ouid=101430720901034004945)). OpenFn automates data integration between Kobo
 Toolbox and a Postgresql transitional database.
 
 ### (1) Data Flows & OpenFn Jobs
 
-The following jobs are configured on OpenFn.org to run automatically.
+**[See this data flow](https://lucid.app/lucidchart/b7d25cb3-067c-4e80-ade6-adc3f741a66f/view?page=0_0#?folder_id=home&browser=icon) diagram.** The following jobs are configured on OpenFn.org to run automatically.
 
 1. [fetch-rc-submissions.js](https://github.com/OpenFn/wcs-wildmeat/blob/master/jobs/fetch-rc-submissions.js):
    On a timer-basis, OpenFn fetches all Kobo survey submissions where form
