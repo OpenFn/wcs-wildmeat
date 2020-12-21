@@ -52,7 +52,7 @@ alterState(state => {
         state.data.body._id +
         state.data.body._submission_time +
         state.data.body._xform_id_string,
-      sample_unit: state.data.defaultUnit || 'kilograms', //Q: set to default unit? 
+      sample_unit: state.data.defaultUnit || 'kilograms', //Q: set to default unit?
       number_sample_units: '24',
       sampling_effortin_days: '2',
     }),
@@ -74,7 +74,7 @@ alterState(state => {
                   state.data.body._id +
                   state.data.body._submission_time +
                   state.data.body._xform_id_string,
-                taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column? 
+                taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column?
                 wildmeat_id: state.data.body._id + i,
                 wildmeat_category_1:
                   foodItem['group_begin/group_food/category1'],
@@ -87,7 +87,11 @@ alterState(state => {
                     ? 'kilogram' //Q: set to default unit? Future options: biomass
                     : '-8',
                 amount: foodItem['group_begin/group_food/amount'],
-                massin_grams: foodItem['group_begin/group_food/quantity'],
+                massin_grams:
+                  state.data.defaultUnit === 'kilograms'
+                    ? parseInt(foodItem['group_begin/group_food/quantity']) *
+                      1000
+                    : foodItem['group_begin/group_food/quantity'],
                 price: foodItem['group_begin/group_food/Cost'],
                 aquisition: foodItem['group_begin/group_food/obtention'],
                 acquisition_other:
