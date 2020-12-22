@@ -26,8 +26,8 @@ get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
         formId: form.uid,
         tag,
         url,
-        query: `&query={"end":{"$gte":"${manualCursor}"}}`,
-        //query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
+        //query: `&query={"end":{"$gte":"${manualCursor}"}}`,
+        query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
       };
     });
   console.log(`Forms to fetch: ${JSON.stringify(state.data.forms, null, 2)}`);
