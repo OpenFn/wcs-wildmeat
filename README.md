@@ -8,6 +8,7 @@ See the [`WCS Docs`](https://openfn.github.io/wcs/wildmeat/) for solution docume
 
 ## Wildmeat Integration with Transition Postgres DB
 ### (1) Solution Overview
+About requirements, Kobo forms, etc. 
 
 ### (2) Integration Flow
 Overview...
