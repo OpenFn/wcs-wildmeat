@@ -71,7 +71,7 @@ fn(state => {
               foodItem['group_begin/group_food/frequency'],
           };
         });
-      });
+      })(state);
     })
   )(state);
 });

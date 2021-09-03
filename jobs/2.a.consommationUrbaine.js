@@ -29,7 +29,7 @@ fn(state => {
             vernacular_name: state.data.body['bm_consumption/bm_species'],
           };
         });
-      });
+      })(state);
     }),
 
     upsert('tbl_site', 'study_id', {
