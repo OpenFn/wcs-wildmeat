@@ -53,7 +53,7 @@ fn(state => {
             };
           });
         })(state);
-      });
+      })(state);
     })
   )(state);
 });
