@@ -23,12 +23,14 @@ fn(state => {
     // vernacularName: '',
     // }),
 
-    upsert('tbl_site', 'study_id', {
+    upsert('tbl_site', 'site_id', {
       admin_level_3: state.data.body.district,
       site_name: state.data.body.village,
+      site_id: studyIDMap[state.data.formType],
     }),
 
-    upsert('tbl_market', 'study_id', {
+  //UUID unclear
+    upsert('tbl_market', 'market_id', {
       external_id: state.data.body.market,
       number_tables_surveyed: state.data.body.total_surveyed,
     }),
@@ -38,7 +40,7 @@ fn(state => {
 
       return each(vendors, state => {
         const sales = state.data['vendor/sales'];
-        return upsertMany('tbl_wildmeat_market', 'study_id', state => {
+        return upsertMany('tbl_wildmeat_market', 'wildmeat_id', state => {
           sales.map(sale => {
             return {
               wildmeat_id: sale['vendor/sales/species'],
