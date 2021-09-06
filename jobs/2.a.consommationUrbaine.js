@@ -49,6 +49,7 @@ upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
   date_start: state.data.body['introduction_gp/date'],
   date_end: state.data.body['introduction_gp/date'],
   preferences: state.data.body['prot_preference/why_like_bm'],
+  individual_id: state.data._id,
 });
 
 // upsert('swm_species', 'study_id', {
