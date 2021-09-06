@@ -1,3 +1,6 @@
+//== Job to be used for fetching data from Kobo on repeated, timer basis  ==//
+// This can be run on-demand at any time by clicking "run" // 
+
 fn(state => {
   console.log('Current cursor value:', state.lastEnd);
   // Set a manual cursor if you'd like to only fetch data after this date.
