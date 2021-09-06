@@ -42,14 +42,14 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   site_id: state => state.studyIDMap[state.data.formType],
 });
 
-// upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
-//   study_id: state => state.studyIDMap[state.data.formType],
-//   site_id: state => state.studyIDMap[state.data.formType],
-//   sample_id: `${state.data._id}${state.data._xform_id_string}`,
-//   date_start: state.data.body['introduction_gp/date'],
-//   date_end: state.data.body['introduction_gp/date'],
-//   preferences: state.data.body['prot_preference/why_like_bm'],
-// });
+upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
+  study_id: state => state.studyIDMap[state.data.formType],
+  site_id: state => state.studyIDMap[state.data.formType],
+  sample_id: `${state.data._id}${state.data._xform_id_string}`,
+  date_start: state.data.body['introduction_gp/date'],
+  date_end: state.data.body['introduction_gp/date'],
+  preferences: state.data.body['prot_preference/why_like_bm'],
+});
 
 // upsert('swm_species', 'study_id', {
 // taxonID: '',
