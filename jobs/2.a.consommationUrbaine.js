@@ -32,11 +32,11 @@ upsert('tbl_study', 'study_id', {
 //   )(state);
 // });
 
-upsert('tbl_site', 'site_id', {
-  study_id: state => state.studyIDMap[state.data.formType],
-  admin_level_2: state.data.body['introduction_gp/other_town'],
-  site_id: state => state.studyIDMap[state.data.formType],
-});
+// upsert('tbl_site', 'site_id', {
+//   study_id: state => state.studyIDMap[state.data.formType],
+//   admin_level_2: state.data.body['introduction_gp/other_town'],
+//   site_id: state => state.studyIDMap[state.data.formType],
+// });
 
 upsert('tbl_sample_urban', 'sample_id', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
