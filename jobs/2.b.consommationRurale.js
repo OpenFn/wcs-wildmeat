@@ -23,9 +23,10 @@ fn(state => {
       submission_time: state.data.body['_submission_time'],
     }),
 
-    upsert('tbl_site', 'study_id', {
+    upsert('tbl_site', 'site_id', {
       admin_level_3: state.data.body['survey_info/district'],
       site_name: state.data.body['survey_info/village'],
+      site_id: studyIDMap[state.data.formType],
     }),
 
     // upsert('swm_species', 'study_id', {
