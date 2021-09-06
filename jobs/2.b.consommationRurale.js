@@ -44,8 +44,7 @@ fn(state => {
       external_id: state.data.body['survey_info/household_id'],
     }),
 
-    //UUID is not clear 
-    upsert('tbl_household_char', 'study_id', {
+    upsert('tbl_household_char', 'household_id', {
       household_id: state.data.body['survey_info/household_id'],
       num_occupants: state.data.body['group_begin/group_people/nb_people'],
       num_babies: state.data.body['group_begin/group_people/nb_babies'],
@@ -60,10 +59,10 @@ fn(state => {
         state.data.body['group_begin/group_people/nb_brestfeeding'],
     }),
 
-    //UUID is not clear 
+
     fn(state => {
       const repeatGroup = state.data.body['group_begin/group_food'];
-      return upsertMany('tbl_wildmeat', 'study_id', state => {
+      return upsertMany('tbl_wildmeat', 'sample_id', state => {
         repeatGroup.map(foodItem => {
           const unit =
             foodItem['group_begin/group_food/quantity_technique'] ===
