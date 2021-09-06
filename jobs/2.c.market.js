@@ -29,8 +29,8 @@ fn(state => {
       site_id: studyIDMap[state.data.formType],
     }),
 
-  //UUID unclear
-    upsert('tbl_market', 'market_id', {
+ 
+    upsert('tbl_market', 'external_id', {
       external_id: state.data.body.market,
       number_tables_surveyed: state.data.body.total_surveyed,
     }),
