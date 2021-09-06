@@ -34,15 +34,17 @@ fn(state => {
     // vernacularName: '',
     // }),
 
-    upsert('tbl_individual', 'study_id', {
+    upsert('tbl_individual', 'individual_id', {
       household_id: state.data.body['survey_info/household_id'],
+      individual_id: state.data._id,
     }),
 
-    upsert('tbl_household', 'study_id', {
+    upsert('tbl_household', 'household_id', {
       household_id: state.data.body['survey_info/household_id'],
       external_id: state.data.body['survey_info/household_id'],
     }),
 
+    //UUID is not clear 
     upsert('tbl_household_char', 'study_id', {
       household_id: state.data.body['survey_info/household_id'],
       num_occupants: state.data.body['group_begin/group_people/nb_people'],
@@ -58,6 +60,7 @@ fn(state => {
         state.data.body['group_begin/group_people/nb_brestfeeding'],
     }),
 
+    //UUID is not clear 
     fn(state => {
       const repeatGroup = state.data.body['group_begin/group_food'];
       return upsertMany('tbl_wildmeat', 'study_id', state => {
