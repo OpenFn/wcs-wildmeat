@@ -36,13 +36,13 @@ fn(state => {
   )(state);
 });
 
-upsert('tbl_site', 'site_id', {
+upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   study_id: state => state.studyIDMap[state.data.formType],
   admin_level_2: state.data.body['introduction_gp/other_town'],
   site_id: state => state.studyIDMap[state.data.formType],
 });
 
-upsert('tbl_sample_urban', 'sample_id', {
+upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   date_start: state.data.body['introduction_gp/date'],
   date_end: state.data.body['introduction_gp/date'],
