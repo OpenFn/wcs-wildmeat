@@ -38,12 +38,12 @@ upsert('tbl_study', 'study_id', {
 //   site_id: state => state.studyIDMap[state.data.formType],
 // });
 
-upsert('tbl_sample_urban', 'sample_id', {
-  sample_id: `${state.data._id}${state.data._xform_id_string}`,
-  date_start: state.data.body['introduction_gp/date'],
-  date_end: state.data.body['introduction_gp/date'],
-  preferences: state.data.body['prot_preference/why_like_bm'],
-});
+// upsert('tbl_sample_urban', 'sample_id', {
+//   sample_id: `${state.data._id}${state.data._xform_id_string}`,
+//   date_start: state.data.body['introduction_gp/date'],
+//   date_end: state.data.body['introduction_gp/date'],
+//   preferences: state.data.body['prot_preference/why_like_bm'],
+// });
 
 // upsert('swm_species', 'study_id', {
 // taxonID: '',
