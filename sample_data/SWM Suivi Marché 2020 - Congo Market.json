@@ -1,0 +1,493 @@
+{
+  "__query_params": {},
+  "body": {
+    "__version__": "vJAFo9NxaQKqijC4MzkgWn",
+    "_attachments": [],
+    "_geolocation": [
+      null,
+      null
+    ],
+    "_id": 84348935,
+    "_notes": [],
+    "_status": "submitted_via_web",
+    "_submission_time": "2021-02-04T11:14:49",
+    "_submitted_by": null,
+    "_tags": [],
+    "_uuid": "4db92eba-a827-4144-9243-d4e9904cfeb4",
+    "_validation_status": {},
+    "_version_": "v75guULPMgdfxb9khkkNSr",
+    "_xform_id_string": "aDVDagX8TE9NUY7xmvAUpv",
+    "district": "ouesso",
+    "end": "2021-05-07T14:23:08.217+01:00",
+    "formhub/uuid": "8a90fbd2bb044a9d9ff6bcdf19c29692",
+    "market": "djazzi",
+    "meta/deprecatedID": "uuid:f6676891-399f-4500-bf4d-68553f465c39",
+    "meta/instanceID": "uuid:4db92eba-a827-4144-9243-d4e9904cfeb4",
+    "nowildmeat_vendors": "7",
+    "start": "2021-02-04T10:55:51.015+01:00",
+    "surveyed_vendors_nowildmeat": "7",
+    "surveyed_vendors_wildmeat": "6",
+    "surveyor": "ruben",
+    "today": "2021-02-04",
+    "total_surveyed": "13",
+    "total_vendors": "13",
+    "vendor": [
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "1",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "9",
+            "vendor/sales/species": "1266",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "2",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "7",
+            "vendor/sales/species": "1260",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Morceaux",
+            "vendor/sales/price": "2500",
+            "vendor/sales/quantity": "1",
+            "vendor/sales/species": "1263",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "3",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "fresh",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "4",
+            "vendor/sales/species": "17985",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "4",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "fresh",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "4",
+            "vendor/sales/species": "1260",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "11",
+            "vendor/sales/species": "1263",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "5",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "15",
+            "vendor/sales/species": "1260",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "fresh",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "3",
+            "vendor/sales/species": "1266",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "6",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "wildmeat",
+            "vendor/sales/category2": "mammal",
+            "vendor/sales/condition": "fresh",
+            "vendor/sales/group": "antelopes",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "7",
+            "vendor/sales/species": "1263",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "7",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "9",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "6",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "1",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "8",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "13",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/price": "3500",
+            "vendor/sales/quantity": "4",
+            "vendor/sales/species": "17994",
+            "vendor/sales/unit": "entire"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "1",
+            "vendor/sales/species": "36189",
+            "vendor/sales/unit": "entire"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "3",
+            "vendor/sales/species": "17998",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "9",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "10",
+            "vendor/sales/species": "17982",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "7",
+            "vendor/sales/species": "17981",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "9",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "10",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Morceau",
+            "vendor/sales/price": "4000",
+            "vendor/sales/quantity": "12",
+            "vendor/sales/species": "17994",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "5000",
+            "vendor/sales/quantity": "1",
+            "vendor/sales/species": "36189",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "5000",
+            "vendor/sales/quantity": "1",
+            "vendor/sales/species": "17989",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "11",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "14",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "6",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "7",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "25_45",
+        "vendor/gender": "woman",
+        "vendor/id": "12",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "7",
+            "vendor/sales/species": "17991",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "4",
+            "vendor/sales/species": "17998",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "2",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_fished",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "500",
+            "vendor/sales/quantity": "4",
+            "vendor/sales/species": "17995",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "6",
+            "vendor/sales/species": "100058",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/price": "2500",
+            "vendor/sales/quantity": "4",
+            "vendor/sales/species": "36189",
+            "vendor/sales/unit": "entire"
+          }
+        ]
+      },
+      {
+        "vendor/age_category": "over_46",
+        "vendor/gender": "woman",
+        "vendor/id": "13",
+        "vendor/sales": [
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "1000",
+            "vendor/sales/quantity": "21",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          },
+          {
+            "vendor/sales/category1": "fish",
+            "vendor/sales/category2": "fw_fish",
+            "vendor/sales/condition": "smoked",
+            "vendor/sales/group": "fw_fish_lake",
+            "vendor/sales/other_unit": "Tas",
+            "vendor/sales/price": "2000",
+            "vendor/sales/quantity": "1",
+            "vendor/sales/species": "100061",
+            "vendor/sales/unit": "other"
+          }
+        ]
+      }
+    ],
+    "vendor_count": "13",
+    "village": "ouesso",
+    "wildmeat_vendors": "6"
+  },
+  "formName": "SWM Suivi Marché 2020 - Congo Market",
+  "formType": "Market"
+}
