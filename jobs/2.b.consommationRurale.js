@@ -14,8 +14,10 @@ upsert('tbl_study', 'study_id', {
 });
 
 upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
+  study_id: state => state.studyIDMap[state.data.formType],
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   date_start: state.data.body['survey_info/info_recall_date'],
+  site_id: state => state.studyIDMap[state.data.formType],
   household_id: state.data.body['survey_info/household_id'],
 });
 
@@ -28,6 +30,7 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   admin_level_3: state.data.body['survey_info/district'],
   site_name: state.data.body['survey_info/village'],
   site_id: state => state.studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.data.formType],
 });
 
 // upsert('swm_species', 'study_id', {
