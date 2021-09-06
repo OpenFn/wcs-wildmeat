@@ -14,10 +14,7 @@ fn(state => {
     upsert('tbl_sample', 'sample_id', {
       sample_id: `${state.data._id}${state.data._xform_id_string}`,
       date_start: state.data.body['survey_info/info_recall_date'],
-    }),
-
-    upsert('tbl_wildmeat', 'sample_id', {
-      sample_id: `${state.data._id}${state.data._xform_id_string}`,
+      household_id: state.data.body['survey_info/household_id'],
     }),
 
     upsert('swm_transaction', 'uuid', {
@@ -35,7 +32,17 @@ fn(state => {
     // vernacularName: '',
     // }),
 
+    upsert('tbl_individual', 'study_id', {
+      household_id: state.data.body['survey_info/household_id'],
+    }),
+
+    upsert('tbl_household', 'study_id', {
+      household_id: state.data.body['survey_info/household_id'],
+      external_id: state.data.body['survey_info/household_id'],
+    }),
+
     upsert('tbl_household_char', 'study_id', {
+      household_id: state.data.body['survey_info/household_id'],
       num_occupants: state.data.body['group_begin/group_people/nb_people'],
       num_babies: state.data.body['group_begin/group_people/nb_babies'],
       num_children: state.data.body['group_begin/group_people/nb_children'],
@@ -53,12 +60,19 @@ fn(state => {
       const repeatGroup = state.data.body['group_begin/group_food'];
       return upsertMany('tbl_wildmeat', 'study_id', state => {
         repeatGroup.map(foodItem => {
+          const unit =
+            foodItem['group_begin/group_food/quantity_technique'] ===
+            'known_technique'
+              ? 'kilogram'
+              : '-8';
+
           return {
+            sample_id: `${state.data._id}${state.data._xform_id_string}`,
             wildmeat_category_1: foodItem['group_begin/group_food/category1'],
             wildmeat_category_2: foodItem['group_begin/group_food/category2'],
             wildmeat_group: foodItem['group_begin/group_food/group'],
             vernacular_name: foodItem['group_begin/group_food/species'],
-            unit: foodItem['group_begin/group_food/quantity_technique'],
+            unit,
             massin_grams: foodItem['group_begin/group_food/quantity'],
             price: foodItem['group_begin/group_food/Cost'],
             aquisition: foodItem['group_begin/group_food/obtention'],

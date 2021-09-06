@@ -11,7 +11,6 @@ fn(state => {
       study_id: studyIDMap[state.data.formType],
     }),
 
-    // to check
     fn(state => {
       const wildmeatIDs =
         state.data.body['domeat_consumption/domeat_species'].split(' ');
