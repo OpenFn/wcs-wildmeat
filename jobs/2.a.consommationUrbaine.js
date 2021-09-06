@@ -49,7 +49,7 @@ upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
   date_start: state.data.body['introduction_gp/date'],
   date_end: state.data.body['introduction_gp/date'],
   preferences: state.data.body['prot_preference/why_like_bm'],
-  individual_id: state.data._id,
+  individual_id: state.data.body._id,
 });
 
 // upsert('swm_species', 'study_id', {
@@ -64,5 +64,5 @@ upsert('tbl_individual_urban', 'individual_id', {
   age: state.data.body['subject_info/age'],
   education_years: state.data.body['subject_info/education_yrs'],
   religion: state.data.body['other_questions/religion'],
-  individual_id: state.data._id,
+  individual_id: state.data.body._id,
 });
