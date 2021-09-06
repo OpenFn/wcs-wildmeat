@@ -57,7 +57,7 @@ upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
 // vernacularName: '',
 // })
 
-upsert('tbl_individual_urban', 'individual_id', {
+upsert('tbl_individual_urban', 'ON CONSTRAINT tbl_individual_urban_pkey', {
   gender: state.data.body['introduction_gp/gender'],
   local_origin: state.data.body['subject_info/home'],
   origin_type: state.data.body['subject_info/other_home'],
