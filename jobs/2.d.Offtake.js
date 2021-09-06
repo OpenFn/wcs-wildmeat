@@ -10,11 +10,11 @@ fn(state => {
 });
 
 upsert('tbl_study', 'study_id', {
-  study_id: state => studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.data.formType],
 });
 
 upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
-  study_id: state => studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.data.formType],
   site_id: '',
   hunter_monitoring_id: state.data.body['id_hunter'],
 

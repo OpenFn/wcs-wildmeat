@@ -10,7 +10,7 @@ fn(state => {
 });
 
 upsert('tbl_study', 'study_id', {
-  study_id: state => studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.data.formType],
 });
 
 upsert('tbl_sample', 'sample_id', {
@@ -27,7 +27,7 @@ upsert('swm_transaction', 'uuid', {
 upsert('tbl_site', 'site_id', {
   admin_level_3: state.data.body['survey_info/district'],
   site_name: state.data.body['survey_info/village'],
-  site_id: state => studyIDMap[state.data.formType],
+  site_id: state => state.studyIDMap[state.data.formType],
 });
 
 // upsert('swm_species', 'study_id', {
