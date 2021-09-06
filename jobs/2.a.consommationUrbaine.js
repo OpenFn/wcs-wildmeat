@@ -16,7 +16,7 @@ fn(state => {
 fn(state => {
   const wildmeatIDs =
     state.data.body['domeat_consumption/domeat_species'].split(' ');
-  return upsertMany('tbl_wildmeat_urban', 'ON CONSTRAINT tbl_wildmeat_pkey', state =>
+  return upsertMany('tbl_wildmeat_urban', 'ON CONSTRAINT tbl_wildmeat_urban_pkey', state =>
     wildmeatIDs.map(wildmeat => {
       return {
         study_id: state => state.studyIDMap[state.data.formType],
