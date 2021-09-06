@@ -13,18 +13,18 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.data.formType],
 });
 
-upsert('tbl_sample', 'sample_id', {
+upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   date_start: state.data.body['survey_info/info_recall_date'],
   household_id: state.data.body['survey_info/household_id'],
 });
 
-upsert('swm_transaction', 'uuid', {
+upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   uuid: `${state.data._id}${state.data._xform_id_string}`,
   submission_time: state.data.body['_submission_time'],
 });
 
-upsert('tbl_site', 'site_id', {
+upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   admin_level_3: state.data.body['survey_info/district'],
   site_name: state.data.body['survey_info/village'],
   site_id: state => state.studyIDMap[state.data.formType],
@@ -35,17 +35,17 @@ upsert('tbl_site', 'site_id', {
 // vernacularName: '',
 // })
 
-upsert('tbl_individual', 'individual_id', {
+upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   individual_id: state.data._id,
 });
 
-upsert('tbl_household', 'household_id', {
+upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   external_id: state.data.body['survey_info/household_id'],
 });
 
-upsert('tbl_household_char', 'household_id', {
+upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   num_occupants: state.data.body['group_begin/group_people/nb_people'],
   num_babies: state.data.body['group_begin/group_people/nb_babies'],
@@ -61,7 +61,7 @@ upsert('tbl_household_char', 'household_id', {
 
 fn(state => {
   const repeatGroup = state.data.body['group_begin/group_food'];
-  return upsertMany('tbl_wildmeat', 'sample_id', state =>
+  return upsertMany('tbl_wildmeat', 'ON CONSTRAINT tbl_wildmeat_pkey', state =>
     repeatGroup.map(foodItem => {
       const unit =
         foodItem['group_begin/group_food/quantity_technique'] ===
