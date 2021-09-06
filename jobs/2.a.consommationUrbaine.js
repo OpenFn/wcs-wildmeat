@@ -65,4 +65,6 @@ upsert('tbl_individual_urban', 'ON CONSTRAINT tbl_individual_urban_pkey', {
   //education_years: state.data.body['subject_info/education_yrs'],
   religion: state.data.body['other_questions/religion'],
   individual_id: state.data.body._id,
+  study_id: state => state.studyIDMap[state.data.formType],
+  site_id: state => state.studyIDMap[state.data.formType],
 });
