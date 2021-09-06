@@ -12,8 +12,8 @@ fn(state => {
       study_id: studyIDMap[state.data.formType],
     }),
 
-    //UUID unclear
-    upsert('tbl_hunter_monitoring', 'sample_id', {
+    
+    upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
       study_id: studyIDMap[state.data.formType],
       site_id: '',
       hunter_monitoring_id: state.data.body['id_hunter'],
