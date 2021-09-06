@@ -20,10 +20,10 @@ upsert('tbl_study', 'study_id', {
 fn(state => {
   const wildmeatIDs =
     state.data.body['domeat_consumption/domeat_species'].split(' ');
-  return upsertMany('tbl_wildmeat_urban', 'wildmeat_id', state => {
-    return wildmeatIDs.map(wildmeat => {
+  return upsertMany('tbl_wildmeat_urban', 'wildmeat_id', state =>
+    wildmeatIDs.map(wildmeat => {
       return {
-        study_id: state.studyIDMap[state.data.formType],
+        study_id: state => state.studyIDMap[state.data.formType],
         wildmeat_id: wildmeat,
         sample_id: `${state.data._id}${state.data._xform_id_string}`,
         amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
@@ -32,14 +32,14 @@ fn(state => {
         unit: state.data.body['domeat_consumption/qty_measure_type_dm'],
         vernacular_name: state.data.body['bm_consumption/bm_species'],
       };
-    });
-  })(state);
+    })
+  )(state);
 });
 
 upsert('tbl_site', 'site_id', {
   study_id: state => state.studyIDMap[state.data.formType],
   admin_level_2: state.data.body['introduction_gp/other_town'],
-  site_id: state.studyIDMap[state.data.formType],
+  site_id: state => state.studyIDMap[state.data.formType],
 });
 
 upsert('tbl_sample_urban', 'sample_id', {
