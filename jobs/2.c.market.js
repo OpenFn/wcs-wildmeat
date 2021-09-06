@@ -41,6 +41,8 @@ fn(state => {
         return upsertMany('tbl_wildmeat_market', 'study_id', state => {
           sales.map(sale => {
             return {
+              wildmeat_id: sale['vendor/sales/species'],
+              amount: 1,
               wildmeat_category_1: sale['vendor/sales/category1'],
               wildmeat_category_2: sale['vendor/sales/category2'],
               wildmeat_group: sale['vendor/sales/group'],
