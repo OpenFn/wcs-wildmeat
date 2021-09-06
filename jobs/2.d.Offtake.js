@@ -12,6 +12,7 @@ fn(state => {
       study_id: studyIDMap[state.data.formType],
     }),
 
+    //UUID unclear
     upsert('tbl_hunter_monitoring', 'sample_id', {
       study_id: studyIDMap[state.data.formType],
       site_id: '',
@@ -39,7 +40,7 @@ fn(state => {
 
     fn(state => {
       const animals = state.data.body['animal_details'];
-      return upsertMany('tbl_wildmeat_hunter', 'study_id', state => {
+      return upsertMany('tbl_wildmeat_hunter', 'sample_id', state => {
         animals.map(animal => {
           return {
             sample_id: `${state.data._id}${state.data._xform_id_string}`,
