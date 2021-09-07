@@ -60,7 +60,7 @@ fn(state => {
           vernacular_name_other: sale['vendor/sales/othe_species'],
           condition: sale['vendor/sales/condition'],
           unit: sale['vendor/sales/unit'],
-          unit_other: sale['vendor/sales/other_unit'],
+          other_unit: sale['vendor/sales/other_unit'],
           harvest_method: sale['vendor/sales/technique'],
           price: sale['vendor/sales/price'],
         };
