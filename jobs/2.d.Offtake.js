@@ -20,9 +20,9 @@ upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
 
   trip_hunting_method: state.data.body['trip/type'],
   date_start: state.data.body['trip/trip/hunting_start'],
-  trip_end_time: state.data.body['trip/trip/hunting_start'],
-  date_end: state.data.body['trip/nb_people_hunt'],
-  trip_start_time: state.data.body['trip/hunting_start'],
+  trip_end_time: state.data.body['trip/trip/hunting_return'],
+  date_end: state.data.body['trip/trip/hunting_return'],
+  trip_start_time: state.data.body['trip/trip/hunting_start'],
   duration: state.data.body['trip/duration'],
   hunter_number: state.data.body['trip/nb_people_hunt'],
   indiv_group_hunter: state.data.body['trip/hunt_group'],
