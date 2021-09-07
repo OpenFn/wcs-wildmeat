@@ -36,6 +36,7 @@ upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
   site_id: state => state.studyIDMap[state.data.formType], //AD
   sample_unit: 'individual',
   //hunter_monitoring_id: state.data.body['id_hunter'],
+  hunter_monitoring_id: "1", //AD 
   date_start: state.data.body['trip/trip/hunting_start'],
   number_sample_units: state.data.body['animal_details_count'],
 });
