@@ -15,7 +15,7 @@ upsert('tbl_study', 'study_id', {
 
 upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
   study_id: state => state.studyIDMap[state.data.formType],
-  site_id: '',
+  site_id: state => state.studyIDMap[state.data.formType],
   //hunter_monitoring_id: state.data.body['id_hunter'],
 
   trip_hunting_method: state.data.body['trip/type'],
