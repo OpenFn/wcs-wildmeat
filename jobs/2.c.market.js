@@ -27,7 +27,7 @@ upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
 // vernacularName: '',
 // }),
 
-upsert('tbl_site', 'site_id', {
+upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   admin_level_3: state.data.body.district,
   site_name: state.data.body.village,
   site_id: state => state.studyIDMap[state.data.formType],
