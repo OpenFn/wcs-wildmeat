@@ -61,30 +61,35 @@ upsert('tbl_household_char', 'household_id', {
 
 fn(state => {
   const repeatGroup = state.data.body['group_begin/group_food'];
-  return upsertMany('tbl_wildmeat', 'sample_id', state =>
-    repeatGroup.map(foodItem => {
-      const unit =
-        foodItem['group_begin/group_food/quantity_technique'] ===
-        'known_technique'
-          ? 'kilogram'
-          : '-8';
+  if (repeatGroup) {
+    return upsertMany('tbl_wildmeat', 'sample_id', state =>
+      repeatGroup.map(foodItem => {
+        const unit =
+          foodItem['group_begin/group_food/quantity_technique'] ===
+          'known_technique'
+            ? 'kilogram'
+            : '-8';
 
-      return {
-        sample_id: `${state.data._id}${state.data._xform_id_string}`,
-        wildmeat_category_1: foodItem['group_begin/group_food/category1'],
-        wildmeat_category_2: foodItem['group_begin/group_food/category2'],
-        wildmeat_group: foodItem['group_begin/group_food/group'],
-        vernacular_name: foodItem['group_begin/group_food/species'],
-        unit,
-        massin_grams: foodItem['group_begin/group_food/quantity'],
-        price: foodItem['group_begin/group_food/Cost'],
-        aquisition: foodItem['group_begin/group_food/obtention'],
-        acquisition_other: foodItem['group_begin/group_food/other_obtention'],
-        origin_of_wildmeat: foodItem['group_begin/group_food/origin_wildmeat'],
-        condition: foodItem['group_begin/group_food/state'],
-        consumption_frequency_unit:
-          foodItem['group_begin/group_food/frequency'],
-      };
-    })
-  )(state);
+        return {
+          sample_id: `${state.data._id}${state.data._xform_id_string}`,
+          wildmeat_category_1: foodItem['group_begin/group_food/category1'],
+          wildmeat_category_2: foodItem['group_begin/group_food/category2'],
+          wildmeat_group: foodItem['group_begin/group_food/group'],
+          vernacular_name: foodItem['group_begin/group_food/species'],
+          unit,
+          massin_grams: foodItem['group_begin/group_food/quantity'],
+          price: foodItem['group_begin/group_food/Cost'],
+          aquisition: foodItem['group_begin/group_food/obtention'],
+          acquisition_other: foodItem['group_begin/group_food/other_obtention'],
+          origin_of_wildmeat:
+            foodItem['group_begin/group_food/origin_wildmeat'],
+          condition: foodItem['group_begin/group_food/state'],
+          consumption_frequency_unit:
+            foodItem['group_begin/group_food/frequency'],
+        };
+      })
+    )(state);
+  }
+  console.log('There is no wildmeat array. Skipping upsertMany(...)');
+  return state;
 });
