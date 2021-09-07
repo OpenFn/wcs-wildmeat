@@ -81,6 +81,8 @@ upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   num_pregnant_women: state.data.body['group_begin/group_people/nb_pregnant'],
   num_breastfeeding_women:
     state.data.body['group_begin/group_people/nb_brestfeeding'],
+  site_id: state => state.studyIDMap[state.data.formType], //AD
+  study_id: state => state.studyIDMap[state.data.formType], //AD
 });
 
 fn(state => {
