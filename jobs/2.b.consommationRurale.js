@@ -21,6 +21,7 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   household_id: state.data.body['survey_info/household_id'],
 });
 
+//AD added everything except uuid & submission_time
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   uuid: `${state.data._id}${state.data._xform_id_string}`,
   submission_time: state.data.body['_submission_time'],
@@ -51,11 +52,13 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 // vernacularName: '',
 // })
 
+
 upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   household_id: state.data.body['survey_info/household_id'],
-  individual_id: state.data._id,
-  site_id: state => state.studyIDMap[state.data.formType],
-  study_id: state => state.studyIDMap[state.data.formType],
+  individual_id: state.data.body._id,
+  site_id: state => state.studyIDMap[state.data.formType], //AD
+  study_id: state => state.studyIDMap[state.data.formType], //AD
+  external_id: state.data.body['survey_info/identity'] //AD
 });
 
 upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
