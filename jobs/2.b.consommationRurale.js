@@ -24,7 +24,7 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   uuid: `${state.data._id}${state.data._xform_id_string}`,
   submission_time: state.data.body['_submission_time'],
-  date: state.data.body._submission_time,
+  date: state.data.body['_submission_time'],
 });
 
 upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
