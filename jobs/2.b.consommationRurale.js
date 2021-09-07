@@ -25,6 +25,17 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   uuid: `${state.data._id}${state.data._xform_id_string}`,
   submission_time: state.data.body['_submission_time'],
   date: state.data.body['_submission_time'],
+  status: 'new',
+  modified_by: 'open_fn',
+  inserted_by: 'open_fn',
+  data_type: 'consumption', //other types: hunter, market
+  instances: state => {
+    if (state.data.body.consent_checklist == 'yes')
+      return JSON.stringify(state.data);
+    else {
+      let instance = { uuid: state.data.body._uuid, consent: 'no' };
+      return instance;
+    }
 });
 
 upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
