@@ -36,6 +36,7 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
       let instance = { uuid: state.data.body._uuid, consent: 'no' };
       return instance;
     }
+  }
 });
 
 upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
