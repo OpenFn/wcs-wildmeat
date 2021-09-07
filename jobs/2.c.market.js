@@ -17,9 +17,10 @@ upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   date_start: state.data.body.today,
   date_end: state.data.body.today,
-   study_id: state => state.studyIDMap[state.data.formType], //ad
+  study_id: state => state.studyIDMap[state.data.formType], //ad
   site_id: state => state.studyIDMap[state.data.formType], //ad
-  market_id: "1" //AD 
+  market_id: "1", //AD 
+  number_tables_surveyed: state.data.body.total_surveyed,
 });
 
 // upsert('swm_species', 'study_id', {
@@ -37,7 +38,6 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 
 upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
   external_id: state.data.body.market,
-  number_tables_surveyed: state.data.body.total_surveyed,
 });
 
 fn(state => {
