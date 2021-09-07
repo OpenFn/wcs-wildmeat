@@ -13,7 +13,7 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.data.formType],
 });
 
-upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
+upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
   study_id: state => state.studyIDMap[state.data.formType],
   site_id: state => state.studyIDMap[state.data.formType],
   //hunter_monitoring_id: state.data.body['id_hunter'],
@@ -30,7 +30,7 @@ upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
   number_traps: state.data.body['trip/nb_traps'],
 });
 
-upsert('tbl_sample_hunter', 'sample_id', {
+upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   sample_unit: 'individual',
   //hunter_monitoring_id: state.data.body['id_hunter'],
@@ -40,7 +40,7 @@ upsert('tbl_sample_hunter', 'sample_id', {
 
 fn(state => {
   const animals = state.data.body['animal_details'];
-  return upsertMany('tbl_wildmeat_hunter', 'sample_id', state =>
+  return upsertMany('tbl_wildmeat_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', state =>
     animals.map(animal => {
       return {
         sample_id: `${state.data._id}${state.data._xform_id_string}`,
