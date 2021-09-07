@@ -54,6 +54,8 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   individual_id: state.data._id,
+  site_id: state => state.studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.data.formType],
 });
 
 upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
