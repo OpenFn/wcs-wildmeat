@@ -13,7 +13,7 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.data.formType],
 });
 
-upsert('tbl_sample_market', 'sample_id', {
+upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   date_start: state.data.body.today,
   date_end: state.data.body.today,
@@ -30,7 +30,7 @@ upsert('tbl_site', 'site_id', {
   site_id: state => state.studyIDMap[state.data.formType],
 });
 
-upsert('tbl_market', 'external_id', {
+upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
   external_id: state.data.body.market,
   number_tables_surveyed: state.data.body.total_surveyed,
 });
@@ -40,7 +40,7 @@ fn(state => {
 
   return each(vendors, state => {
     const sales = state.data['vendor/sales'];
-    return upsertMany('tbl_wildmeat_market', 'wildmeat_id', state =>
+    return upsertMany('tbl_wildmeat_market', 'ON CONSTRAINT tbl_wildmeat_market_pkey', state =>
       sales.map(sale => {
         return {
           wildmeat_id: sale['vendor/sales/species'],
