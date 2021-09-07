@@ -19,6 +19,7 @@ upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
   date_end: state.data.body.today,
    study_id: state => state.studyIDMap[state.data.formType], //ad
   site_id: state => state.studyIDMap[state.data.formType], //ad
+  market_id: "1" //AD 
 });
 
 // upsert('swm_species', 'study_id', {
