@@ -33,7 +33,7 @@ upsert('tbl_hunter_monitoring', 'hunter_monitoring_id', {
 upsert('tbl_sample_hunter', 'sample_id', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   sample_unit: 'individual',
-  hunter_monitoring_id: state.data.body['id_hunter'],
+  //hunter_monitoring_id: state.data.body['id_hunter'],
   date_start: state.data.body['trip/trip/hunting_start'],
   number_sample_units: state.data.body['animal_details_count'],
 });
