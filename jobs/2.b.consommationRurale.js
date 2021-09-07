@@ -70,6 +70,7 @@ upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
 });
 
 upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
+  household_char_id: state.data.body._id, //ad
   household_id: state.data.body['survey_info/household_id'],
   num_occupants: state.data.body['group_begin/group_people/nb_people'],
   num_babies: state.data.body['group_begin/group_people/nb_babies'],
