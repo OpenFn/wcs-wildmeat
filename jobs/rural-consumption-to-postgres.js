@@ -121,6 +121,7 @@ alterState(state => {
   )(state);
 });
 
+
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   uuid: state.data.body._id + state.data.body._xform_id_string,
   date: state.data.body._submission_time,
