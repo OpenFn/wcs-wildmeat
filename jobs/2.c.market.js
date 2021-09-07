@@ -51,6 +51,8 @@ fn(state => {
     return upsertMany('tbl_wildmeat_market', 'ON CONSTRAINT tbl_wildmeat_market_pkey', state =>
       sales.map(sale => {
         return {
+          site_id: state => state.studyIDMap[state.data.formType], //ad
+          study_id: state => state.studyIDMap[state.data.formType], //ad
           wildmeat_id: sale['vendor/sales/species'],
           amount: 1,
           wildmeat_category_1: sale['vendor/sales/category1'],
