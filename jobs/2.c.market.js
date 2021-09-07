@@ -31,6 +31,8 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   admin_level_3: state.data.body.district,
   site_name: state.data.body.village,
   site_id: state => state.studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.data.formType], //ad
+
 });
 
 upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
