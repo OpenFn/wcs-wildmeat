@@ -121,20 +121,22 @@ alterState(state => {
   )(state);
 });
 
-upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
-  uuid: state.data.body._id + state.data.body._xform_id_string,
-  //date: state.data.body._submission_time,
-  status: 'new',
-  submission_time: state.data.body._submission_time,
-  modified_by: 'open_fn',
-  inserted_by: 'open_fn',
-  data_type: 'consumption', //other types: hunter, market
-  instances: state => {
-    if (state.data.body.consent_checklist == 'yes')
-      return JSON.stringify(state.data);
-    else {
-      let instance = { uuid: state.data.body._uuid, consent: 'no' };
-      return instance;
-    }
-  },
+//date required field?
+
+// upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+//   uuid: state.data.body._id + state.data.body._xform_id_string,
+//   date: state.data.body._submission_time,
+//   status: 'new',
+//   submission_time: state.data.body._submission_time,
+//   modified_by: 'open_fn',
+//   inserted_by: 'open_fn',
+//   data_type: 'consumption', //other types: hunter, market
+//   instances: state => {
+//     if (state.data.body.consent_checklist == 'yes')
+//       return JSON.stringify(state.data);
+//     else {
+//       let instance = { uuid: state.data.body._uuid, consent: 'no' };
+//       return instance;
+//     }
+//   },
 });
