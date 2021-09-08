@@ -43,7 +43,7 @@ upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
 
 fn(state => {
   const animals = state.data.body['animal_details'];
-  return upsertMany('tbl_wildmeat_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', state =>
+  return upsertMany('tbl_wildmeat_hunter', 'ON CONSTRAINT tbl_wildmeat_hunter_pkey', state =>
     animals.map(animal => {
       return {
         sample_id: `${state.data._id}${state.data._xform_id_string}`,
