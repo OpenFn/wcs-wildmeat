@@ -14,8 +14,9 @@ upsert('tbl_study', 'study_id', {
 });
 
 fn(state => {
-  const wildmeatIDs =
-    state.data.body['domeat_consumption/domeat_species'].split(' ');
+  const wildmeatIDs = state.data.body['domeat_consumption/domeat_species']
+    ? state.data.body['domeat_consumption/domeat_species'].split(' ')
+    : [];
   return upsertMany(
     'tbl_wildmeat_urban',
     'ON CONSTRAINT tbl_wildmeat_urban_pkey',
