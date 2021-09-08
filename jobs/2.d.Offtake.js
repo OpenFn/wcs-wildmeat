@@ -47,7 +47,8 @@ fn(state => {
     animals.map(animal => {
       return {
         sample_id: `${state.data._id}${state.data._xform_id_string}`,
-
+        study_id: state => state.studyIDMap[state.data.formType], //AD
+        site_id: state => state.studyIDMap[state.data.formType], //AD
         wildmeat_category_2: animal['animal_details/category2'],
         wildmeat_group: animal['animal_details/group'],
         vernacular_name: animal['animal_details/species_id'],
