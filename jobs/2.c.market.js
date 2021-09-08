@@ -53,7 +53,7 @@ fn(state => {
       state =>
         sales.map(sale => {
           return {
-            sample_id: `${state.data._id}${state.data._xform_id_string}`,
+            sample_id: `${state.data._id}${state.data._xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
             study_id: state.studyIDMap[state.formType], //ad
             site_id: state.studyIDMap[state.formType], //ad
             wildmeat_id: sale['vendor/sales/species'],
