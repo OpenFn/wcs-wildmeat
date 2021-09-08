@@ -6,18 +6,18 @@ fn(state => {
     Market: 1004,
     Offtake: 1006,
   };
-  return state;
+  return { ...state, formType: state.data.formType };
 });
 
 upsert('tbl_study', 'study_id', {
-  study_id: state => state.studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.formType],
 });
 
 upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
-  study_id: state => state.studyIDMap[state.data.formType],
-  site_id: state => state.studyIDMap[state.data.formType],
-  //hunter_monitoring_id: state.data.body['id_hunter'], 
-  hunter_monitoring_id: "1", 
+  study_id: state => state.studyIDMap[state.formType],
+  site_id: state => state.studyIDMap[state.formType],
+  //hunter_monitoring_id: state.data.body['id_hunter'],
+  hunter_monitoring_id: '1',
   trip_hunting_method: state.data.body['trip/type'],
   date_start: state.data.body['trip/trip/hunting_start'],
   trip_end_time: state.data.body['trip/trip/hunting_return'],
@@ -32,32 +32,35 @@ upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
 
 upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
-  study_id: state => state.studyIDMap[state.data.formType], //AD
-  site_id: state => state.studyIDMap[state.data.formType], //AD
+  study_id: state => state.studyIDMap[state.formType], //AD
+  site_id: state => state.studyIDMap[state.formType], //AD
   sample_unit: 'individual',
   //hunter_monitoring_id: state.data.body['id_hunter'],
-  hunter_monitoring_id: "1", //AD 
+  hunter_monitoring_id: '1', //AD
   date_start: state.data.body['trip/trip/hunting_start'],
   number_sample_units: state.data.body['animal_details_count'],
 });
 
 fn(state => {
   const animals = state.data.body['animal_details'];
-  return upsertMany('tbl_wildmeat_hunter', 'ON CONSTRAINT tbl_wildmeat_hunter_pkey', state =>
-    animals.map(animal => {
-      return {
-        sample_id: `${state.data._id}${state.data._xform_id_string}`,
-        study_id: state => state.studyIDMap[state.data.formType], //AD
-        site_id: state => state.studyIDMap[state.data.formType], //AD
-        wildmeat_category_2: animal['animal_details/category2'],
-        wildmeat_group: animal['animal_details/group'],
-        vernacular_name: animal['animal_details/species_id'],
-        harvest_method: animal['animal_details/hunting_method'],
-        use: animal['animal_details/usage'],
-        percent_sold: animal['animal_details/pct_sold'],
-        condition: animal['animal_details/conservation'],
-        price: animal['animal_details/price'],
-      };
-    })
+  return upsertMany(
+    'tbl_wildmeat_hunter',
+    'ON CONSTRAINT tbl_wildmeat_hunter_pkey',
+    state =>
+      animals.map(animal => {
+        return {
+          sample_id: `${state.data._id}${state.data._xform_id_string}`,
+          study_id: state.studyIDMap[state.formType], //AD
+          site_id: state.studyIDMap[state.formType], //AD
+          wildmeat_category_2: animal['animal_details/category2'],
+          wildmeat_group: animal['animal_details/group'],
+          vernacular_name: animal['animal_details/species_id'],
+          harvest_method: animal['animal_details/hunting_method'],
+          use: animal['animal_details/usage'],
+          percent_sold: animal['animal_details/pct_sold'],
+          condition: animal['animal_details/conservation'],
+          price: animal['animal_details/price'],
+        };
+      })
   )(state);
 });

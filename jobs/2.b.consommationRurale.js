@@ -6,18 +6,18 @@ fn(state => {
     Market: 1004,
     Offtake: 1006,
   };
-  return state;
+  return { ...state, formType: state.data.formType };
 });
 
 upsert('tbl_study', 'study_id', {
-  study_id: state => state.studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.formType],
 });
 
 upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
-  study_id: state => state.studyIDMap[state.data.formType],
+  study_id: state => state.studyIDMap[state.formType],
   sample_id: `${state.data._id}${state.data._xform_id_string}`,
   date_start: state.data.body['survey_info/info_recall_date'],
-  site_id: state => state.studyIDMap[state.data.formType],
+  site_id: state => state.studyIDMap[state.formType],
   household_id: state.data.body['survey_info/household_id'],
 });
 
@@ -43,8 +43,8 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
 upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   admin_level_3: state.data.body['survey_info/district'],
   site_name: state.data.body['survey_info/village'],
-  site_id: state => state.studyIDMap[state.data.formType],
-  study_id: state => state.studyIDMap[state.data.formType],
+  site_id: state => state.studyIDMap[state.formType],
+  study_id: state => state.studyIDMap[state.formType],
 });
 
 // upsert('swm_species', 'study_id', {
@@ -55,8 +55,8 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   individual_id: state.data.body._id,
-  site_id: state => state.studyIDMap[state.data.formType], //AD
-  study_id: state => state.studyIDMap[state.data.formType], //AD
+  site_id: state => state.studyIDMap[state.formType], //AD
+  study_id: state => state.studyIDMap[state.formType], //AD
   external_id: state.data.body['survey_info/identity'], //AD
 });
 
@@ -64,8 +64,8 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
 upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
   household_id: state.data.body['survey_info/household_id'],
   external_id: state.data.body['survey_info/household_id'],
-  site_id: state => state.studyIDMap[state.data.formType], //AD
-  study_id: state => state.studyIDMap[state.data.formType], //AD
+  site_id: state => state.studyIDMap[state.formType], //AD
+  study_id: state => state.studyIDMap[state.formType], //AD
 });
 
 upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
@@ -81,8 +81,8 @@ upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   num_pregnant_women: state.data.body['group_begin/group_people/nb_pregnant'],
   num_breastfeeding_women:
     state.data.body['group_begin/group_people/nb_brestfeeding'],
-  site_id: state => state.studyIDMap[state.data.formType], //AD
-  study_id: state => state.studyIDMap[state.data.formType], //AD
+  site_id: state => state.studyIDMap[state.formType], //AD
+  study_id: state => state.studyIDMap[state.formType], //AD
 });
 
 fn(state => {
