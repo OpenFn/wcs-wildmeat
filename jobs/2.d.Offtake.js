@@ -58,5 +58,5 @@ fn(state => {
         price: animal['animal_details/price'],
       };
     })
-  );
+  )(state);
 });
