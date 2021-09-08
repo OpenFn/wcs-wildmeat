@@ -63,7 +63,7 @@ upsert('tbl_individual_urban', 'ON CONSTRAINT tbl_individual_urban_pkey', {
   local_origin: state.data.body['subject_info/home'],
   origin_type: state.data.body['subject_info/other_home'],
   age: state.data.body['subject_info/age'],
-  //education_years: state.data.body['subject_info/education_yrs'],
+  education_years: state.data.body['subject_info/education_yrs'],
   religion: state.data.body['other_questions/religion'],
   individual_id: state.data.body._id,
   study_id: state => state.studyIDMap[state.formType],
