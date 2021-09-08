@@ -11,14 +11,17 @@ fn(state => {
       {
         id: 'a9eJJ2hrRSMCJZ95WMc93j',
         name: 'SWM Consommation Urbaine',
+        type: ''
       },
       {
         id: 'aJxTqQSF7VRLYbMGfeTHfd',
         name: 'SWM Urban Consumption Survey 2019',
+        type: ''
       },
       {
         id: 'aUrUbD6C9hB3y8XjfQ9CLc',
         name: 'SWM Consommation Rurale',
+        type: ''
       },
       {
         id: 'aUtBrSsVRkZrjkpodB6TW7',
@@ -27,22 +30,27 @@ fn(state => {
       {
         id: 'aDVDagX8TE9NUY7xmvAUpv',
         name: 'SWM Suivi Marché 2020 - Congo Market ',
+        type: ''
       },
       {
         id: 'aem28HL45vkQKyhB22xn8Q',
         name: 'SWM Suivi points de vente protéines animales - DRC Market',
+        type: ''
       },
       {
         id: 'aYcthFvuwgvUn89aBoedgT',
         name: 'SWM_Offtake_DRC_202104',
+        type: ''
       },
       {
         id: 'a3hX3ZvVm4BanZDeis9AFj',
         name: 'Prélèvement de chasse SWM',
+        type: ''
       },
     ].map(survey => ({
       formId: survey.id,
-      name: survey.name,
+      formName: survey.name,
+      formType: survey.type,
       url: `https://kf.kobotoolbox.org/api/v2/assets/${survey.id}/data/?format=json`,
       query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
     })),
@@ -56,6 +64,8 @@ each(dataPath('surveys[*]'), state =>
     state.data.submissions = state.data.results.map(submission => {
       return {
         body: submission,
+        formName,
+        formType
       };
     });
     console.log(`Fetched ${state.data.count} submissions.`);
