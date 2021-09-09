@@ -43,24 +43,28 @@ upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
 
 fn(state => {
   const animals = state.data.body['animal_details'];
-  return upsertMany(
-    'tbl_wildmeat_hunter',
-    'ON CONSTRAINT tbl_wildmeat_hunter_pkey',
-    state =>
-      animals.map(animal => {
-        return {
-          sample_id: `${state.data._id}${state.data._xform_id_string}`,
-          study_id: state.studyIDMap[state.formType], //AD
-          site_id: state.studyIDMap[state.formType], //AD
-          wildmeat_category_2: animal['animal_details/category2'],
-          wildmeat_group: animal['animal_details/group'],
-          vernacular_name: animal['animal_details/species_id'],
-          harvest_method: animal['animal_details/hunting_method'],
-          use: animal['animal_details/usage'],
-          percent_sold: animal['animal_details/pct_sold'],
-          condition: animal['animal_details/conservation'],
-          price: animal['animal_details/price'],
-        };
-      })
-  )(state);
+  if (animals) {
+    return upsertMany(
+      'tbl_wildmeat_hunter',
+      'ON CONSTRAINT tbl_wildmeat_hunter_pkey',
+      state =>
+        animals.map(animal => {
+          return {
+            sample_id: `${state.data._id}${state.data._xform_id_string}`,
+            study_id: state.studyIDMap[state.formType], //AD
+            site_id: state.studyIDMap[state.formType], //AD
+            wildmeat_category_2: animal['animal_details/category2'],
+            wildmeat_group: animal['animal_details/group'],
+            vernacular_name: animal['animal_details/species_id'],
+            harvest_method: animal['animal_details/hunting_method'],
+            use: animal['animal_details/usage'],
+            percent_sold: animal['animal_details/pct_sold'],
+            condition: animal['animal_details/conservation'],
+            price: animal['animal_details/price'],
+          };
+        })
+    )(state);
+  }
+  console.log('No animals array. Ignoring upsert...');
+  return state;
 });
