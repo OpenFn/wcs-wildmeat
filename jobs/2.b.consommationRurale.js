@@ -103,6 +103,7 @@ fn(state => {
             site_id: state => state.studyIDMap[state.formType], //AD
             study_id: state => state.studyIDMap[state.formType], //AD
             sample_id: `${state.data._id}${state.data._xform_id_string}`,
+            wildmeat_id: foodItem['group_begin/group_food/species'], //AD
             wildmeat_category_1: foodItem['group_begin/group_food/category1'],
             wildmeat_category_2: foodItem['group_begin/group_food/category2'],
             wildmeat_group: foodItem['group_begin/group_food/group'],
