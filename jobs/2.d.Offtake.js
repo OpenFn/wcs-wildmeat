@@ -17,7 +17,7 @@ upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
   study_id: state => state.studyIDMap[state.formType],
   site_id: state => state.studyIDMap[state.formType],
   hunter_monitoring_id: state.data.body['id_hunter'],
-  hunter_monitoring_id: '1',
+  //hunter_monitoring_id: '1',
   trip_hunting_method: state.data.body['trip/type'],
   date_start: state.data.body['trip/trip/hunting_start'],
   trip_end_time: state.data.body['trip/trip/hunting_return'],
