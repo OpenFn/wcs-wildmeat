@@ -65,6 +65,8 @@ upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
   site_id: state => state.studyIDMap[state.formType], //AD
   study_id: state => state.studyIDMap[state.formType], //AD
   individual_id: state.data.body._id,
+  individual_char_id: state.data.body._id,
+
 });
 
 //AD everything except household id and external_id
