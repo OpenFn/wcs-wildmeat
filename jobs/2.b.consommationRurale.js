@@ -15,7 +15,7 @@ upsert('tbl_study', 'study_id', {
 
 upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   study_id: state => state.studyIDMap[state.formType],
-  sample_id: `${state.data._id}${state.data._xform_id_string}`,
+  sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
   date_start: state.data.body['survey_info/info_recall_date'],
   site_id: state => state.studyIDMap[state.formType],
   household_id: state.data.body['survey_info/household_id'],
@@ -23,7 +23,7 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
 
 //AD added everything except uuid & submission_time
 upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
-  uuid: `${state.data._id}${state.data._xform_id_string}`,
+  uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
   submission_time: state.data.body['_submission_time'],
   date: state.data.body['_submission_time'],
   status: 'new',
@@ -111,7 +111,7 @@ fn(state => {
           return {
             site_id: state => state.studyIDMap[state.formType], //AD
             study_id: state => state.studyIDMap[state.formType], //AD
-            sample_id: `${state.data._id}${state.data._xform_id_string}`,
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
             wildmeat_id: foodItem['group_begin/group_food/species'], //AD
             wildmeat_category_1: foodItem['group_begin/group_food/category1'],
             wildmeat_category_2: foodItem['group_begin/group_food/category2'],
