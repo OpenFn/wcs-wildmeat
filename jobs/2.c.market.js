@@ -14,7 +14,7 @@ upsert('tbl_study', 'study_id', {
 });
 
 upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
-  sample_id: `${state.data._id}${state.data._xform_id_string}`,
+  sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
   date_start: state.data.body.today,
   date_end: state.data.body.today,
   study_id: state => state.studyIDMap[state.formType], //ad
@@ -55,7 +55,7 @@ fn(state => {
           state =>
             sales.map(sale => {
               return {
-                sample_id: `${state.data._id}${state.data._xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
+                sample_id: `${state.data.body._id}${state.data.body._xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
                 study_id: state.studyIDMap[state.formType], //ad
                 site_id: state.studyIDMap[state.formType], //ad
                 wildmeat_id: sale['vendor/sales/species'],
