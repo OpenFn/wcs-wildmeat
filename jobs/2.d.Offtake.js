@@ -32,7 +32,7 @@ upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
 });
 
 upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
-  sample_id: `${state.data._id}${state.data._xform_id_string}`,
+  sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
   study_id: state => state.studyIDMap[state.formType], //AD
   site_id: state => state.studyIDMap[state.formType], //AD
   sample_unit: 'individual',
