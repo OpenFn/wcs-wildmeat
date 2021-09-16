@@ -26,7 +26,7 @@ fn(state => {
           study_id: state.studyIDMap[state.formType],
           site_id: state.studyIDMap[state.formType],
           wildmeat_id: wildmeat,
-          sample_id: `${state.data._id}${state.data._xform_id_string}`,
+          sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
           amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
           condition: state.data.body[`domeat_consumption/state_${wildmeat}`],
           wildmeat_group: state.data.body['domeat_consumption/domeat_species'],
@@ -46,7 +46,7 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
   study_id: state => state.studyIDMap[state.formType],
   site_id: state => state.studyIDMap[state.formType],
-  sample_id: `${state.data._id}${state.data._xform_id_string}`,
+  sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
   date_start: state.data.body['introduction_gp/date'],
   date_end: state.data.body['introduction_gp/date'],
   preferences: state.data.body['prot_preference/why_like_bm'],
