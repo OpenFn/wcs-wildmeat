@@ -6,6 +6,7 @@ fn(state => {
     Market: 1004,
     Offtake: 1006,
   };
+  console.log(state.data.body._id)
   return { ...state, formType: state.data.formType };
 });
 
