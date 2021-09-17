@@ -39,11 +39,13 @@ upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
   external_id: state.data.body.market,
   site_id: state => state.studyIDMap[state.formType],
   study_id: state => state.studyIDMap[state.formType], //ad
-
 });
 
 fn(state => {
   const vendors = state.data.body['vendor'];
+  const id = state.data.body._id;
+  const xform_id_string = state.data.body._xform_id_string;
+
 
   if (vendors) {
     return each(vendors, state => {
@@ -54,9 +56,8 @@ fn(state => {
           'ON CONSTRAINT tbl_wildmeat_market_pkey',
           state =>
             sales.map(sale => {
-              console.log('id', state.data.body._id)
               return {
-                sample_id: `${state.data.body._id}${state.data.body._xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
+                sample_id: `${id}${xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
                 study_id: state.studyIDMap[state.formType], //ad
                 site_id: state.studyIDMap[state.formType], //ad
                 wildmeat_id: sale['vendor/sales/species'],
