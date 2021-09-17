@@ -6,7 +6,6 @@ fn(state => {
     Market: 1004,
     Offtake: 1006,
   };
-  console.log(state.data.body._id)
   return { ...state, formType: state.data.formType };
 });
 
@@ -55,6 +54,7 @@ fn(state => {
           'ON CONSTRAINT tbl_wildmeat_market_pkey',
           state =>
             sales.map(sale => {
+              console.log('id', state.data.body._id)
               return {
                 sample_id: `${state.data.body._id}${state.data.body._xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
                 study_id: state.studyIDMap[state.formType], //ad
