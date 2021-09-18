@@ -19,7 +19,13 @@ upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
   date_end: state.data.body.today,
   study_id: state => state.studyIDMap[state.formType], //ad
   site_id: state => state.studyIDMap[state.formType], //ad
-  market_id: '1', //AD
+  market_id: findValue({
+        uuid: 'external_id',
+        relation: 'tbl_market',
+        where: {
+          external_id: state.data.body.market,
+        },
+      }),
   number_tables_surveyed: state.data.body.total_surveyed,
 });
 
