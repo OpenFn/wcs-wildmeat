@@ -10,6 +10,8 @@ See the [`WCS Docs`](https://openfn.github.io/wcs/wildmeat/) for solution docume
 ### (1) Solution Overview
 OpenFn has configured an automated data integration solution between Kobo Toolbox and a PostgresSQL database to sync Kobo submissions and enable real-time monitoring of field data collection.
 
+[See here](https://docs.google.com/spreadsheets/d/1qfniuXap7tyjf9sZZN1M1Hn7nzGfvs_twhcxzjRV8QQ/edit#gid=0) for the data element mapping specification.
+
 
 ### (2) Integration Flow
 The solution is a one-way Kobo Toolbox-to-PostgresSQL integration that connects the following Kobo form types:
@@ -18,12 +20,14 @@ The solution is a one-way Kobo Toolbox-to-PostgresSQL integration that connects 
 `Market`,
 `Offtake`.
 
+[See here](https://docs.google.com/spreadsheets/d/1qfniuXap7tyjf9sZZN1M1Hn7nzGfvs_twhcxzjRV8QQ/edit#gid=0) for the full list of Kobo forms which were used to design these integrations.
+
 #### Triggers
 Trigger Type: Message Filter  
 A message filter trigger has been configured for each of the forms above. The corresponding job will run when a form with the matching message filter is recieved in the project inbox. These can be adjusted in the OpenFn project.
 
 #### Data Mappings
-These forms map to the following database tables:
+The Kobo forms map to the following database tables:  
 `tbl_sample`  
 `tbl_study`  
 `swm_transaction`  
@@ -45,16 +49,16 @@ These forms map to the following database tables:
 
 
 
-
 #### External Identifiers
 ...
 
 ### (3) Assumptions & Considerations for Change Management
-1. ...
+1. `study_id` & `site_id` are hardcoded values.
+2. This integration assumes that the master list of species used across forms has already been added to the PostgresSQL database. The master list can be found [here](https://docs.google.com/spreadsheets/d/1qfniuXap7tyjf9sZZN1M1Hn7nzGfvs_twhcxzjRV8QQ/edit#gid=1500079237).
 
 ### (4) Administration & Support
 #### Provisioning, Hosting, & Maintenance
-This integration is hosted on OpenFn.org with hosted SaaS. The Postgres DB is managed by WCS/EU SWM Wildmeat partners (email: U.Muchlish@cgiar.org)
+This integration is hosted on OpenFn.org with hosted SaaS. The Postgres DB is managed by WCS/EU SWM Wildmeat partners (email: U.Muchlish@cgiar.org).
 
 ####  Questions or support needed?
 Contact support@openfn.org. 
