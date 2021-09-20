@@ -30,24 +30,24 @@ A message filter trigger has been configured for each of the forms above. The co
 The Kobo forms map to the following database tables:  
 | DB Table    | External Uuid | Source data | Form Type |
 | ----------- | ------------- | ----------- | --------- |
-| tbl_site | site_id | hardcoded default (e.g., `1001`) | all? |
-| tbl_sample  | ? | ? | all? |
-| tbl_study | study_id | hardcoded default (e.g., `2001`) | all? |
-| swm_transaction | ? | ? | all? |
-| tbl_individual | ? | ? | all? |
-| tbl_individual_char | ? | ? | all? |
-| tbl_household | ? | ? | all? |
-| tbl_household_char | ? | ? | all? |
-| tbl_wildmeat | ? | ? | all? |
-| tbl_market | market_id | market (e.g., "djazzi") | all? |
-| tbl_wildmeat_market | ? | ? | market? |
-| tbl_sample_market | ? | ? | market? |
-| tbl_hunter_monitoring | ? | ? | ? |
-| tbl_wildmeat_hunter | ? | ? |? |
-| tbl_sample_hunter | ? | ? |? |
-| tbl_wildmeat_urban | ? | ? | urban? |
-| tbl_individual_urban | ? | ? |urban? |
-| tbl_sample_urban | ? | ? |
+| tbl_site | site_id | hardcoded default (e.g., `1001`) | All |
+| tbl_sample  | sample_id | _id + _xform_id_string | Rural Consumption |
+| tbl_study | study_id | hardcoded default (e.g., `2001`) | All |
+| swm_transaction | uuid | _id + _xform_id_string | Rural Consumption |
+| tbl_individual | individual_id | _id | Rural Consumption |
+| tbl_individual_char | individual_id | _id | Rural Consumption |
+| tbl_household | household_id | household_id | Rural Consumption |
+| tbl_household_char | household_id | household_id | Rural Consumption |
+| tbl_wildmeat | vernacular_name | species | Rural Consumption |
+| tbl_market | market_id | market (e.g., "djazzi") | Market |
+| tbl_wildmeat_market | wildmeat_id | species | Market |
+| tbl_sample_market | sample_id | _id + _xform_id_string | Market |
+| tbl_hunter_monitoring | hunter_monitoring_id | id_hunter | Offtake |
+| tbl_wildmeat_hunter | vernacular_name | species_id | Offtake |
+| tbl_sample_hunter | sample_id | _id + _xform_id_string | Offtake |
+| tbl_wildmeat_urban | wildmeat_id | wildmeat | Urban Consumption |
+| tbl_individual_urban | individual_id | _id | Urban Consumption |
+| tbl_sample_urban | sample_id | _id + _xform_id_string| Urban Consumption |
 
 
 #### External Identifiers
