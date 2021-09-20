@@ -30,7 +30,7 @@ A message filter trigger has been configured for each of the forms above. The co
 The Kobo forms map to the following database tables:  
 | DB Table    | External Uuid | Source data |
 | ----------- | ------------- | ----------- |
-| tbl_site | study_id | hardcoded default (e.g., `1001`) |
+| tbl_site | site_id | hardcoded default (e.g., `1001`) |
 | tbl_sample  | ? | ? |
 | tbl_study | study_id | hardcoded default (e.g., `2001`) |
 | swm_transaction | ? | ? |
@@ -39,7 +39,7 @@ The Kobo forms map to the following database tables:
 | tbl_household | ? | ? |
 | tbl_household_char | ? | ? |
 | tbl_wildmeat | ? | ? |
-| tbl_market | ? | ? |
+| tbl_market | market_id | market (e.g., "djazzi") |
 | tbl_wildmeat_market | ? | ? |
 | tbl_sample_market | ? | ? |
 | tbl_hunter_monitoring | ? | ? |
