@@ -28,25 +28,26 @@ A message filter trigger has been configured for each of the forms above. The co
 
 #### Data Mappings
 The Kobo forms map to the following database tables:  
-`tbl_sample`  
-`tbl_study`  
-`swm_transaction`  
-`tbl_site`  
-`tbl_individual`  
-`tbl_individual_char`  
-`tbl_household`  
-`tbl_household_char`  
-`tbl_wildmeat`  
-`tbl_sample_market`  
-`tbl_market`  
-`tbl_wildmeat_market`  
-`tbl_hunter_monitoring`  
-`tbl_sample_hunter`  
-`tbl_wildmeat_hunter`  
-`tbl_wildmeat_urban`  
-`tbl_sample_urban`  
-`tbl_individual_urban`  
-
+| DB Table    | External Uuid | Source data |
+| ----------- | ------------- | ----------- |
+| tbl_site | study_id | hardcoded default (e.g., `1001`) |
+| tbl_sample  | ? | ? |
+| tbl_study | study_id | hardcoded default (e.g., `2001`) |
+| swm_transaction | ? | ? |
+| tbl_individual | ? | ? |
+| tbl_individual_char | ? | ? |
+| tbl_household | ? | ? |
+| tbl_household_char | ? | ? |
+| tbl_wildmeat | ? | ? |
+| tbl_market | ? | ? |
+| tbl_wildmeat_market | ? | ? |
+| tbl_sample_market | ? | ? |
+| tbl_hunter_monitoring | ? | ? |
+| tbl_wildmeat_hunter | ? | ? |
+| tbl_wildmeat_urban | ? | ? |
+| tbl_individual_urban | ? | ? |
+| tbl_sample_hunter | ? | ? |
+| tbl_sample_urban | ? | ? |
 
 
 #### External Identifiers
