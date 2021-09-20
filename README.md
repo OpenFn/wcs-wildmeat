@@ -28,25 +28,25 @@ A message filter trigger has been configured for each of the forms above. The co
 
 #### Data Mappings
 The Kobo forms map to the following database tables:  
-| DB Table    | External Uuid | Source data |
-| ----------- | ------------- | ----------- |
-| tbl_site | site_id | hardcoded default (e.g., `1001`) |
-| tbl_sample  | ? | ? |
-| tbl_study | study_id | hardcoded default (e.g., `2001`) |
-| swm_transaction | ? | ? |
-| tbl_individual | ? | ? |
-| tbl_individual_char | ? | ? |
-| tbl_household | ? | ? |
-| tbl_household_char | ? | ? |
-| tbl_wildmeat | ? | ? |
-| tbl_market | market_id | market (e.g., "djazzi") |
-| tbl_wildmeat_market | ? | ? |
-| tbl_sample_market | ? | ? |
-| tbl_hunter_monitoring | ? | ? |
-| tbl_wildmeat_hunter | ? | ? |
-| tbl_wildmeat_urban | ? | ? |
-| tbl_individual_urban | ? | ? |
-| tbl_sample_hunter | ? | ? |
+| DB Table    | External Uuid | Source data | Form Type |
+| ----------- | ------------- | ----------- | --------- |
+| tbl_site | site_id | hardcoded default (e.g., `1001`) | all? |
+| tbl_sample  | ? | ? | all? |
+| tbl_study | study_id | hardcoded default (e.g., `2001`) | all? |
+| swm_transaction | ? | ? | all? |
+| tbl_individual | ? | ? | all? |
+| tbl_individual_char | ? | ? | all? |
+| tbl_household | ? | ? | all? |
+| tbl_household_char | ? | ? | all? |
+| tbl_wildmeat | ? | ? | all? |
+| tbl_market | market_id | market (e.g., "djazzi") | all? |
+| tbl_wildmeat_market | ? | ? | market? |
+| tbl_sample_market | ? | ? | market? |
+| tbl_hunter_monitoring | ? | ? | ? |
+| tbl_wildmeat_hunter | ? | ? |? |
+| tbl_sample_hunter | ? | ? |? |
+| tbl_wildmeat_urban | ? | ? | urban? |
+| tbl_individual_urban | ? | ? |urban? |
 | tbl_sample_urban | ? | ? |
 
 
