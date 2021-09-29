@@ -10,7 +10,8 @@ See the [`WCS Docs`](https://openfn.github.io/wcs/wildmeat/) for solution docume
 ### (1) Solution Overview
 OpenFn has configured an automated data integration solution between Kobo Toolbox and a PostgresSQL database to sync Kobo submissions and enable real-time monitoring of field data collection.
 
-[See here](https://docs.google.com/spreadsheets/d/1qfniuXap7tyjf9sZZN1M1Hn7nzGfvs_twhcxzjRV8QQ/edit#gid=0) for the data element mapping specification.
+[See here](https://drive.google.com/file/d/1H6x0S-b6BOqVKN41i99c7mVjyk_YACrT/view?usp=sharing) for the data model of the destionation database. 
+
 
 
 ### (2) Integration Flow
@@ -21,6 +22,9 @@ The solution is a one-way Kobo Toolbox-to-PostgresSQL integration that connects 
 `Offtake`.
 
 [See here](https://docs.google.com/spreadsheets/d/1qfniuXap7tyjf9sZZN1M1Hn7nzGfvs_twhcxzjRV8QQ/edit#gid=0) for the full list of Kobo forms which were used to design these integrations.
+
+[See here](https://docs.google.com/spreadsheets/d/1qfniuXap7tyjf9sZZN1M1Hn7nzGfvs_twhcxzjRV8QQ/edit#gid=0) for the data element mapping specification for exchange data between Kobo and the database.
+
 
 #### Triggers
 Trigger Type: Message Filter  
