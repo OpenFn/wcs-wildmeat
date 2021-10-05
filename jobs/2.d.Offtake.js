@@ -39,6 +39,7 @@ upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
   hunter_monitoring_id: state.data.body['id_hunter'],
   //hunter_monitoring_id: '1', //AD
   date_start: state.data.body['trip/trip/hunting_start'],
+  date_end: state.data.body['trip/trip/hunting_return'],
   number_sample_units: state.data.body['animal_details_count'],
 });
 
