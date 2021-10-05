@@ -45,6 +45,7 @@ upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
   external_id: state.data.body.market,
   site_id: state => state.studyIDMap[state.formType],
   study_id: state => state.studyIDMap[state.formType], //ad
+  sell_point_type: state => state.data.body.sell_point_type,
 });
 
 fn(state => {
