@@ -125,6 +125,7 @@ fn(state => {
             massin_grams: foodItem['group_begin/group_food/quantity'],
             price: foodItem['group_begin/group_food/Cost'],
             aquisition: foodItem['group_begin/group_food/obtention'],
+            amount: foodItem['group_begin/group_food/amount'],
             acquisition_other:
               foodItem['group_begin/group_food/other_obtention'],
             origin_of_wildmeat:
