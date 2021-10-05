@@ -17,6 +17,9 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   study_id: state => state.studyIDMap[state.formType],
   sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
   date_start: state.data.body['survey_info/info_recall_date'],
+  sample_unit: state.data.defaultUnit || 'kilograms',
+  number_sample_units: '24',
+  sampling_effortin_days: '2',
   site_id: state => state.studyIDMap[state.formType],
   household_id: state.data.body['survey_info/household_id'],
 });
