@@ -74,8 +74,9 @@ alterState(state => {
                   state.data.body._id +
                   state.data.body._submission_time +
                   state.data.body._xform_id_string,
-                taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column?
+                //taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column?
                 wildmeat_id: state.data.body._id + i,
+                vernacular_name: foodItem['group_begin/group_food/species'],
                 wildmeat_category_1:
                   foodItem['group_begin/group_food/category1'],
                 wildmeat_category_2:
