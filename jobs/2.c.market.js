@@ -13,6 +13,13 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.formType],
 });
 
+upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
+  external_id: state.data.body.market,
+  site_id: state => state.studyIDMap[state.formType],
+  study_id: state => state.studyIDMap[state.formType], //ad
+  sell_point_type: state => state.data.body.sell_point_type,
+});
+
 upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
   sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
   date_start: state.data.body.today,
@@ -41,12 +48,6 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   study_id: state => state.studyIDMap[state.formType], //ad
 });
 
-upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
-  external_id: state.data.body.market,
-  site_id: state => state.studyIDMap[state.formType],
-  study_id: state => state.studyIDMap[state.formType], //ad
-  sell_point_type: state => state.data.body.sell_point_type,
-});
 
 fn(state => {
   const vendors = state.data.body['vendor'];
