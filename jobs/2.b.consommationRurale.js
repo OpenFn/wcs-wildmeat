@@ -70,7 +70,6 @@ upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
   study_id: state => state.studyIDMap[state.formType], //AD
   individual_id: state.data.body._id,
   individual_char_id: state.data.body._id,
-
 });
 
 //AD everything except household id and external_id
@@ -122,7 +121,7 @@ fn(state => {
             wildmeat_group: foodItem['group_begin/group_food/group'],
             vernacular_name: foodItem['group_begin/group_food/species'],
             unit,
-            massin_grams: foodItem['group_begin/group_food/quantity'],
+            massin_grams: foodItem['group_begin/group_food/quantity'] * 1000,
             price: foodItem['group_begin/group_food/Cost'],
             aquisition: foodItem['group_begin/group_food/obtention'],
             amount: foodItem['group_begin/group_food/amount'],

@@ -30,7 +30,11 @@ fn(state => {
           amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
           condition: state.data.body[`domeat_consumption/state_${wildmeat}`],
           wildmeat_group: state.data.body['domeat_consumption/domeat_species'],
-          unit: state.data.body['domeat_consumption/qty_measure_type_dm'],
+          unit:
+            state.data.body['domeat_consumption/qty_measure_type_dm'] ===
+            'known_quantity'
+              ? 'kilogram'
+              : -8,
           vernacular_name: state.data.body['bm_consumption/bm_species'],
         };
       })
