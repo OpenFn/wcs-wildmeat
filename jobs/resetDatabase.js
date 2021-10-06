@@ -1,5 +1,5 @@
-fn(state => {
-  const tablesToReset = [
+each(
+  [
     'tbl_site',
     'tbl_sample',
     'tbl_study',
@@ -18,10 +18,6 @@ fn(state => {
     'tbl_wildmeat_urban',
     'tbl_individual_urban',
     'tbl_sample_urban',
-  ];
-
-  return each(
-    tablesToReset,
-    sql(state => `DELETE FROM ${state.data};`, { writeSql: true })
-  )(state);
-});
+  ],
+  sql(state => `DELETE FROM ${state.data};`, { writeSql: true })
+);
