@@ -14,7 +14,7 @@ each(
     'tbl_sample_market',
     'tbl_hunter_monitoring',
     'tbl_wildmeat_hunter',
-    'bl_sample_hunter',
+    'tbl_sample_hunter',
     'tbl_wildmeat_urban',
     'tbl_individual_urban',
     'tbl_sample_urban',
