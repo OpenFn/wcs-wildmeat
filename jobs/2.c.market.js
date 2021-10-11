@@ -27,7 +27,7 @@ upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
   study_id: state => state.studyIDMap[state.formType], //ad
   site_id: state => state.studyIDMap[state.formType], //ad
   market_id: findValue({
-        uuid: 'external_id',
+        uuid: 'market_id',
         relation: 'tbl_market',
         where: {
           external_id: state.data.body.market,
