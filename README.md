@@ -39,7 +39,7 @@ The Kobo forms map to the following database tables:
 | tbl_study | study_id | hardcoded default (e.g., `2001`) | All |
 | swm_transaction | uuid | _id + _xform_id_string | Rural Consumption |
 | tbl_individual | individual_id | _id | Rural Consumption |
-| tbl_individual_char | individual_id | _id | Rural Consumption |
+| tbl_individual_char | individual_char_id | _id | Rural Consumption |
 | tbl_household | household_id | household_id | Rural Consumption |
 | tbl_household_char | household_id | household_id | Rural Consumption |
 | tbl_wildmeat | vernacular_name | species | Rural Consumption |
