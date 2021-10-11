@@ -16,8 +16,7 @@ upsert('tbl_study', 'study_id', {
 upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
   study_id: state => state.studyIDMap[state.formType],
   site_id: state => state.studyIDMap[state.formType],
-  //hunter_monitoring_id: state.data.body['id_hunter'],
-  //hunter_monitoring_id: '1',
+  hunter_monitoring_id: state.data.body['id_hunter'],
   external_id: state.data.body['id_hunter'],
   trip_hunting_method: state.data.body['trip/type'],
   date_start: state.data.body['trip/hunting_start'],
@@ -64,6 +63,7 @@ fn(state => {
             percent_sold: animal['animal_details/pct_sold'],
             condition: animal['animal_details/conservation'],
             price: animal['animal_details/price'],
+            amount: 1
           };
         })
     )(state);
