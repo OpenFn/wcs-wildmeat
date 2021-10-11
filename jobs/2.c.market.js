@@ -13,7 +13,7 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.formType],
 });
 
-upsert('tbl_market', 'ON CONSTRAINT tbl_market_pkey', {
+upsert('tbl_market', 'external_id', {
   external_id: state.data.body.market,
   site_id: state => state.studyIDMap[state.formType],
   study_id: state => state.studyIDMap[state.formType], //ad
