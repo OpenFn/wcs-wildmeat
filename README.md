@@ -43,7 +43,7 @@ The Kobo forms map to the following database tables:
 | tbl_household | household_id | household_id | Rural Consumption |
 | tbl_household_char | household_id | household_id | Rural Consumption |
 | tbl_wildmeat | vernacular_name | species | Rural Consumption |
-| tbl_market | market_id | market (e.g., "djazzi") | Market |
+| tbl_market | external_id | market (e.g., "djazzi") | Market |
 | tbl_wildmeat_market | wildmeat_id | species | Market |
 | tbl_sample_market | sample_id | _id + _xform_id_string | Market |
 | tbl_hunter_monitoring | hunter_monitoring_id | id_hunter | Offtake |
