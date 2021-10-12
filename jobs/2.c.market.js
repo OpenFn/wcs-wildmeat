@@ -65,15 +65,7 @@ fn(state => {
           state =>
             sales.map(sale => {
               return {
-                sample_id: [
-                  id,
-                  xform_id_string,
-                  sale['vendor/sales/othe_species'],
-                  sale['vendor/sales/quantity'],
-                  sale['vendor/sales/price'],
-                ]
-                  .filter(Boolean)
-                  .join(''),
+                sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
                 // sample_id: `${id}${xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
                 study_id: state.studyIDMap[state.formType], //ad
                 site_id: state.studyIDMap[state.formType], //ad
