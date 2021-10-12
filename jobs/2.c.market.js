@@ -20,20 +20,22 @@ upsert('tbl_market', 'external_id', {
   sell_point_type: state => state.data.body.sell_point_type,
 });
 
-upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
-  sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
-  date_start: state.data.body.today,
-  date_end: state.data.body.today,
-  study_id: state => state.studyIDMap[state.formType], //ad
-  site_id: state => state.studyIDMap[state.formType], //ad
-  market_id: findValue({
-        uuid: 'market_id',
-        relation: 'tbl_market',
-        where: {
-          external_id: state.data.body.market,
-        },
-      }),
-  number_tables_surveyed: state.data.body.total_surveyed,
+fn(async state => {
+  return upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
+    sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+    date_start: state.data.body.today,
+    date_end: state.data.body.today,
+    study_id: state => state.studyIDMap[state.formType], //ad
+    site_id: state => state.studyIDMap[state.formType], //ad
+    market_id: await findValue({
+      uuid: 'market_id',
+      relation: 'tbl_market',
+      where: {
+        external_id: state.data.body.market,
+      },
+    })(state),
+    number_tables_surveyed: state.data.body.total_surveyed,
+  })(state);
 });
 
 // upsert('swm_species', 'study_id', {
@@ -48,12 +50,10 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   study_id: state => state.studyIDMap[state.formType], //ad
 });
 
-
 fn(state => {
   const vendors = state.data.body['vendor'];
   const id = state.data.body._id;
   const xform_id_string = state.data.body._xform_id_string;
-
 
   if (vendors) {
     return each(vendors, state => {
