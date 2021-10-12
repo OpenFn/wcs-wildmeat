@@ -21,6 +21,9 @@ upsert('tbl_market', 'external_id', {
 });
 
 fn(async state => {
+  // if (!state.data.body.market) {
+  //   return state;
+  // }
   return upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
     sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
     date_start: state.data.body.today,
