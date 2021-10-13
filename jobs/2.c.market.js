@@ -61,19 +61,22 @@ fn(state => {
 
   if (vendors) {
     return each(vendors, state => {
+      const vendorID = state.data['vendor/id'];
       const sales = state.data['vendor/sales'];
       if (sales) {
         return upsertMany(
           'tbl_wildmeat_market',
           'ON CONSTRAINT tbl_wildmeat_market_pkey',
           state =>
-            sales.map(sale => {
+            sales.map((sale, i) => {
               return {
                 sample_id: `${id}${xform_id_string}`,
                 // sample_id: `${id}${xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
                 study_id: state.studyIDMap[state.formType], //ad
                 site_id: state.studyIDMap[state.formType], //ad
-                wildmeat_id: sale['vendor/sales/species'],
+                wildmeat_id: `${vendorID}-${i + 1}-${
+                  sale['vendor/sales/species']
+                }`,
                 amount: 1,
                 wildmeat_category_1: sale['vendor/sales/category1'],
                 wildmeat_category_2: sale['vendor/sales/category2'],
