@@ -22,6 +22,7 @@ upsert('tbl_market', 'external_id', {
 
 fn(async state => {
   if (!state.data.body.market) {
+    console.log('No market specified. Skipping upsert');
     return state;
   }
   return upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
