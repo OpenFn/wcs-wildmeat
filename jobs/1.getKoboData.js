@@ -59,9 +59,9 @@ fn(state => {
   return state;
 });
 
-each(dataPath('surveys[*]'), state =>
-  get(`${state.data.url}${state.data.query}`, {}, state => {
-    const { url, query, formId, formName, formType } = state.data;
+each(dataPath('surveys[*]'), state => {
+  const { url, query, formId, formName, formType } = state.data;
+  return get(`${state.data.url}${state.data.query}`, {}, state => {
     state.data.submissions = state.data.results.map(submission => {
       return {
         body: submission,
@@ -81,7 +81,7 @@ each(dataPath('surveys[*]'), state =>
       })(state);
     })(state);
   })(state)
-);
+});
 
 fn(state => {
   // TODO: Pluck out the end date of the last submission to use as a cursor.
