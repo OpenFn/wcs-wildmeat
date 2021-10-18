@@ -8,26 +8,26 @@ fn(state => {
   state.data = {
     surveys: [
       //** Specify new forms to fetch here **//
-      {
-        id: 'a9eJJ2hrRSMCJZ95WMc93j',
-        name: 'SWM Consommation Urbaine',
-        type: 'Urban Consumption'
-      },
-      {
-        id: 'aJxTqQSF7VRLYbMGfeTHfd',
-        name: 'SWM Urban Consumption Survey 2019',
-        type: 'Urban Consumption'
-      },
       // {
-      //   id: 'aUrUbD6C9hB3y8XjfQ9CLc',
-      //   name: 'SWM Consommation Rurale',
-      //   type: 'Rural Consumption'
+      //   id: 'a9eJJ2hrRSMCJZ95WMc93j',
+      //   name: 'SWM Consommation Urbaine',
+      //   type: 'Urban Consumption'
       // },
       // {
-      //   id: 'aUtBrSsVRkZrjkpodB6TW7',
-      //   name: 'SWM_Rural_Consumption_Form',
-      //   type: 'Rural Consumption'
+      //   id: 'aJxTqQSF7VRLYbMGfeTHfd',
+      //   name: 'SWM Urban Consumption Survey 2019',
+      //   type: 'Urban Consumption'
       // },
+      {
+        id: 'aUrUbD6C9hB3y8XjfQ9CLc',
+        name: 'SWM Consommation Rurale',
+        type: 'Rural Consumption'
+      },
+      {
+        id: 'aUtBrSsVRkZrjkpodB6TW7',
+        name: 'SWM_Rural_Consumption_Form',
+        type: 'Rural Consumption'
+      },
       // {
       //   id: 'aDVDagX8TE9NUY7xmvAUpv',
       //   name: 'SWM Suivi Marché 2020 - Congo Market ',
