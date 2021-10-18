@@ -4,7 +4,7 @@
 fn(state => {
   console.log('Current cursor value:', state.lastEnd);
   // Set a manual cursor if you'd like to only fetch data after this date.
-  const manualCursor = '2020-11-20T14:32:43.325+01:00';
+  const manualCursor = '2019-11-20T14:32:43.325+01:00';
   state.data = {
     surveys: [
       //** Specify new forms to fetch here **//
@@ -13,40 +13,40 @@ fn(state => {
         name: 'SWM Consommation Urbaine',
         type: ''
       },
-      {
-        id: 'aJxTqQSF7VRLYbMGfeTHfd',
-        name: 'SWM Urban Consumption Survey 2019',
-        type: ''
-      },
-      {
-        id: 'aUrUbD6C9hB3y8XjfQ9CLc',
-        name: 'SWM Consommation Rurale',
-        type: ''
-      },
-      {
-        id: 'aUtBrSsVRkZrjkpodB6TW7',
-        name: 'SWM_Rural_Consumption_Form',
-      },
-      {
-        id: 'aDVDagX8TE9NUY7xmvAUpv',
-        name: 'SWM Suivi Marché 2020 - Congo Market ',
-        type: ''
-      },
-      {
-        id: 'aem28HL45vkQKyhB22xn8Q',
-        name: 'SWM Suivi points de vente protéines animales - DRC Market',
-        type: ''
-      },
-      {
-        id: 'aYcthFvuwgvUn89aBoedgT',
-        name: 'SWM_Offtake_DRC_202104',
-        type: ''
-      },
-      {
-        id: 'a3hX3ZvVm4BanZDeis9AFj',
-        name: 'Prélèvement de chasse SWM',
-        type: ''
-      },
+      // {
+      //   id: 'aJxTqQSF7VRLYbMGfeTHfd',
+      //   name: 'SWM Urban Consumption Survey 2019',
+      //   type: ''
+      // },
+      // {
+      //   id: 'aUrUbD6C9hB3y8XjfQ9CLc',
+      //   name: 'SWM Consommation Rurale',
+      //   type: ''
+      // },
+      // {
+      //   id: 'aUtBrSsVRkZrjkpodB6TW7',
+      //   name: 'SWM_Rural_Consumption_Form',
+      // },
+      // {
+      //   id: 'aDVDagX8TE9NUY7xmvAUpv',
+      //   name: 'SWM Suivi Marché 2020 - Congo Market ',
+      //   type: ''
+      // },
+      // {
+      //   id: 'aem28HL45vkQKyhB22xn8Q',
+      //   name: 'SWM Suivi points de vente protéines animales - DRC Market',
+      //   type: ''
+      // },
+      // {
+      //   id: 'aYcthFvuwgvUn89aBoedgT',
+      //   name: 'SWM_Offtake_DRC_202104',
+      //   type: ''
+      // },
+      // {
+      //   id: 'a3hX3ZvVm4BanZDeis9AFj',
+      //   name: 'Prélèvement de chasse SWM',
+      //   type: ''
+      // },
     ].map(survey => ({
       formId: survey.id,
       formName: survey.name,
