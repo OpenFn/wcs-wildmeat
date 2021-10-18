@@ -11,41 +11,42 @@ fn(state => {
       {
         id: 'a9eJJ2hrRSMCJZ95WMc93j',
         name: 'SWM Consommation Urbaine',
-        type: ''
+        type: 'Urban Consumption'
       },
-      // {
-      //   id: 'aJxTqQSF7VRLYbMGfeTHfd',
-      //   name: 'SWM Urban Consumption Survey 2019',
-      //   type: ''
-      // },
+      {
+        id: 'aJxTqQSF7VRLYbMGfeTHfd',
+        name: 'SWM Urban Consumption Survey 2019',
+        type: 'Urban Consumption'
+      },
       // {
       //   id: 'aUrUbD6C9hB3y8XjfQ9CLc',
       //   name: 'SWM Consommation Rurale',
-      //   type: ''
+      //   type: 'Rural Consumption'
       // },
       // {
       //   id: 'aUtBrSsVRkZrjkpodB6TW7',
       //   name: 'SWM_Rural_Consumption_Form',
+      //   type: 'Rural Consumption'
       // },
       // {
       //   id: 'aDVDagX8TE9NUY7xmvAUpv',
       //   name: 'SWM Suivi Marché 2020 - Congo Market ',
-      //   type: ''
+      //   type: 'Market'
       // },
       // {
       //   id: 'aem28HL45vkQKyhB22xn8Q',
       //   name: 'SWM Suivi points de vente protéines animales - DRC Market',
-      //   type: ''
+      //   type: 'Market'
       // },
       // {
       //   id: 'aYcthFvuwgvUn89aBoedgT',
       //   name: 'SWM_Offtake_DRC_202104',
-      //   type: ''
+      //   type: 'Offtake'
       // },
       // {
       //   id: 'a3hX3ZvVm4BanZDeis9AFj',
       //   name: 'Prélèvement de chasse SWM',
-      //   type: ''
+      //   type: 'Offtake'
       // },
     ].map(survey => ({
       formId: survey.id,
