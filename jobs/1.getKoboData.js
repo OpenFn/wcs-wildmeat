@@ -61,6 +61,7 @@ fn(state => {
 
 each(dataPath('surveys[*]'), state =>
   get(`${state.data.url}${state.data.query}`, {}, state => {
+    const { url, query, formId, formName, formType } = state.data;
     state.data.submissions = state.data.results.map(submission => {
       return {
         body: submission,
