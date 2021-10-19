@@ -28,26 +28,26 @@ fn(state => {
       //   name: 'SWM_Rural_Consumption_Form',
       //   type: 'Rural Consumption'
       // },
-      {
-        id: 'aDVDagX8TE9NUY7xmvAUpv',
-        name: 'SWM Suivi Marché 2020 - Congo Market ',
-        type: 'Market'
-      },
-      {
-        id: 'aem28HL45vkQKyhB22xn8Q',
-        name: 'SWM Suivi points de vente protéines animales - DRC Market',
-        type: 'Market'
-      },
       // {
-      //   id: 'aYcthFvuwgvUn89aBoedgT',
-      //   name: 'SWM_Offtake_DRC_202104',
-      //   type: 'Offtake'
+      //   id: 'aDVDagX8TE9NUY7xmvAUpv',
+      //   name: 'SWM Suivi Marché 2020 - Congo Market ',
+      //   type: 'Market'
       // },
       // {
-      //   id: 'a3hX3ZvVm4BanZDeis9AFj',
-      //   name: 'Prélèvement de chasse SWM',
-      //   type: 'Offtake'
+      //   id: 'aem28HL45vkQKyhB22xn8Q',
+      //   name: 'SWM Suivi points de vente protéines animales - DRC Market',
+      //   type: 'Market'
       // },
+      {
+        id: 'aYcthFvuwgvUn89aBoedgT',
+        name: 'SWM_Offtake_DRC_202104',
+        type: 'Offtake'
+      },
+      {
+        id: 'a3hX3ZvVm4BanZDeis9AFj',
+        name: 'Prélèvement de chasse SWM',
+        type: 'Offtake'
+      },
     ].map(survey => ({
       formId: survey.id,
       formName: survey.name,
