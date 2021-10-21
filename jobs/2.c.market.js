@@ -25,21 +25,29 @@ fn(async state => {
     console.log('No market specified. Skipping upsert');
     return state;
   }
-  return upsert('tbl_sample_market', 'ON CONSTRAINT tbl_sample_market_pkey', {
-    sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
-    date_start: state.data.body.today,
-    date_end: state.data.body.today,
-    study_id: state => state.studyIDMap[state.formType], //ad
-    site_id: state => state.studyIDMap[state.formType], //ad
-    market_id: await findValue({
-      uuid: 'market_id',
-      relation: 'tbl_market',
-      where: {
-        external_id: state.data.body.market,
-      },
-    })(state),
-    number_tables_surveyed: state.data.body.total_surveyed,
-  })(state);
+  return upsert(
+    'tbl_sample_market',
+    'ON CONSTRAINT tbl_sample_market_pkey',
+    {
+      sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+      date_start: state.data.body.today,
+      date_end: state.data.body.today,
+      study_id: state => state.studyIDMap[state.formType], //ad
+      site_id: state => state.studyIDMap[state.formType], //ad
+      market_id: await findValue({
+        uuid: 'market_id',
+        relation: 'tbl_market',
+        where: {
+          external_id: state.data.body.market,
+        },
+      })(state),
+      number_tables_surveyed: state.data.body.total_surveyed,
+    },
+    {
+      setNull: ["'NaN'", "'undefined'"],
+      logValues: true,
+    }
+  )(state);
 });
 
 // upsert('swm_species', 'study_id', {
