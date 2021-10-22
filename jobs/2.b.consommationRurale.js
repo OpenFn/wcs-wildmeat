@@ -22,7 +22,7 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   number_sample_units: '24',
   sampling_effortin_days: '2',
   site_id: state => state.studyIDMap[state.formType],
-  household_id: state.data.body['survey_info/household_id'],
+  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
 });
 
 //AD added everything except uuid & submission_time
@@ -57,7 +57,7 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 // })
 
 upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
-  household_id: state.data.body['survey_info/household_id'],
+  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
   individual_id: state.data.body._id,
   site_id: state => state.studyIDMap[state.formType], //AD
   study_id: state => state.studyIDMap[state.formType], //AD
@@ -65,7 +65,7 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
 });
 
 upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
-  household_id: state.data.body['survey_info/household_id'],
+  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
   site_id: state => state.studyIDMap[state.formType], //AD
   study_id: state => state.studyIDMap[state.formType], //AD
   individual_id: state.data.body._id,
@@ -82,7 +82,7 @@ upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
 
 upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   household_char_id: state.data.body._id, //ad
-  household_id: state.data.body['survey_info/household_id'],
+  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
   num_occupants: state.data.body['group_begin/group_people/nb_people'],
   num_babies: state.data.body['group_begin/group_people/nb_babies'],
   num_children: state.data.body['group_begin/group_people/nb_children'],
