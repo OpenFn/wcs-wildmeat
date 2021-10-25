@@ -54,7 +54,7 @@ fn(state => {
             'known_quantity'
               ? 'kilogram'
               : -8,
-          vernacular_name: state.data.body['bm_consumption/bm_species'],
+          vernacular_name: state.data.body['domeat_consumption/domeat_species'],
         };
       })
   )(state);
