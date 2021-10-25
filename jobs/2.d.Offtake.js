@@ -67,7 +67,6 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   },
 });
 
-
 fn(state => {
   const animals = state.data.body['animal_details'];
   if (animals) {
@@ -75,10 +74,10 @@ fn(state => {
       'tbl_wildmeat_hunter',
       'ON CONSTRAINT tbl_wildmeat_hunter_pkey',
       state =>
-        animals.map(animal => {
+        animals.map((animal, pos) => {
           return {
             sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
-            wildmeat_id: animal['animal_details/species_id'],
+            wildmeat_id: `${animal['animal_details/species_id']}${pos + 1}`,
             study_id: state.studyIDMap[state.formType], //AD
             site_id: state.studyIDMap[state.formType], //AD
             wildmeat_category_2: animal['animal_details/category2'],
@@ -89,8 +88,8 @@ fn(state => {
             percent_sold: animal['animal_details/pct_sold'],
             condition: animal['animal_details/conservation'],
             price: animal['animal_details/price'],
-            unit: "individual",
-            amount: 1
+            unit: 'individual',
+            amount: 1,
           };
         })
     )(state);

@@ -31,7 +31,6 @@ upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
   },
 });
 
-
 fn(state => {
   const wildmeatIDs = state.data.body['domeat_consumption/domeat_species']
     ? state.data.body['domeat_consumption/domeat_species'].split(' ')
@@ -40,11 +39,11 @@ fn(state => {
     'tbl_wildmeat_urban',
     'ON CONSTRAINT tbl_wildmeat_urban_pkey',
     state =>
-      wildmeatIDs.map(wildmeat => {
+      wildmeatIDs.map((wildmeat, pos) => {
         return {
           study_id: state.studyIDMap[state.formType],
           site_id: state.studyIDMap[state.formType],
-          wildmeat_id: wildmeat,
+          wildmeat_id: `${wildmeat}${pos + 1}`,
           sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
           amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
           condition: state.data.body[`domeat_consumption/state_${wildmeat}`],
