@@ -13,6 +13,13 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.formType],
 });
 
+upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+  admin_level_3: state.data.body['district'],
+  site_name: state.data.body['village'],
+  site_id: state => state.studyIDMap[state.formType],
+  study_id: state => state.studyIDMap[state.formType],
+});
+
 upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
   study_id: state => state.studyIDMap[state.formType],
   site_id: state => state.studyIDMap[state.formType],
