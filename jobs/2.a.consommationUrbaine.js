@@ -13,6 +13,25 @@ upsert('tbl_study', 'study_id', {
   study_id: state => state.studyIDMap[state.formType],
 });
 
+upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+  uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+  submission_time: state.data.body['_submission_time'],
+  date: state.data.body['_submission_time'],
+  status: 'new',
+  modified_by: 'open_fn',
+  inserted_by: 'open_fn',
+  data_type: 'consumption', //other types: hunter, market
+  instances: state => {
+    if (state.data.body.consent_checklist == 'yes')
+      return JSON.stringify(state.data);
+    else {
+      let instance = { uuid: state.data.body._uuid, consent: 'no' };
+      return instance;
+    }
+  },
+});
+
+
 fn(state => {
   const wildmeatIDs = state.data.body['domeat_consumption/domeat_species']
     ? state.data.body['domeat_consumption/domeat_species'].split(' ')
