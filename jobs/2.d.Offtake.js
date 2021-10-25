@@ -89,6 +89,7 @@ fn(state => {
             percent_sold: animal['animal_details/pct_sold'],
             condition: animal['animal_details/conservation'],
             price: animal['animal_details/price'],
+            unit: "individual",
             amount: 1
           };
         })
