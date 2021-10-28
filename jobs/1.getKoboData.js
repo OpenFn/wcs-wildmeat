@@ -8,16 +8,16 @@ fn(state => {
   state.data = {
     surveys: [
       //** Specify new forms to fetch here **//
-      // {
-      //   id: 'a9eJJ2hrRSMCJZ95WMc93j',
-      //   name: 'SWM Consommation Urbaine',
-      //   type: 'Urban Consumption'
-      // },
-      // {
-      //   id: 'aJxTqQSF7VRLYbMGfeTHfd',
-      //   name: 'SWM Urban Consumption Survey 2019',
-      //   type: 'Urban Consumption'
-      // },
+       {
+        id: 'a9eJJ2hrRSMCJZ95WMc93j',
+        name: 'SWM Consommation Urbaine',
+        type: 'Urban Consumption'
+      },
+       {
+         id: 'aJxTqQSF7VRLYbMGfeTHfd',
+         name: 'SWM Urban Consumption Survey 2019',
+         type: 'Urban Consumption'
+       },
       // {
       //   id: 'aUrUbD6C9hB3y8XjfQ9CLc',
       //   name: 'SWM Consommation Rurale',
