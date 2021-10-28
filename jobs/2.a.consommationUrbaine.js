@@ -55,7 +55,7 @@ fn(state => {
               : -8,
           vernacular_name: state.data.body['domeat_consumption/domeat_species'],
         };
-      }), { logValues: true }
+      })
   )(state);
 });
 
@@ -84,7 +84,7 @@ fn(state => {
               : -8,
           vernacular_name: state.data.body['bm_consumption/bm_species'],
         };
-      }), { logValues: true }
+      })
   )(state);
 });
 
