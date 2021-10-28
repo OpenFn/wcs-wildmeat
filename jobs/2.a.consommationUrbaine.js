@@ -59,6 +59,35 @@ fn(state => {
   )(state);
 });
 
+//TODO: Aicha to update mappings below specific to bm_species
+// fn(state => {
+//   const wildmeatIDs = state.data.body['bm_consumption/bm_species']
+//     ? state.data.body['bm_consumption/bm_species'].split(' ')
+//     : [];
+//   return upsertMany(
+//     'tbl_wildmeat_urban',
+//     'ON CONSTRAINT tbl_wildmeat_urban_pkey',
+//     state =>
+//       wildmeatIDs.map((wildmeat, pos) => {
+//         return {
+//           study_id: state.studyIDMap[state.formType],
+//           site_id: state.studyIDMap[state.formType],
+//           wildmeat_id: `${wildmeat}${pos + 1}`,
+//           sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+//           amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
+//           condition: state.data.body[`domeat_consumption/state_${wildmeat}`],
+//           wildmeat_group: state.data.body['domeat_consumption/domeat_species'],
+//           unit:
+//             state.data.body['domeat_consumption/qty_measure_type_dm'] ===
+//             'known_quantity'
+//               ? 'kilogram'
+//               : -8,
+//           vernacular_name: state.data.body['domeat_consumption/domeat_species'],
+//         };
+//       })
+//   )(state);
+// });
+
 upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
   study_id: state => state.studyIDMap[state.formType],
   admin_level_2: state.data.body['introduction_gp/other_town'],
