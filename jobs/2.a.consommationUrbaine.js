@@ -59,7 +59,7 @@ fn(state => {
   )(state);
 });
 
-//TODO: Aicha to update mappings below specific to bm_species
+//NOTE: There seems to be 2 species types: bm_consumption and domeat_consumption
 fn(state => {
   const wildmeatIDs = state.data.body['bm_consumption/bm_species']
     ? state.data.body['bm_consumption/bm_species'].split(' ')
