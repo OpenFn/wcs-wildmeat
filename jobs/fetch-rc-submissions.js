@@ -6,7 +6,7 @@ console.log(JSON.stringify({ ...state, configuration: 'REDACTED' }, null, 2));
 get('https://kf.kobotoolbox.org/api/v2/assets/?format=json', {}, state => {
   console.log(`Previous cursor: ${state.lastEnd}`);
   // Set a manual cursor if you'd like to only fetch data after a certain date
-  const manualCursor = '2020-05-25T14:32:43.325+01:00';
+  const manualCursor = '2020-08-01T14:32:43.325+01:00';
 
   // ===========================================================================
   // Add strings to be case-insensitively searched for across Kobo form names
