@@ -1,3 +1,5 @@
+// Example only
+
 sql(state => {
   const { data } = state;
   return (
