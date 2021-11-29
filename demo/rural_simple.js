@@ -1,3 +1,5 @@
+// Example only
+
 sql(state => {
   const { data } = state;
   const params = data.__query_params;
