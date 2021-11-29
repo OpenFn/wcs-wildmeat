@@ -2,6 +2,7 @@
 // This can be run on-demand at any time by clicking "run" // 
 // Add a new form to this job to sync it to the DB: Fill the id, name, and type to this list.//
 // DO NOT DELETE ANY SURVEY FROM THIS JOB, just comment it if it doesn't need to be synced anymore. //
+// Form type can be: Market, Offtake, Urban Consumption, Rural Consumption //
 
 fn(state => {
   console.log('Current cursor value:', state.lastEnd);
