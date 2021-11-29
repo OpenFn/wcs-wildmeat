@@ -1,3 +1,5 @@
+// Example only
+
 alterState(state => {
   // This is bad. It's a workaround until we get proper UUIDs in the DB.
   state.fake_uuid = Date.parse(state.data._submission_time) / 1000;
