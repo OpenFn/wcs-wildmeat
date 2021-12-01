@@ -7,7 +7,7 @@
 fn(state => {
   console.log('Current cursor value:', state.lastEnd);
   // Set a manual cursor if you'd like to only fetch data after this date.
-  const manualCursor = '2019-11-20T14:32:43.325+01:00';
+  const manualCursor = '2021-11-30T14:32:43.325+01:00';
   state.data = {
     surveys: [
       //** Specify new forms to fetch here **//
