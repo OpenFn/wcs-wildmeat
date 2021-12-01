@@ -133,7 +133,8 @@ fn(state => {
             consumption_frequency_unit:
               foodItem['group_begin/group_food/frequency'],
           };
-        })
+        }),
+        {logValues: true}
     )(state);
   }
   console.log('There is no wildmeat array. Skipping upsertMany(...)');
