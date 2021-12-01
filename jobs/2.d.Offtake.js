@@ -91,7 +91,8 @@ fn(state => {
             unit: 'individual',
             amount: 1,
           };
-        })
+        }),
+        {logValues: true}
     )(state);
   }
   console.log('No animals array. Ignoring upsert...');
