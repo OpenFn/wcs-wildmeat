@@ -22,7 +22,8 @@ upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
   number_sample_units: '24',
   sampling_effortin_days: '2',
   site_id: state => state.studyIDMap[state.formType],
-  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
+  household_id:
+    state.data.body['survey_info/household_id'] || state.data.body._id,
 });
 
 //AD added everything except uuid & submission_time
@@ -57,7 +58,8 @@ upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
 // })
 
 upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
-  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
+  household_id:
+    state.data.body['survey_info/household_id'] || state.data.body._id,
   individual_id: state.data.body._id,
   site_id: state => state.studyIDMap[state.formType], //AD
   study_id: state => state.studyIDMap[state.formType], //AD
@@ -65,7 +67,8 @@ upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
 });
 
 upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
-  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
+  household_id:
+    state.data.body['survey_info/household_id'] || state.data.body._id,
   site_id: state => state.studyIDMap[state.formType], //AD
   study_id: state => state.studyIDMap[state.formType], //AD
   individual_id: state.data.body._id,
@@ -74,15 +77,18 @@ upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
 
 //AD everything except household id and external_id
 upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
-  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
-  external_id: state.data.body['survey_info/household_id'] || state.data.body._id,
+  household_id:
+    state.data.body['survey_info/household_id'] || state.data.body._id,
+  external_id:
+    state.data.body['survey_info/household_id'] || state.data.body._id,
   site_id: state => state.studyIDMap[state.formType], //AD
   study_id: state => state.studyIDMap[state.formType], //AD
 });
 
 upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
   household_char_id: state.data.body._id, //ad
-  household_id: state.data.body['survey_info/household_id'] || state.data.body._id,
+  household_id:
+    state.data.body['survey_info/household_id'] || state.data.body._id,
   num_occupants: state.data.body['group_begin/group_people/nb_people'],
   num_babies: state.data.body['group_begin/group_people/nb_babies'],
   num_children: state.data.body['group_begin/group_people/nb_children'],
@@ -104,7 +110,7 @@ fn(state => {
       'tbl_wildmeat',
       'ON CONSTRAINT tbl_wildmeat_pkey',
       state =>
-        repeatGroup.map(foodItem => {
+        repeatGroup.map((foodItem, pos) => {
           const unit =
             foodItem['group_begin/group_food/quantity_technique'] ===
             'known_technique'
@@ -115,7 +121,9 @@ fn(state => {
             site_id: state => state.studyIDMap[state.formType], //AD
             study_id: state => state.studyIDMap[state.formType], //AD
             sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
-            wildmeat_id: foodItem['group_begin/group_food/species'], //AD
+            wildmeat_id: `${foodItem['group_begin/group_food/species']}${
+              pos + 1
+            }`, //AD
             wildmeat_category_1: foodItem['group_begin/group_food/category1'],
             wildmeat_category_2: foodItem['group_begin/group_food/category2'],
             wildmeat_group: foodItem['group_begin/group_food/group'],
@@ -134,7 +142,7 @@ fn(state => {
               foodItem['group_begin/group_food/frequency'],
           };
         }),
-        {logValues: true}
+      { logValues: true }
     )(state);
   }
   console.log('There is no wildmeat array. Skipping upsertMany(...)');
