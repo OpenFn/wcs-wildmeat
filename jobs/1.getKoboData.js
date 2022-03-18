@@ -11,30 +11,37 @@ fn(state => {
   state.data = {
     surveys: [
       //** Specify new forms to fetch here **//
+      // ------------- CONGO ----------------------
       {
         id: 'a9eJJ2hrRSMCJZ95WMc93j',
         name: 'SWM Consommation Urbaine',
         type: 'Urban Consumption'
       },
+            {
+        id: 'aUrUbD6C9hB3y8XjfQ9CLc',
+        name: 'SWM Consommation Rurale',
+        type: 'Rural Consumption'
+      },
+            // {
+      //   id: 'aDVDagX8TE9NUY7xmvAUpv',
+      //   name: 'SWM Suivi Marché 2020 - Congo Market ',
+      //   type: 'Market'
+      // },
+            {
+        id: 'a3hX3ZvVm4BanZDeis9AFj',
+        name: 'Prélèvement de chasse SWM',
+        type: 'Offtake'
+      },
+       // ------------- DRC ----------------------
       // {
       //   id: 'aJxTqQSF7VRLYbMGfeTHfd',
       //   name: 'SWM Urban Consumption Survey 2019',
       //   type: 'Urban Consumption'
       // },
-      {
-        id: 'aUrUbD6C9hB3y8XjfQ9CLc',
-        name: 'SWM Consommation Rurale',
-        type: 'Rural Consumption'
-      },
       // {
       //   id: 'aUtBrSsVRkZrjkpodB6TW7',
       //   name: 'SWM_Rural_Consumption_Form',
       //   type: 'Rural Consumption'
-      // },
-      // {
-      //   id: 'aDVDagX8TE9NUY7xmvAUpv',
-      //   name: 'SWM Suivi Marché 2020 - Congo Market ',
-      //   type: 'Market'
       // },
       {
         id: 'aem28HL45vkQKyhB22xn8Q',
@@ -46,11 +53,7 @@ fn(state => {
         name: 'SWM_Offtake_DRC_202104',
         type: 'Offtake'
       },
-      {
-        id: 'a3hX3ZvVm4BanZDeis9AFj',
-        name: 'Prélèvement de chasse SWM',
-        type: 'Offtake'
-      },
+
     ].map(survey => ({
       formId: survey.id,
       formName: survey.name,
