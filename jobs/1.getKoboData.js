@@ -22,11 +22,11 @@ fn(state => {
         name: 'SWM Consommation Rurale',
         type: 'Rural Consumption'
       },
-            // {
-      //   id: 'aDVDagX8TE9NUY7xmvAUpv',
-      //   name: 'SWM Suivi Marché 2020 - Congo Market ',
-      //   type: 'Market'
-      // },
+             {
+         id: 'aDVDagX8TE9NUY7xmvAUpv',
+         name: 'SWM Suivi Marché 2020 - Congo Market ',
+         type: 'Market'
+       },
             {
         id: 'a3hX3ZvVm4BanZDeis9AFj',
         name: 'Prélèvement de chasse SWM',
