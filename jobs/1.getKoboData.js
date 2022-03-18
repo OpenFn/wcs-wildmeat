@@ -14,12 +14,12 @@ fn(state => {
       // ------------- CONGO ----------------------
       {
         id: 'a9eJJ2hrRSMCJZ95WMc93j',
-        name: 'SWM Consommation Urbaine',
+        name: 'SWM Conso Urbaine RoC 2020-2021',
         type: 'Urban Consumption'
       },
             {
         id: 'aUrUbD6C9hB3y8XjfQ9CLc',
-        name: 'SWM Consommation Rurale',
+        name: 'SWM Conso Rurale RoC 2020-2021',
         type: 'Rural Consumption'
       },
              {
@@ -29,7 +29,7 @@ fn(state => {
        },
             {
         id: 'a3hX3ZvVm4BanZDeis9AFj',
-        name: 'Prélèvement de chasse SWM',
+        name: 'SWM Prélèvement de chasse RoC',
         type: 'Offtake'
       },
        // ------------- DRC ----------------------
