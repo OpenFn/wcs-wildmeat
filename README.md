@@ -2,8 +2,8 @@
 
 
 ## Connection to OpenFn.org
-For authorized users, see the OpenFn `Wildmeat` project for the live integration and job configuration settings. 
-See the [`WCS Docs`](https://openfn.github.io/wcs/wildmeat/) page for solution documentation. 
+- For authorized users, see the OpenFn `Wildmeat` project for the live integration and job configuration settings. 
+- See the `ConSoSci` Docs site for solution documentation on the `Wildmeat` integrations: https://openfn.github.io/ConSoSci/wildmeat/ 
 
 **N.B. that all commits to the `master` branch will auto-deploy to OpenFn.org and WCS's live integration implementation.**
 
