@@ -5,9 +5,13 @@
 // Form type can be: Market, Offtake, Urban Consumption, Rural Consumption //
 
 fn(state => {
-  console.log('Current cursor value:', state.lastEnd);
+  //console.log('Date of last sync:', state.lastEnd);
   // Set a manual cursor if you'd like to only fetch data after this date.
   const manualCursor = '2024-07-18T14:32:43.325+01:00';
+  
+  const cursorDate = state.lastEnd || manualCursor; 
+  console.log('Current cursor value:', cursorDate);
+  
   state.data = {
     surveys: [
       //** Specify new forms to fetch here **//
@@ -59,7 +63,7 @@ fn(state => {
       formName: survey.name,
       formType: survey.type,
       url: `https://kf.kobotoolbox.org/api/v2/assets/${survey.id}/data/?format=json`,
-      query: `&query={"end":{"$gte":"${state.lastEnd || manualCursor}"}}`,
+      query: `&query={"end":{"$gte":"${cursorDate}"}}`,
     })),
   };
 
