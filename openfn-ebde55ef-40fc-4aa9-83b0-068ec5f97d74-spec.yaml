@@ -1,0 +1,1665 @@
+name: wildmeat
+description: null
+collections: null
+credentials:
+  rediet@openfn.org-Kobo-Wildmeat-Credential:
+    name: Kobo Wildmeat Credential
+    owner: rediet@openfn.org
+  rediet@openfn.org-Wildmeat-Postgres-Transitional-DB---WCS:
+    name: Wildmeat Postgres Transitional DB - WCS
+    owner: rediet@openfn.org
+workflows:
+  "1.-Sync-Data-(Get-Kobo-Forms----Ongoing)":
+    name: '1. Sync Data (Get Kobo Forms -- Ongoing)'
+    jobs:
+      Sync-Data-Get-Kobo-Forms---Ongoing:
+        name: Sync Data Get Kobo Forms - Ongoing
+        adaptor: '@openfn/language-http@3.1.11'
+        credential: rediet@openfn.org-Kobo-Wildmeat-Credential
+        body: |
+          //== Job to be used for fetching data from Kobo on repeated, timer basis  ==//
+          // This can be run on-demand at any time by clicking "run" // 
+          // Add a new form to this job to sync it to the DB: Fill the id, name, and type to this list.//
+          // DO NOT DELETE ANY SURVEY FROM THIS JOB, just comment it if it doesn't need to be synced anymore. //
+          // Form type can be: Market, Offtake, Urban Consumption, Rural Consumption //
+
+          fn(state => {
+            //console.log('Date of last sync:', state.lastEnd);
+            // Set a manual cursor if you'd like to only fetch data after this date.
+            const manualCursor = '2024-07-18T14:32:43.325+01:00';
+            
+            const cursorDate = state.lastEnd || manualCursor; 
+            console.log('Current cursor value:', cursorDate);
+            
+            state.data = {
+              surveys: [
+                //** Specify new forms to fetch here **//
+                // ------------- CONGO ----------------------
+                {
+                  id: 'a9eJJ2hrRSMCJZ95WMc93j',
+                  name: 'SWM Conso Urbaine RoC 2020-2021',
+                  type: 'Urban Consumption'
+                },
+                      {
+                  id: 'aUrUbD6C9hB3y8XjfQ9CLc',
+                  name: 'SWM Conso Rurale RoC 2020-2021',
+                  type: 'Rural Consumption'
+                },
+                       {
+                   id: 'aDVDagX8TE9NUY7xmvAUpv',
+                   name: 'SWM Suivi Marché 2020 - Congo Market ',
+                   type: 'Market'
+                 },
+                      {
+                  id: 'a3hX3ZvVm4BanZDeis9AFj',
+                  name: 'SWM Prélèvement de chasse RoC',
+                  type: 'Offtake'
+                },
+                 // ------------- DRC ----------------------
+                // {
+                //   id: 'aJxTqQSF7VRLYbMGfeTHfd',
+                //   name: 'SWM Urban Consumption Survey 2019',
+                //   type: 'Urban Consumption'
+                // },
+                // {
+                //   id: 'aUtBrSsVRkZrjkpodB6TW7',
+                //   name: 'SWM_Rural_Consumption_Form',
+                //   type: 'Rural Consumption'
+                // },
+                {
+                  id: 'aem28HL45vkQKyhB22xn8Q',
+                  name: 'SWM Suivi points de vente protéines animales - DRC Market',
+                  type: 'Market'
+                },
+                {
+                  id: 'aYcthFvuwgvUn89aBoedgT',
+                  name: 'SWM_Offtake_DRC_202104',
+                  type: 'Offtake'
+                },
+
+              ].map(survey => ({
+                formId: survey.id,
+                formName: survey.name,
+                formType: survey.type,
+                url: `https://kf.kobotoolbox.org/api/v2/assets/${survey.id}/data/?format=json`,
+                query: `&query={"end":{"$gte":"${cursorDate}"}}`,
+              })),
+            };
+
+            return state;
+          });
+
+          each(dataPath('surveys[*]'), state => {
+            const { url, query, formId, formName, formType } = state.data;
+            return get(`${state.data.url}${state.data.query}`, {}, state => {
+              state.data.submissions = state.data.results.map(submission => {
+                return {
+                  body: submission,
+                  formName,
+                  formType
+                };
+              });
+              console.log(`Fetched ${state.data.count} submissions.`);
+              //Once we fetch the data, we want to post each individual Kobo survey
+              //to the triage workflow that syncs to PG
+              const count = state.data.count;
+
+              return each(dataPath('submissions[*]'), state => {
+                console.log(`Posting ${state.data.i + 1} of ${count}...`);
+                return post("https://app.openfn.org/i/610eddc0-163a-4394-81dd-63d76be7e649", {
+                  body: state => state.data,
+                })(state);
+              })(state);
+            })(state)
+          });
+
+          fn(state => {
+            // TODO: Pluck out the end date of the last submission to use as a cursor.
+            const lastEnd = state.references
+              .filter(item => item && item.body)
+              .map(s => s.body.end)
+              .sort((a, b) => (new Date(a.date) > new Date(b.date) ? 1 : -1))[0];
+
+            console.log(`Next cursor: ${lastEnd}`);
+            return { ...state, lastEnd, data: {}, references: [], response: {} };
+          });
+
+    triggers:
+      cron:
+        type: cron
+        cron_expression: '0 0 * * *'
+        enabled: false
+    edges:
+      cron->Sync-Data-Get-Kobo-Forms---Ongoing:
+        source_trigger: cron
+        target_job: Sync-Data-Get-Kobo-Forms---Ongoing
+        condition_type: always
+        enabled: true
+  2.-Sync-Kobo-data-to-PG:
+    name: 2. Sync Kobo data to PG
+    jobs:
+      Triage-Forms:
+        name: Triage Forms
+        adaptor: '@openfn/language-common@latest'
+        credential: null
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+
+      02---Rural-Consumption-to-PG:
+        name: 02 - Rural Consumption to PG
+        adaptor: '@openfn/language-postgresql@3.1.3'
+        credential: rediet@openfn.org-Wildmeat-Postgres-Transitional-DB---WCS
+        body: |
+          alterState(state => {
+            if (state.data.body.consent_checklist == 'no') {
+              console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
+              return state;
+            }
+
+            return combine(
+              upsert('tbl_study', 'study_id', {
+                study_id: 1000,
+              }),
+
+              upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+                study_id: 1000,
+                site_id: 1001,
+                admin_level_3: state.data.body['survey_info/district'],
+                site_name: state.data.body['survey_info/village'],
+              }),
+
+              upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
+                study_id: 1000,
+                site_id: 1001,
+                household_id: state.data.body['survey_info/household_id'],
+                external_id: state.data.body['survey_info/household_id'],
+              }),
+
+              upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
+                site_id: 1001,
+                study_id: 1000,
+                household_id: state.data.body['survey_info/household_id'],
+                // TODO: decide how to handle household_char_id //Q: remove?
+                household_char_id: state.data.body._id,
+                num_occupants: state.data.body['group_begin/group_people/nb_people'],
+                num_babies: state.data.body['group_begin/group_people/nb_babies'],
+                num_children: state.data.body['group_begin/group_people/nb_children'],
+                num_young_men: state.data.body['group_begin/group_people/nb_youngmen'],
+                num_adult_men: state.data.body['group_begin/group_people/nb_men'],
+                num_old_men: state.data.body['group_begin/group_people/nb_oldmen'],
+                num_adult_women: state.data.body['group_begin/group_people/nb_women'],
+                num_pregnant_women:
+                  state.data.body['group_begin/group_people/nb_pregnant'],
+                num_breastfeeding_women:
+                  state.data.body['group_begin/group_people/nb_brestfeeding'],
+              }),
+
+              upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
+                study_id: 1000,
+                site_id: 1001,
+                household_id: state.data.body['survey_info/household_id'],
+                // household_char_id: state.data.body['survey_info/household_id'], //Q: remove?
+                date_start: state.data.body['survey_info/info_recall_date'],
+                sample_id:
+                  state.data.body._id +
+                  state.data.body._submission_time +
+                  state.data.body._xform_id_string,
+                sample_unit: state.data.defaultUnit || 'kilograms', //Q: set to default unit?
+                number_sample_units: '24',
+                sampling_effortin_days: '2',
+              }),
+
+              alterState(state => {
+                const repeatGroup = state.data.body['group_begin/group_food'];
+                if (repeatGroup) {
+                  console.log('There is an array of wildmeat.');
+                  return upsertMany(
+                    'tbl_wildmeat',
+                    'ON CONSTRAINT tbl_wildmeat_pkey',
+                    state =>
+                      repeatGroup.map((foodItem, i) => {
+                        return {
+                          kobo_submission_id: state.data.body['meta/instanceID'],
+                          site_id: 1001,
+                          study_id: 1000,
+                          sample_id:
+                            state.data.body._id +
+                            state.data.body._submission_time +
+                            state.data.body._xform_id_string,
+                          //taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column?
+                          wildmeat_id: state.data.body._id + i,
+                          vernacular_name: foodItem['group_begin/group_food/species'],
+                          wildmeat_category_1:
+                            foodItem['group_begin/group_food/category1'],
+                          wildmeat_category_2:
+                            foodItem['group_begin/group_food/category2'],
+                          wildmeat_group: foodItem['group_begin/group_food/group'],
+                          unit:
+                            foodItem['group_begin/group_food/quantity_technique'] ===
+                            'known_technique'
+                              ? 'kilogram' //Q: set to default unit? Future options: biomass
+                              : '-8',
+                          amount: foodItem['group_begin/group_food/amount'],
+                          massin_grams:
+                            state.data.defaultUnit === 'kilograms'
+                              ? parseInt(foodItem['group_begin/group_food/quantity']) *
+                                1000
+                              : foodItem['group_begin/group_food/quantity'],
+                          price: foodItem['group_begin/group_food/Cost'],
+                          aquisition: foodItem['group_begin/group_food/obtention'],
+                          acquisition_other:
+                            foodItem['group_begin/group_food/other_obtention'],
+                          origin_of_wildmeat:
+                            foodItem['group_begin/group_food/origin_wildmeat'],
+                          condition: foodItem['group_begin/group_food/state'],
+                          consumption_frequency_unit:
+                            foodItem['group_begin/group_food/frequency'],
+                        };
+                      })
+                  )(state);
+                }
+
+                console.log('There is no wildmeat array. Skipping insertMany(...)');
+                return state;
+              }),
+
+              upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
+                site_id: 1001,
+                study_id: 1000,
+                household_id: state.data.body['survey_info/household_id'],
+                external_id: state.data.body['survey_info/identity'],
+                // TODO: Autonumber comment in postgres, but NOT getting generated. Intent?
+                individual_id: state.data.body._id,
+              })
+            )(state);
+          });
+
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: state.data.body._id + state.data.body._xform_id_string,
+            date: state.data.body._submission_time,
+            status: 'new',
+            submission_time: state.data.body._submission_time,
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+      Market-to-PG:
+        name: Market to PG
+        adaptor: '@openfn/language-postgresql@3.3.2'
+        credential: rediet@openfn.org-Wildmeat-Postgres-Transitional-DB---WCS
+        body: |
+          // Check out the Job Writing Guide for help getting started:
+          // https://docs.openfn.org/documentation/jobs/job-writing-guide
+          // Your job goes here.
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_market', 'external_id', {
+            external_id: state.data.body.market,
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType], //ad
+            sell_point_type: state => state.data.body.sell_point_type,
+          });
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          fn(async state => {
+            if (!state.data.body.market) {
+              console.log('No market specified. Skipping upsert');
+              return state;
+            }
+            return upsert(
+              'tbl_sample_market',
+              'ON CONSTRAINT tbl_sample_market_pkey',
+              {
+                sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                date_start: state.data.body.today,
+                date_end: state.data.body.today,
+                study_id: state => state.studyIDMap[state.formType], //ad
+                site_id: state => state.studyIDMap[state.formType], //ad
+                market_id: await findValue({
+                  uuid: 'market_id',
+                  relation: 'tbl_market',
+                  where: {
+                    external_id: state.data.body.market,
+                  },
+                })(state),
+                number_tables_surveyed: state.data.body.total_surveyed,
+              },
+              {
+                setNull: ["'NaN'", "'undefined'"],
+                logValues: true,
+              }
+            )(state);
+          });
+
+          // upsert('swm_species', 'study_id', {
+          // taxonID: '',
+          // vernacularName: '',
+          // }),
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            admin_level_3: state.data.body.district,
+            site_name: state.data.body.village,
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType], //ad
+          });
+
+          fn(state => {
+            const vendors = state.data.body['vendor'];
+            const id = state.data.body._id;
+            const xform_id_string = state.data.body._xform_id_string;
+
+            if (vendors) {
+              return each(vendors, state => {
+                const vendorID = state.data['vendor/id'];
+                const sales = state.data['vendor/sales'];
+                if (sales) {
+                  return upsertMany(
+                    'tbl_wildmeat_market',
+                    'ON CONSTRAINT tbl_wildmeat_market_pkey',
+                    state =>
+                      sales.map((sale, i) => {
+                        return {
+                          sample_id: `${id}${xform_id_string}`,
+                          // sample_id: `${id}${xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
+                          study_id: state.studyIDMap[state.formType], //ad
+                          site_id: state.studyIDMap[state.formType], //ad
+                          wildmeat_id: `${vendorID}-${i + 1}-${
+                            sale['vendor/sales/species']
+                          }`,
+                          amount: 1,
+                          wildmeat_category_1: sale['vendor/sales/category1'],
+                          wildmeat_category_2: sale['vendor/sales/category2'],
+                          wildmeat_group: sale['vendor/sales/group'],
+                          vernacular_name: sale['vendor/sales/species'],
+                          vernacular_name_other: sale['vendor/sales/othe_species'],
+                          condition: sale['vendor/sales/condition'],
+                          unit: sale['vendor/sales/unit'],
+                          other_unit: sale['vendor/sales/other_unit'],
+                          harvest_method: sale['vendor/sales/technique'],
+                          price: sale['vendor/sales/price'],
+                        };
+                      })
+                  )(state);
+                }
+                console.log('No sales array. Ignoring upsert...');
+                return state;
+              })(state);
+            }
+            console.log('No vendors array. Ignoring upsert...');
+            return state;
+          });
+
+      Offtake-to-PG:
+        name: Offtake to PG
+        adaptor: '@openfn/language-postgresql@3.3.1'
+        credential: rediet@openfn.org-Wildmeat-Postgres-Transitional-DB---WCS
+        body: |
+          // Your job goes here.
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            admin_level_3: state.data.body['district'],
+            site_name: state.data.body['village'],
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            site_id: state => state.studyIDMap[state.formType],
+            hunter_monitoring_id: state.data.body['id_hunter'],
+            external_id: state.data.body['id_hunter'],
+            trip_hunting_method: state.data.body['trip/type'],
+            date_start: state.data.body['trip/hunting_start'],
+            trip_end_time: state.data.body['trip/hunting_return'],
+            date_end: state.data.body['trip/hunting_return'],
+            trip_start_time: state.data.body['trip/hunting_start'],
+            duration: state.data.body['trip/duration'],
+            hunter_number: state.data.body['trip/nb_people_hunt'],
+            indiv_group_hunter: state.data.body['trip/hunt_group'],
+            hunting_technique: state.data.body['trip/hunting_technique'],
+            number_traps: state.data.body['trip/nb_traps'],
+          });
+
+          upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            study_id: state => state.studyIDMap[state.formType], //AD
+            site_id: state => state.studyIDMap[state.formType], //AD
+            sample_unit: 'individual',
+            hunter_monitoring_id: state.data.body['id_hunter'],
+            //hunter_monitoring_id: '1', //AD
+            date_start: state.data.body['trip/hunting_start'],
+            date_end: state.data.body['trip/hunting_return'],
+            number_sample_units: state.data.body['animal_details_count'],
+          });
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          fn(state => {
+            const animals = state.data.body['animal_details'];
+            if (animals) {
+              return upsertMany(
+                'tbl_wildmeat_hunter',
+                'ON CONSTRAINT tbl_wildmeat_hunter_pkey',
+                state =>
+                  animals.map((animal, pos) => {
+                    return {
+                      sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                      wildmeat_id: `${animal['animal_details/species_id']}${pos + 1}`,
+                      study_id: state.studyIDMap[state.formType], //AD
+                      site_id: state.studyIDMap[state.formType], //AD
+                      wildmeat_category_2: animal['animal_details/category2'],
+                      wildmeat_group: animal['animal_details/group'],
+                      vernacular_name: animal['animal_details/species_id'],
+                      harvest_method: animal['animal_details/hunting_method'],
+                      use: animal['animal_details/usage'],
+                      percent_sold: animal['animal_details/pct_sold'],
+                      condition: animal['animal_details/conservation'],
+                      price: animal['animal_details/price'],
+                      unit: 'individual',
+                      amount: 1,
+                    };
+                  }),
+                  {logValues: true}
+              )(state);
+            }
+            console.log('No animals array. Ignoring upsert...');
+            return state;
+          });
+
+      Rural-Consumption-to-PG---New:
+        name: Rural Consumption to PG - New
+        adaptor: '@openfn/language-postgresql@3.3.1'
+        credential: rediet@openfn.org-Wildmeat-Postgres-Transitional-DB---WCS
+        body: |
+          // Your job goes here.
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            household_char_id: state.data.body._id,
+            date_start: state.data.body['survey_info/info_recall_date'],
+            sample_unit: state.data.defaultUnit || 'kilograms',
+            number_sample_units: '24',
+            sampling_effortin_days: '2',
+            site_id: state => state.studyIDMap[state.formType],
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+          });
+
+          //AD added everything except uuid & submission_time
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            admin_level_3: state.data.body['survey_info/district'],
+            site_name: state.data.body['survey_info/village'],
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          // upsert('swm_species', 'study_id', {
+          // taxonID: '',
+          // vernacularName: '',
+          // })
+
+          upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            individual_id: state.data.body._id,
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+            external_id: state.data.body['survey_info/identity'], //AD
+          });
+
+          upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+            individual_id: state.data.body._id,
+            individual_char_id: state.data.body._id,
+          });
+
+          //AD everything except household id and external_id
+          upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            external_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+          });
+
+          upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
+            household_char_id: state.data.body._id, //ad
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            num_occupants: state.data.body['group_begin/group_people/nb_people'],
+            num_babies: state.data.body['group_begin/group_people/nb_babies'],
+            num_children: state.data.body['group_begin/group_people/nb_children'],
+            num_young_men: state.data.body['group_begin/group_people/nb_youngmen'],
+            num_adult_men: state.data.body['group_begin/group_people/nb_men'],
+            num_old_men: state.data.body['group_begin/group_people/nb_oldmen'],
+            num_adult_women: state.data.body['group_begin/group_people/nb_women'],
+            num_pregnant_women: state.data.body['group_begin/group_people/nb_pregnant'],
+            num_breastfeeding_women:
+              state.data.body['group_begin/group_people/nb_brestfeeding'],
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+          });
+
+          fn(state => {
+            const repeatGroup = state.data.body['group_begin/group_food'];
+            if (repeatGroup) {
+              return upsertMany(
+                'tbl_wildmeat',
+                'ON CONSTRAINT tbl_wildmeat_pkey',
+                state =>
+                  repeatGroup.map((foodItem, pos) => {
+                    const unit =
+                      foodItem['group_begin/group_food/quantity_technique'] ===
+                      'known_technique'
+                        ? 'kilogram'
+                        : '-8';
+
+                    return {
+                      site_id: state => state.studyIDMap[state.formType], //AD
+                      study_id: state => state.studyIDMap[state.formType], //AD
+                      sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                      wildmeat_id: `${foodItem['group_begin/group_food/species']}${
+                        pos + 1
+                      }`, //AD
+                      wildmeat_category_1: foodItem['group_begin/group_food/category1'],
+                      wildmeat_category_2: foodItem['group_begin/group_food/category2'],
+                      wildmeat_group: foodItem['group_begin/group_food/group'],
+                      vernacular_name: foodItem['group_begin/group_food/species'],
+                      unit,
+                      massin_grams: foodItem['group_begin/group_food/quantity'] * 1000,
+                      price: foodItem['group_begin/group_food/Cost'],
+                      aquisition: foodItem['group_begin/group_food/obtention'],
+                      amount: foodItem['group_begin/group_food/amount'],
+                      acquisition_other:
+                        foodItem['group_begin/group_food/other_obtention'],
+                      origin_of_wildmeat:
+                        foodItem['group_begin/group_food/origin_wildmeat'],
+                      condition: foodItem['group_begin/group_food/state'],
+                      consumption_frequency_unit:
+                        foodItem['group_begin/group_food/frequency'],
+                    };
+                  }),
+                { logValues: true }
+              )(state);
+            }
+            console.log('There is no wildmeat array. Skipping upsertMany(...)');
+            return state;
+          });
+
+      Urban-Consumption-to-PG:
+        name: Urban Consumption to PG
+        adaptor: '@openfn/language-postgresql@3.3.0'
+        credential: rediet@openfn.org-Wildmeat-Postgres-Transitional-DB---WCS
+        body: |
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          fn(state => {
+            const wildmeatIDs = state.data.body['domeat_consumption/domeat_species']
+              ? state.data.body['domeat_consumption/domeat_species'].split(' ')
+              : [];
+            return upsertMany(
+              'tbl_wildmeat_urban',
+              'ON CONSTRAINT tbl_wildmeat_urban_pkey',
+              state =>
+                wildmeatIDs.map((wildmeat, pos) => {
+                  return {
+                    study_id: state.studyIDMap[state.formType],
+                    site_id: state.studyIDMap[state.formType],
+                    wildmeat_id: `${wildmeat}${pos + 1}`,
+                    sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                    amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
+                    condition: state.data.body[`domeat_consumption/state_${wildmeat}`],
+                    wildmeat_group: state.data.body['domeat_consumption/domeat_species'],
+                    unit:
+                      state.data.body['domeat_consumption/qty_measure_type_dm'] ===
+                      'known_quantity'
+                        ? 'kilogram'
+                        : -8,
+                    vernacular_name: state.data.body['domeat_consumption/domeat_species'],
+                  };
+                })
+            )(state);
+          });
+
+          //NOTE: There seems to be 2 species types: bm_consumption and domeat_consumption
+          fn(state => {
+            const wildmeatIDs = state.data.body['bm_consumption/bm_species']
+              ? state.data.body['bm_consumption/bm_species'].split(' ')
+              : [];
+            return upsertMany(
+              'tbl_wildmeat_urban',
+              'ON CONSTRAINT tbl_wildmeat_urban_pkey',
+              state =>
+                wildmeatIDs.map((wildmeat, pos) => {
+                  return {
+                    study_id: state.studyIDMap[state.formType],
+                    site_id: state.studyIDMap[state.formType],
+                    wildmeat_id: `${wildmeat}${pos + 1}`,
+                    sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                    amount: state.data.body[`bm_consumption/quantity_${wildmeat}`],
+                    condition: state.data.body[`bm_consumption/state_${wildmeat}`],
+                    wildmeat_group: state.data.body['bm_consumption/bm_species'],
+                    unit:
+                      state.data.body['bm_consumption/qty_measure_type_bm'] ===
+                      'known_quantity'
+                        ? 'kilogram'
+                        : -8,
+                    vernacular_name: state.data.body['bm_consumption/bm_species'],
+                  };
+                })
+            )(state);
+          });
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            admin_level_2: state.data.body['introduction_gp/other_town'],
+            site_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            site_id: state => state.studyIDMap[state.formType],
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            date_start: state.data.body['introduction_gp/date'],
+            date_end: state.data.body['introduction_gp/date'],
+            preferences: state.data.body['prot_preference/why_like_bm'],
+            individual_id: state.data.body._id,
+          });
+
+          // upsert('swm_species', 'study_id', {
+          // taxonID: '',
+          // vernacularName: '',
+          // })
+
+          upsert('tbl_individual_urban', 'ON CONSTRAINT tbl_individual_urban_pkey', {
+            gender: state.data.body['introduction_gp/gender'],
+            local_origin: state.data.body['subject_info/home'],
+            origin_type: state.data.body['subject_info/other_home'],
+            age: state.data.body['subject_info/age'],
+            education_years: state.data.body['subject_info/education_yrs'],
+            religion: state.data.body['other_questions/religion'],
+            individual_id: state.data.body._id,
+            study_id: state => state.studyIDMap[state.formType],
+            site_id: state => state.studyIDMap[state.formType],
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Triage-Forms:
+        source_trigger: webhook
+        target_job: Triage-Forms
+        condition_type: always
+        enabled: true
+      Triage-Forms->02---Rural-Consumption-to-PG:
+        source_job: Triage-Forms
+        target_job: 02---Rural-Consumption-to-PG
+        condition_type: js_expression
+        condition_label: Rural Consumption
+        condition_expression: |
+          state.data.form == "Rural Consumption"
+        enabled: true
+      Triage-Forms->Market-to-PG:
+        source_job: Triage-Forms
+        target_job: Market-to-PG
+        condition_type: js_expression
+        condition_label: Market
+        condition_expression: |
+          state.data.formType == "Market"
+        enabled: true
+      Triage-Forms->Offtake-to-PG:
+        source_job: Triage-Forms
+        target_job: Offtake-to-PG
+        condition_type: js_expression
+        condition_label: Offtake
+        condition_expression: |
+          state.data.formType == "Offtake"
+        enabled: true
+      Triage-Forms->Rural-Consumption-to-PG---New:
+        source_job: Triage-Forms
+        target_job: Rural-Consumption-to-PG---New
+        condition_type: js_expression
+        condition_label: Rural Consumption
+        condition_expression: |
+          state.data.formType == "Rural Consumption"
+        enabled: true
+      Triage-Forms->Urban-Consumption-to-PG:
+        source_job: Triage-Forms
+        target_job: Urban-Consumption-to-PG
+        condition_type: js_expression
+        condition_label: Urban Consumption
+        condition_expression: |
+          state.data.formType == "Urban Consumption"
+        enabled: true
+  Reset-Database:
+    name: Reset Database
+    jobs:
+      Reset-Database:
+        name: Reset Database
+        adaptor: '@openfn/language-postgresql@3.3.1'
+        credential: null
+        body: |
+          each(
+            [
+              'tbl_site',
+              'tbl_sample',
+              'tbl_study',
+              'swm_transaction',
+              'tbl_individual',
+              'tbl_individual_char',
+              'tbl_household',
+              'tbl_household_char',
+              'tbl_wildmeat',
+              'tbl_market',
+              'tbl_wildmeat_market',
+              'tbl_sample_market',
+              'tbl_hunter_monitoring',
+              'tbl_wildmeat_hunter',
+              'tbl_sample_hunter',
+              'tbl_wildmeat_urban',
+              'tbl_individual_urban',
+              'tbl_sample_urban',
+            ],
+            sql(state => `DELETE FROM ${state.data};`, { writeSql: true })
+          );
+
+    triggers:
+      cron:
+        type: cron
+        cron_expression: '12 * * * *'
+        enabled: false
+    edges:
+      cron->Reset-Database:
+        source_trigger: cron
+        target_job: Reset-Database
+        condition_type: always
+        enabled: true
+  z02-Rural-Consumption-to-PG:
+    name: z02 Rural Consumption to PG
+    jobs:
+      02---Rural-Consumption-to-PG:
+        name: 02 - Rural Consumption to PG
+        adaptor: '@openfn/language-postgresql@v2.4.0'
+        credential: null
+        body: |
+          alterState(state => {
+            if (state.data.body.consent_checklist == 'no') {
+              console.log("Note: consent_checklist == 'no', skipping to swm_transaction");
+              return state;
+            }
+
+            return combine(
+              upsert('tbl_study', 'study_id', {
+                study_id: 1000,
+              }),
+
+              upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+                study_id: 1000,
+                site_id: 1001,
+                admin_level_3: state.data.body['survey_info/district'],
+                site_name: state.data.body['survey_info/village'],
+              }),
+
+              upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
+                study_id: 1000,
+                site_id: 1001,
+                household_id: state.data.body['survey_info/household_id'],
+                external_id: state.data.body['survey_info/household_id'],
+              }),
+
+              upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
+                site_id: 1001,
+                study_id: 1000,
+                household_id: state.data.body['survey_info/household_id'],
+                // TODO: decide how to handle household_char_id //Q: remove?
+                household_char_id: state.data.body._id,
+                num_occupants: state.data.body['group_begin/group_people/nb_people'],
+                num_babies: state.data.body['group_begin/group_people/nb_babies'],
+                num_children: state.data.body['group_begin/group_people/nb_children'],
+                num_young_men: state.data.body['group_begin/group_people/nb_youngmen'],
+                num_adult_men: state.data.body['group_begin/group_people/nb_men'],
+                num_old_men: state.data.body['group_begin/group_people/nb_oldmen'],
+                num_adult_women: state.data.body['group_begin/group_people/nb_women'],
+                num_pregnant_women:
+                  state.data.body['group_begin/group_people/nb_pregnant'],
+                num_breastfeeding_women:
+                  state.data.body['group_begin/group_people/nb_brestfeeding'],
+              }),
+
+              upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
+                study_id: 1000,
+                site_id: 1001,
+                household_id: state.data.body['survey_info/household_id'],
+                // household_char_id: state.data.body['survey_info/household_id'], //Q: remove?
+                date_start: state.data.body['survey_info/info_recall_date'],
+                sample_id:
+                  state.data.body._id +
+                  state.data.body._submission_time +
+                  state.data.body._xform_id_string,
+                sample_unit: state.data.defaultUnit || 'kilograms', //Q: set to default unit?
+                number_sample_units: '24',
+                sampling_effortin_days: '2',
+              }),
+
+              alterState(state => {
+                const repeatGroup = state.data.body['group_begin/group_food'];
+                if (repeatGroup) {
+                  console.log('There is an array of wildmeat.');
+                  return upsertMany(
+                    'tbl_wildmeat',
+                    'ON CONSTRAINT tbl_wildmeat_pkey',
+                    state =>
+                      repeatGroup.map((foodItem, i) => {
+                        return {
+                          kobo_submission_id: state.data.body['meta/instanceID'],
+                          site_id: 1001,
+                          study_id: 1000,
+                          sample_id:
+                            state.data.body._id +
+                            state.data.body._submission_time +
+                            state.data.body._xform_id_string,
+                          //taxon_id: foodItem['group_begin/group_food/species'], //Q: Remove constraints? OR map to a different column?
+                          wildmeat_id: state.data.body._id + i,
+                          vernacular_name: foodItem['group_begin/group_food/species'],
+                          wildmeat_category_1:
+                            foodItem['group_begin/group_food/category1'],
+                          wildmeat_category_2:
+                            foodItem['group_begin/group_food/category2'],
+                          wildmeat_group: foodItem['group_begin/group_food/group'],
+                          unit:
+                            foodItem['group_begin/group_food/quantity_technique'] ===
+                            'known_technique'
+                              ? 'kilogram' //Q: set to default unit? Future options: biomass
+                              : '-8',
+                          amount: foodItem['group_begin/group_food/amount'],
+                          massin_grams:
+                            state.data.defaultUnit === 'kilograms'
+                              ? parseInt(foodItem['group_begin/group_food/quantity']) *
+                                1000
+                              : foodItem['group_begin/group_food/quantity'],
+                          price: foodItem['group_begin/group_food/Cost'],
+                          aquisition: foodItem['group_begin/group_food/obtention'],
+                          acquisition_other:
+                            foodItem['group_begin/group_food/other_obtention'],
+                          origin_of_wildmeat:
+                            foodItem['group_begin/group_food/origin_wildmeat'],
+                          condition: foodItem['group_begin/group_food/state'],
+                          consumption_frequency_unit:
+                            foodItem['group_begin/group_food/frequency'],
+                        };
+                      })
+                  )(state);
+                }
+
+                console.log('There is no wildmeat array. Skipping insertMany(...)');
+                return state;
+              }),
+
+              upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
+                site_id: 1001,
+                study_id: 1000,
+                household_id: state.data.body['survey_info/household_id'],
+                external_id: state.data.body['survey_info/identity'],
+                // TODO: Autonumber comment in postgres, but NOT getting generated. Intent?
+                individual_id: state.data.body._id,
+              })
+            )(state);
+          });
+
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: state.data.body._id + state.data.body._xform_id_string,
+            date: state.data.body._submission_time,
+            status: 'new',
+            submission_time: state.data.body._submission_time,
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->02---Rural-Consumption-to-PG:
+        source_trigger: webhook
+        target_job: 02---Rural-Consumption-to-PG
+        condition_type: js_expression
+        condition_label: Rural Consumption Submission
+        condition_expression: |
+          state.data.form == "Rural Consumption"
+        enabled: true
+  zMarket-to-PG:
+    name: zMarket to PG
+    jobs:
+      Market-to-PG:
+        name: Market to PG
+        adaptor: '@openfn/language-postgresql@v3.3.2'
+        credential: null
+        body: |
+          // Your job goes here.
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_market', 'external_id', {
+            external_id: state.data.body.market,
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType], //ad
+            sell_point_type: state => state.data.body.sell_point_type,
+          });
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          fn(async state => {
+            if (!state.data.body.market) {
+              console.log('No market specified. Skipping upsert');
+              return state;
+            }
+            return upsert(
+              'tbl_sample_market',
+              'ON CONSTRAINT tbl_sample_market_pkey',
+              {
+                sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                date_start: state.data.body.today,
+                date_end: state.data.body.today,
+                study_id: state => state.studyIDMap[state.formType], //ad
+                site_id: state => state.studyIDMap[state.formType], //ad
+                market_id: await findValue({
+                  uuid: 'market_id',
+                  relation: 'tbl_market',
+                  where: {
+                    external_id: state.data.body.market,
+                  },
+                })(state),
+                number_tables_surveyed: state.data.body.total_surveyed,
+              },
+              {
+                setNull: ["'NaN'", "'undefined'"],
+                logValues: true,
+              }
+            )(state);
+          });
+
+          // upsert('swm_species', 'study_id', {
+          // taxonID: '',
+          // vernacularName: '',
+          // }),
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            admin_level_3: state.data.body.district,
+            site_name: state.data.body.village,
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType], //ad
+          });
+
+          fn(state => {
+            const vendors = state.data.body['vendor'];
+            const id = state.data.body._id;
+            const xform_id_string = state.data.body._xform_id_string;
+
+            if (vendors) {
+              return each(vendors, state => {
+                const vendorID = state.data['vendor/id'];
+                const sales = state.data['vendor/sales'];
+                if (sales) {
+                  return upsertMany(
+                    'tbl_wildmeat_market',
+                    'ON CONSTRAINT tbl_wildmeat_market_pkey',
+                    state =>
+                      sales.map((sale, i) => {
+                        return {
+                          sample_id: `${id}${xform_id_string}`,
+                          // sample_id: `${id}${xform_id_string}${sale['vendor/sales/othe_species']}${sale['vendor/sales/quantity']}${sale['vendor/sales/price']}`,
+                          study_id: state.studyIDMap[state.formType], //ad
+                          site_id: state.studyIDMap[state.formType], //ad
+                          wildmeat_id: `${vendorID}-${i + 1}-${
+                            sale['vendor/sales/species']
+                          }`,
+                          amount: 1,
+                          wildmeat_category_1: sale['vendor/sales/category1'],
+                          wildmeat_category_2: sale['vendor/sales/category2'],
+                          wildmeat_group: sale['vendor/sales/group'],
+                          vernacular_name: sale['vendor/sales/species'],
+                          vernacular_name_other: sale['vendor/sales/othe_species'],
+                          condition: sale['vendor/sales/condition'],
+                          unit: sale['vendor/sales/unit'],
+                          other_unit: sale['vendor/sales/other_unit'],
+                          harvest_method: sale['vendor/sales/technique'],
+                          price: sale['vendor/sales/price'],
+                        };
+                      })
+                  )(state);
+                }
+                console.log('No sales array. Ignoring upsert...');
+                return state;
+              })(state);
+            }
+            console.log('No vendors array. Ignoring upsert...');
+            return state;
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Market-to-PG:
+        source_trigger: webhook
+        target_job: Market-to-PG
+        condition_type: js_expression
+        condition_label: Market Form Type Received
+        condition_expression: |
+          state.data.formType == "Market"
+        enabled: true
+  zOfftake-to-PG:
+    name: zOfftake to PG
+    jobs:
+      Offtake-to-PG:
+        name: Offtake to PG
+        adaptor: '@openfn/language-postgresql@v3.3.1'
+        credential: null
+        body: |
+          // Your job goes here.
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            admin_level_3: state.data.body['district'],
+            site_name: state.data.body['village'],
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_hunter_monitoring', 'ON CONSTRAINT tbl_hunter_monitoring_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            site_id: state => state.studyIDMap[state.formType],
+            hunter_monitoring_id: state.data.body['id_hunter'],
+            external_id: state.data.body['id_hunter'],
+            trip_hunting_method: state.data.body['trip/type'],
+            date_start: state.data.body['trip/hunting_start'],
+            trip_end_time: state.data.body['trip/hunting_return'],
+            date_end: state.data.body['trip/hunting_return'],
+            trip_start_time: state.data.body['trip/hunting_start'],
+            duration: state.data.body['trip/duration'],
+            hunter_number: state.data.body['trip/nb_people_hunt'],
+            indiv_group_hunter: state.data.body['trip/hunt_group'],
+            hunting_technique: state.data.body['trip/hunting_technique'],
+            number_traps: state.data.body['trip/nb_traps'],
+          });
+
+          upsert('tbl_sample_hunter', 'ON CONSTRAINT tbl_sample_hunter_pkey', {
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            study_id: state => state.studyIDMap[state.formType], //AD
+            site_id: state => state.studyIDMap[state.formType], //AD
+            sample_unit: 'individual',
+            hunter_monitoring_id: state.data.body['id_hunter'],
+            //hunter_monitoring_id: '1', //AD
+            date_start: state.data.body['trip/hunting_start'],
+            date_end: state.data.body['trip/hunting_return'],
+            number_sample_units: state.data.body['animal_details_count'],
+          });
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          fn(state => {
+            const animals = state.data.body['animal_details'];
+            if (animals) {
+              return upsertMany(
+                'tbl_wildmeat_hunter',
+                'ON CONSTRAINT tbl_wildmeat_hunter_pkey',
+                state =>
+                  animals.map((animal, pos) => {
+                    return {
+                      sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                      wildmeat_id: `${animal['animal_details/species_id']}${pos + 1}`,
+                      study_id: state.studyIDMap[state.formType], //AD
+                      site_id: state.studyIDMap[state.formType], //AD
+                      wildmeat_category_2: animal['animal_details/category2'],
+                      wildmeat_group: animal['animal_details/group'],
+                      vernacular_name: animal['animal_details/species_id'],
+                      harvest_method: animal['animal_details/hunting_method'],
+                      use: animal['animal_details/usage'],
+                      percent_sold: animal['animal_details/pct_sold'],
+                      condition: animal['animal_details/conservation'],
+                      price: animal['animal_details/price'],
+                      unit: 'individual',
+                      amount: 1,
+                    };
+                  }),
+                  {logValues: true}
+              )(state);
+            }
+            console.log('No animals array. Ignoring upsert...');
+            return state;
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Offtake-to-PG:
+        source_trigger: webhook
+        target_job: Offtake-to-PG
+        condition_type: js_expression
+        condition_label: Offtake Form Type Received
+        condition_expression: |
+          state.data.formType == "Offtake"
+        enabled: true
+  "zRural-Consumption-to-PG-(New)":
+    name: 'zRural Consumption to PG (New)'
+    jobs:
+      Rural-Consumption-to-PG-New:
+        name: Rural Consumption to PG New
+        adaptor: '@openfn/language-postgresql@v3.3.1'
+        credential: null
+        body: |
+          // Your job goes here.
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_sample', 'ON CONSTRAINT tbl_sample_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            household_char_id: state.data.body._id,
+            date_start: state.data.body['survey_info/info_recall_date'],
+            sample_unit: state.data.defaultUnit || 'kilograms',
+            number_sample_units: '24',
+            sampling_effortin_days: '2',
+            site_id: state => state.studyIDMap[state.formType],
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+          });
+
+          //AD added everything except uuid & submission_time
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            admin_level_3: state.data.body['survey_info/district'],
+            site_name: state.data.body['survey_info/village'],
+            site_id: state => state.studyIDMap[state.formType],
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          // upsert('swm_species', 'study_id', {
+          // taxonID: '',
+          // vernacularName: '',
+          // })
+
+          upsert('tbl_individual', 'ON CONSTRAINT tbl_individual_pkey', {
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            individual_id: state.data.body._id,
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+            external_id: state.data.body['survey_info/identity'], //AD
+          });
+
+          upsert('tbl_individual_char', 'ON CONSTRAINT tbl_individual_char_pkey', {
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+            individual_id: state.data.body._id,
+            individual_char_id: state.data.body._id,
+          });
+
+          //AD everything except household id and external_id
+          upsert('tbl_household', 'ON CONSTRAINT tbl_household_pkey', {
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            external_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+          });
+
+          upsert('tbl_household_char', 'ON CONSTRAINT tbl_household_char_pkey', {
+            household_char_id: state.data.body._id, //ad
+            household_id:
+              state.data.body['survey_info/household_id'] || state.data.body._id,
+            num_occupants: state.data.body['group_begin/group_people/nb_people'],
+            num_babies: state.data.body['group_begin/group_people/nb_babies'],
+            num_children: state.data.body['group_begin/group_people/nb_children'],
+            num_young_men: state.data.body['group_begin/group_people/nb_youngmen'],
+            num_adult_men: state.data.body['group_begin/group_people/nb_men'],
+            num_old_men: state.data.body['group_begin/group_people/nb_oldmen'],
+            num_adult_women: state.data.body['group_begin/group_people/nb_women'],
+            num_pregnant_women: state.data.body['group_begin/group_people/nb_pregnant'],
+            num_breastfeeding_women:
+              state.data.body['group_begin/group_people/nb_brestfeeding'],
+            site_id: state => state.studyIDMap[state.formType], //AD
+            study_id: state => state.studyIDMap[state.formType], //AD
+          });
+
+          fn(state => {
+            const repeatGroup = state.data.body['group_begin/group_food'];
+            if (repeatGroup) {
+              return upsertMany(
+                'tbl_wildmeat',
+                'ON CONSTRAINT tbl_wildmeat_pkey',
+                state =>
+                  repeatGroup.map((foodItem, pos) => {
+                    const unit =
+                      foodItem['group_begin/group_food/quantity_technique'] ===
+                      'known_technique'
+                        ? 'kilogram'
+                        : '-8';
+
+                    return {
+                      site_id: state => state.studyIDMap[state.formType], //AD
+                      study_id: state => state.studyIDMap[state.formType], //AD
+                      sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                      wildmeat_id: `${foodItem['group_begin/group_food/species']}${
+                        pos + 1
+                      }`, //AD
+                      wildmeat_category_1: foodItem['group_begin/group_food/category1'],
+                      wildmeat_category_2: foodItem['group_begin/group_food/category2'],
+                      wildmeat_group: foodItem['group_begin/group_food/group'],
+                      vernacular_name: foodItem['group_begin/group_food/species'],
+                      unit,
+                      massin_grams: foodItem['group_begin/group_food/quantity'] * 1000,
+                      price: foodItem['group_begin/group_food/Cost'],
+                      aquisition: foodItem['group_begin/group_food/obtention'],
+                      amount: foodItem['group_begin/group_food/amount'],
+                      acquisition_other:
+                        foodItem['group_begin/group_food/other_obtention'],
+                      origin_of_wildmeat:
+                        foodItem['group_begin/group_food/origin_wildmeat'],
+                      condition: foodItem['group_begin/group_food/state'],
+                      consumption_frequency_unit:
+                        foodItem['group_begin/group_food/frequency'],
+                    };
+                  }),
+                { logValues: true }
+              )(state);
+            }
+            console.log('There is no wildmeat array. Skipping upsertMany(...)');
+            return state;
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Rural-Consumption-to-PG-New:
+        source_trigger: webhook
+        target_job: Rural-Consumption-to-PG-New
+        condition_type: js_expression
+        condition_label: Rural Consumption Form Type Received
+        condition_expression: |
+          state.data.formType == "Rural Consumption"
+        enabled: true
+  zUrban-Consumption-to-PG:
+    name: zUrban Consumption to PG
+    jobs:
+      Urban-Consumption-to-PG:
+        name: Urban Consumption to PG
+        adaptor: '@openfn/language-postgresql@v3.3.0'
+        credential: null
+        body: |
+          fn(state => {
+            state.studyIDMap = {
+              'Urban Consumption': 1000,
+              'Rural Consumption': 1002,
+              Market: 1004,
+              Offtake: 1006,
+            };
+
+            return { ...state, formType: state.data.formType };
+          });
+
+          upsert('tbl_study', 'study_id', {
+            study_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('swm_transaction', 'ON CONSTRAINT swm_data_pkey', {
+            uuid: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            submission_time: state.data.body['_submission_time'],
+            date: state.data.body['_submission_time'],
+            status: 'new',
+            modified_by: 'open_fn',
+            inserted_by: 'open_fn',
+            data_type: 'consumption', //other types: hunter, market
+            instances: state => {
+              if (state.data.body.consent_checklist == 'yes')
+                return JSON.stringify(state.data);
+              else {
+                let instance = { uuid: state.data.body._uuid, consent: 'no' };
+                return instance;
+              }
+            },
+          });
+
+          fn(state => {
+            const wildmeatIDs = state.data.body['domeat_consumption/domeat_species']
+              ? state.data.body['domeat_consumption/domeat_species'].split(' ')
+              : [];
+            return upsertMany(
+              'tbl_wildmeat_urban',
+              'ON CONSTRAINT tbl_wildmeat_urban_pkey',
+              state =>
+                wildmeatIDs.map((wildmeat, pos) => {
+                  return {
+                    study_id: state.studyIDMap[state.formType],
+                    site_id: state.studyIDMap[state.formType],
+                    wildmeat_id: `${wildmeat}${pos + 1}`,
+                    sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                    amount: state.data.body[`domeat_consumption/quantity_${wildmeat}`],
+                    condition: state.data.body[`domeat_consumption/state_${wildmeat}`],
+                    wildmeat_group: state.data.body['domeat_consumption/domeat_species'],
+                    unit:
+                      state.data.body['domeat_consumption/qty_measure_type_dm'] ===
+                      'known_quantity'
+                        ? 'kilogram'
+                        : -8,
+                    vernacular_name: state.data.body['domeat_consumption/domeat_species'],
+                  };
+                })
+            )(state);
+          });
+
+          //NOTE: There seems to be 2 species types: bm_consumption and domeat_consumption
+          fn(state => {
+            const wildmeatIDs = state.data.body['bm_consumption/bm_species']
+              ? state.data.body['bm_consumption/bm_species'].split(' ')
+              : [];
+            return upsertMany(
+              'tbl_wildmeat_urban',
+              'ON CONSTRAINT tbl_wildmeat_urban_pkey',
+              state =>
+                wildmeatIDs.map((wildmeat, pos) => {
+                  return {
+                    study_id: state.studyIDMap[state.formType],
+                    site_id: state.studyIDMap[state.formType],
+                    wildmeat_id: `${wildmeat}${pos + 1}`,
+                    sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+                    amount: state.data.body[`bm_consumption/quantity_${wildmeat}`],
+                    condition: state.data.body[`bm_consumption/state_${wildmeat}`],
+                    wildmeat_group: state.data.body['bm_consumption/bm_species'],
+                    unit:
+                      state.data.body['bm_consumption/qty_measure_type_bm'] ===
+                      'known_quantity'
+                        ? 'kilogram'
+                        : -8,
+                    vernacular_name: state.data.body['bm_consumption/bm_species'],
+                  };
+                })
+            )(state);
+          });
+
+          upsert('tbl_site', 'ON CONSTRAINT tbl_site_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            admin_level_2: state.data.body['introduction_gp/other_town'],
+            site_id: state => state.studyIDMap[state.formType],
+          });
+
+          upsert('tbl_sample_urban', 'ON CONSTRAINT tbl_sample_urban_pkey', {
+            study_id: state => state.studyIDMap[state.formType],
+            site_id: state => state.studyIDMap[state.formType],
+            sample_id: `${state.data.body._id}${state.data.body._xform_id_string}`,
+            date_start: state.data.body['introduction_gp/date'],
+            date_end: state.data.body['introduction_gp/date'],
+            preferences: state.data.body['prot_preference/why_like_bm'],
+            individual_id: state.data.body._id,
+          });
+
+          // upsert('swm_species', 'study_id', {
+          // taxonID: '',
+          // vernacularName: '',
+          // })
+
+          upsert('tbl_individual_urban', 'ON CONSTRAINT tbl_individual_urban_pkey', {
+            gender: state.data.body['introduction_gp/gender'],
+            local_origin: state.data.body['subject_info/home'],
+            origin_type: state.data.body['subject_info/other_home'],
+            age: state.data.body['subject_info/age'],
+            education_years: state.data.body['subject_info/education_yrs'],
+            religion: state.data.body['other_questions/religion'],
+            individual_id: state.data.body._id,
+            study_id: state => state.studyIDMap[state.formType],
+            site_id: state => state.studyIDMap[state.formType],
+          });
+
+    triggers:
+      webhook:
+        type: webhook
+        enabled: false
+    edges:
+      webhook->Urban-Consumption-to-PG:
+        source_trigger: webhook
+        target_job: Urban-Consumption-to-PG
+        condition_type: js_expression
+        condition_label: Urban Consumption Form Type Received
+        condition_expression: |
+          state.data.formType == "Urban Consumption"
+        enabled: true
