@@ -5,10 +5,6 @@
   "concurrency": null,
   "inserted_at": "2025-03-10T07:26:23Z",
   "updated_at": "2025-04-03T14:18:15Z",
-  "scheduled_deletion": null,
-  "history_retention_period": 7,
-  "dataclip_retention_period": null,
-  "retention_policy": "retain_all",
   "project_credentials": {
     "rediet@openfn.org-Kobo-Wildmeat-Credential": {
       "id": "b753a369-091a-4ec9-b63a-699a3ee2cda8",
@@ -21,41 +17,12 @@
       "owner": "rediet@openfn.org"
     }
   },
+  "scheduled_deletion": null,
+  "history_retention_period": 7,
+  "dataclip_retention_period": null,
+  "retention_policy": "retain_all",
   "collections": {},
-  "requires_mfa": false,
   "workflows": {
-    "1.-Sync-Data-(Get-Kobo-Forms----Ongoing)": {
-      "id": "c68e6105-9407-4881-a29e-d15d18e80d7e",
-      "name": "1. Sync Data (Get Kobo Forms -- Ongoing)",
-      "inserted_at": "2025-03-20T10:33:30.796765Z",
-      "lock_version": 6,
-      "triggers": {
-        "cron": {
-          "enabled": false,
-          "id": "1bd70cdd-612e-4e3c-b7b3-728f41e8ec43",
-          "type": "cron",
-          "cron_expression": "0 0 * * *"
-        }
-      },
-      "jobs": {
-        "Sync-Data-Get-Kobo-Forms---Ongoing": {
-          "id": "8c40b782-0685-4c26-866c-aedd4cf8c077",
-          "name": "Sync Data Get Kobo Forms - Ongoing",
-          "body": "//== Job to be used for fetching data from Kobo on repeated, timer basis  ==//\n// This can be run on-demand at any time by clicking \"run\" // \n// Add a new form to this job to sync it to the DB: Fill the id, name, and type to this list.//\n// DO NOT DELETE ANY SURVEY FROM THIS JOB, just comment it if it doesn't need to be synced anymore. //\n// Form type can be: Market, Offtake, Urban Consumption, Rural Consumption //\n\nfn(state => {\n  //console.log('Date of last sync:', state.lastEnd);\n  // Set a manual cursor if you'd like to only fetch data after this date.\n  const manualCursor = '2024-07-18T14:32:43.325+01:00';\n  \n  const cursorDate = state.lastEnd || manualCursor; \n  console.log('Current cursor value:', cursorDate);\n  \n  state.data = {\n    surveys: [\n      //** Specify new forms to fetch here **//\n      // ------------- CONGO ----------------------\n      {\n        id: 'a9eJJ2hrRSMCJZ95WMc93j',\n        name: 'SWM Conso Urbaine RoC 2020-2021',\n        type: 'Urban Consumption'\n      },\n            {\n        id: 'aUrUbD6C9hB3y8XjfQ9CLc',\n        name: 'SWM Conso Rurale RoC 2020-2021',\n        type: 'Rural Consumption'\n      },\n             {\n         id: 'aDVDagX8TE9NUY7xmvAUpv',\n         name: 'SWM Suivi Marché 2020 - Congo Market ',\n         type: 'Market'\n       },\n            {\n        id: 'a3hX3ZvVm4BanZDeis9AFj',\n        name: 'SWM Prélèvement de chasse RoC',\n        type: 'Offtake'\n      },\n       // ------------- DRC ----------------------\n      // {\n      //   id: 'aJxTqQSF7VRLYbMGfeTHfd',\n      //   name: 'SWM Urban Consumption Survey 2019',\n      //   type: 'Urban Consumption'\n      // },\n      // {\n      //   id: 'aUtBrSsVRkZrjkpodB6TW7',\n      //   name: 'SWM_Rural_Consumption_Form',\n      //   type: 'Rural Consumption'\n      // },\n      {\n        id: 'aem28HL45vkQKyhB22xn8Q',\n        name: 'SWM Suivi points de vente protéines animales - DRC Market',\n        type: 'Market'\n      },\n      {\n        id: 'aYcthFvuwgvUn89aBoedgT',\n        name: 'SWM_Offtake_DRC_202104',\n        type: 'Offtake'\n      },\n\n    ].map(survey => ({\n      formId: survey.id,\n      formName: survey.name,\n      formType: survey.type,\n      url: `https://kf.kobotoolbox.org/api/v2/assets/${survey.id}/data/?format=json`,\n      query: `&query={\"end\":{\"$gte\":\"${cursorDate}\"}}`,\n    })),\n  };\n\n  return state;\n});\n\neach(dataPath('surveys[*]'), state => {\n  const { url, query, formId, formName, formType } = state.data;\n  return get(`${state.data.url}${state.data.query}`, {}, state => {\n    state.data.submissions = state.data.results.map(submission => {\n      return {\n        body: submission,\n        formName,\n        formType\n      };\n    });\n    console.log(`Fetched ${state.data.count} submissions.`);\n    //Once we fetch the data, we want to post each individual Kobo survey\n    //to the triage workflow that syncs to PG\n    const count = state.data.count;\n\n    return each(dataPath('submissions[*]'), state => {\n      console.log(`Posting ${state.data.i + 1} of ${count}...`);\n      return post(\"https://app.openfn.org/i/610eddc0-163a-4394-81dd-63d76be7e649\", {\n        body: state => state.data,\n      })(state);\n    })(state);\n  })(state)\n});\n\nfn(state => {\n  // TODO: Pluck out the end date of the last submission to use as a cursor.\n  const lastEnd = state.references\n    .filter(item => item && item.body)\n    .map(s => s.body.end)\n    .sort((a, b) => (new Date(a.date) > new Date(b.date) ? 1 : -1))[0];\n\n  console.log(`Next cursor: ${lastEnd}`);\n  return { ...state, lastEnd, data: {}, references: [], response: {} };\n});\n",
-          "adaptor": "@openfn/language-http@3.1.11",
-          "project_credential_id": "b753a369-091a-4ec9-b63a-699a3ee2cda8"
-        }
-      },
-      "edges": {
-        "cron->Sync-Data-Get-Kobo-Forms---Ongoing": {
-          "enabled": true,
-          "id": "af52b2a7-6f51-40d6-a73f-4214258b2b01",
-          "target_job_id": "8c40b782-0685-4c26-866c-aedd4cf8c077",
-          "source_trigger_id": "1bd70cdd-612e-4e3c-b7b3-728f41e8ec43",
-          "condition_type": "always"
-        }
-      }
-    },
     "Reset-Database": {
       "id": "b691065d-23b4-48a4-8d4c-c5155ce0c70e",
       "name": "Reset Database",
@@ -91,11 +58,11 @@
     "2.-Sync-Kobo-data-to-PG": {
       "id": "e1c305d5-1efc-46d8-b621-67c27d22194b",
       "name": "2. Sync Kobo data to PG",
-      "inserted_at": "2025-03-20T11:00:18.373882Z",
-      "lock_version": 23,
+      "inserted_at": "2025-04-15T07:52:19.258184Z",
+      "lock_version": 25,
       "triggers": {
         "webhook": {
-          "enabled": false,
+          "enabled": true,
           "id": "610eddc0-163a-4394-81dd-63d76be7e649",
           "type": "webhook"
         }
@@ -105,7 +72,7 @@
           "id": "2478bed7-2d59-4ff6-8cf1-c1f809c1ceb1",
           "name": "Triage Forms",
           "body": "// Check out the Job Writing Guide for help getting started:\n// https://docs.openfn.org/documentation/jobs/job-writing-guide\n",
-          "adaptor": "@openfn/language-common@latest",
+          "adaptor": "@openfn/language-common@2.3.1",
           "project_credential_id": null
         },
         "02---Rural-Consumption-to-PG": {
@@ -198,6 +165,39 @@
           "condition_expression": "state.data.formType == \"Urban Consumption\""
         }
       }
+    },
+    "1.-Sync-Data-(Get-Kobo-Forms----Ongoing)": {
+      "id": "c68e6105-9407-4881-a29e-d15d18e80d7e",
+      "name": "1. Sync Data (Get Kobo Forms -- Ongoing)",
+      "inserted_at": "2025-04-15T08:12:53.103449Z",
+      "lock_version": 10,
+      "triggers": {
+        "cron": {
+          "enabled": false,
+          "id": "1bd70cdd-612e-4e3c-b7b3-728f41e8ec43",
+          "type": "cron",
+          "cron_expression": "0 0 * * *"
+        }
+      },
+      "jobs": {
+        "Sync-Data-Get-Kobo-Forms---Ongoing": {
+          "id": "8c40b782-0685-4c26-866c-aedd4cf8c077",
+          "name": "Sync Data Get Kobo Forms - Ongoing",
+          "body": "//== Job to be used for fetching data from Kobo on repeated, timer basis  ==//\n// This can be run on-demand at any time by clicking \"run\" // \n// Add a new form to this job to sync it to the DB: Fill the id, name, and type to this list.//\n// DO NOT DELETE ANY SURVEY FROM THIS JOB, just comment it if it doesn't need to be synced anymore. //\n// Form type can be: Market, Offtake, Urban Consumption, Rural Consumption //\n\nfn(state => {\n  //console.log('Date of last sync:', state.lastEnd);\n  // Set a manual cursor if you'd like to only fetch data after this date.\n  const manualCursor = '2024-07-18T14:32:43.325+01:00';\n  \n  const cursorDate = state.lastEnd || manualCursor; \n  console.log('Current cursor value:', cursorDate);\n  \n  state.data = {\n    surveys: [\n      //** Specify new forms to fetch here **//\n      // ------------- CONGO ----------------------\n      {\n        id: 'a9eJJ2hrRSMCJZ95WMc93j',\n        name: 'SWM Conso Urbaine RoC 2020-2021',\n        type: 'Urban Consumption'\n      },\n            {\n        id: 'aUrUbD6C9hB3y8XjfQ9CLc',\n        name: 'SWM Conso Rurale RoC 2020-2021',\n        type: 'Rural Consumption'\n      },\n             {\n         id: 'aDVDagX8TE9NUY7xmvAUpv',\n         name: 'SWM Suivi Marché 2020 - Congo Market ',\n         type: 'Market'\n       },\n            {\n        id: 'a3hX3ZvVm4BanZDeis9AFj',\n        name: 'SWM Prélèvement de chasse RoC',\n        type: 'Offtake'\n      },\n       // ------------- DRC ----------------------\n      // {\n      //   id: 'aJxTqQSF7VRLYbMGfeTHfd',\n      //   name: 'SWM Urban Consumption Survey 2019',\n      //   type: 'Urban Consumption'\n      // },\n      // {\n      //   id: 'aUtBrSsVRkZrjkpodB6TW7',\n      //   name: 'SWM_Rural_Consumption_Form',\n      //   type: 'Rural Consumption'\n      // },\n      {\n        id: 'aem28HL45vkQKyhB22xn8Q',\n        name: 'SWM Suivi points de vente protéines animales - DRC Market',\n        type: 'Market'\n      },\n      {\n        id: 'aYcthFvuwgvUn89aBoedgT',\n        name: 'SWM_Offtake_DRC_202104',\n        type: 'Offtake'\n      },\n\n    ].map(survey => ({\n      formId: survey.id,\n      formName: survey.name,\n      formType: survey.type,\n      url: `https://kf.kobotoolbox.org/api/v2/assets/${survey.id}/data/?format=json`,\n      query: `&query={\"end\":{\"$gte\":\"${cursorDate}\"}}`,\n    })),\n  };\n\n  return state;\n});\n\neach(dataPath('surveys[*]'), state => {\n  const { url, query, formId, formName, formType } = state.data;\n  return get(`${url}${query}`, {}, state => {\n    const results = state.data.results || [];\n\n    if (results.length === 0) {\n      console.log(`No submissions found for ${formName}. Skipping...`);\n      return state;\n    }\n\n    state.data.submissions = state.data.results.map(submission => {\n      return {\n        body: submission,\n        formName,\n        formType\n      };\n    });\n    console.log(`Fetched ${state.data.count} submissions.`);\n    //Once we fetch the data, we want to post each individual Kobo survey\n    //to the triage workflow that syncs to PG\n    const count = state.data.count;\n\n    return each(dataPath('submissions[*]'), state => {\n      console.log(`Posting ${state.data.i + 1} of ${count}...`);\n      return post(\"https://app.openfn.org/i/610eddc0-163a-4394-81dd-63d76be7e649\", {\n        body: state => state.data,\n      })(state);\n    })(state);\n  })(state)\n});\n\nfn(state => {\n  // TODO: Pluck out the end date of the last submission to use as a cursor.\n  const lastEnd = state.references\n    .filter(item => item && item.body)\n    .map(s => s.body.end)\n    .sort((a, b) => (new Date(a.date) > new Date(b.date) ? 1 : -1))[0];\n\n  console.log(`Next cursor: ${lastEnd}`);\n  return { ...state, lastEnd, data: {}, references: [], response: {} };\n});\n",
+          "adaptor": "@openfn/language-http@3.1.11",
+          "project_credential_id": "b753a369-091a-4ec9-b63a-699a3ee2cda8"
+        }
+      },
+      "edges": {
+        "cron->Sync-Data-Get-Kobo-Forms---Ongoing": {
+          "enabled": true,
+          "id": "af52b2a7-6f51-40d6-a73f-4214258b2b01",
+          "target_job_id": "8c40b782-0685-4c26-866c-aedd4cf8c077",
+          "source_trigger_id": "1bd70cdd-612e-4e3c-b7b3-728f41e8ec43",
+          "condition_type": "always"
+        }
+      }
     }
-  }
+  },
+  "requires_mfa": false
 }

@@ -91,7 +91,14 @@ workflows:
 
           each(dataPath('surveys[*]'), state => {
             const { url, query, formId, formName, formType } = state.data;
-            return get(`${state.data.url}${state.data.query}`, {}, state => {
+            return get(`${url}${query}`, {}, state => {
+              const results = state.data.results || [];
+
+              if (results.length === 0) {
+                console.log(`No submissions found for ${formName}. Skipping...`);
+                return state;
+              }
+
               state.data.submissions = state.data.results.map(submission => {
                 return {
                   body: submission,
@@ -140,7 +147,7 @@ workflows:
     jobs:
       Triage-Forms:
         name: Triage Forms
-        adaptor: '@openfn/language-common@latest'
+        adaptor: '@openfn/language-common@2.3.1'
         credential: null
         body: |
           // Check out the Job Writing Guide for help getting started:
@@ -822,7 +829,7 @@ workflows:
     triggers:
       webhook:
         type: webhook
-        enabled: false
+        enabled: true
     edges:
       webhook->Triage-Forms:
         source_trigger: webhook
